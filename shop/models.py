@@ -1,12 +1,31 @@
 from django.db import models
+from phone_field import PhoneField
 
 
 class Product(models.Model):
-    title = models.CharField(verbose_name="Название", max_length=100)
-    price = models.DecimalField(verbose_name="Цена", max_digits=10, decimal_places=2)
+    """Товар"""
+
+    title = models.CharField("Название", max_length=100)
+    price = models.DecimalField("Цена", max_digits=10, decimal_places=2)
     price_discounted = models.DecimalField(
-        verbose_name="Цена после скидки", max_digits=10, decimal_places=2
+        "Цена после скидки", max_digits=10, decimal_places=2
     )
-    description = models.TextField(verbose_name="Описание")
-    filling = models.TextField(verbose_name="Начинка")
-    topping = models.TextField(verbose_name="Декор")
+    description = models.TextField("Описание")
+    filling = models.TextField("Начинка")
+    topping = models.TextField("Декор")
+
+
+class Customer(models.Model):
+    """Пользователь"""
+
+    name = models.CharField("Имя", max_length=50)
+    phone = PhoneField("Номер телефона")
+    email = models.CharField("Почта", max_length=50)
+    birth = models.DateField("Дата рождения")
+
+
+class DeliveryAddress:
+    """Адрес доставки"""
+
+    address = models.TextField("Адрес", max_length=150)
+    customer = models.ForeignKey(to=Customer, on_delete=models.DO_NOTHING)
