@@ -28,4 +28,12 @@ class DeliveryAddress:
     """Адрес доставки"""
 
     address = models.TextField("Адрес", max_length=150)
-    customer = models.ForeignKey(to=Customer, on_delete=models.DO_NOTHING)
+    customer = models.ForeignKey(to=Customer, on_delete=models.CASCADE)
+
+
+class Cart(models.Model):
+    """Корзина"""
+
+    product = models.ForeignKey(to=Product, on_delete=models.CASCADE)
+    amount = models.IntegerField("Количество продукта", default=1)
+    customer = models.ForeignKey(to=Customer, on_delete=models.CASCADE)
