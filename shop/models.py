@@ -53,8 +53,28 @@ class Order(models.Model):
 
 
 class OrderProduct(models.Model):
+    """Продукт из заказа"""
+
     title = models.CharField("Название", max_length=100)
     category = models.CharField("Категория", max_length=100)
     price = models.DecimalField("Цена", max_digits=10, decimal_places=2)
     amount = models.IntegerField("Количество продукта", default=1)
     order = models.ForeignKey(Order, on_delete=models.DO_NOTHING)
+
+
+class FooterSocial(models.Model):
+    link = models.CharField("Ссылка на соцсеть", max_length=255)
+    media_type = models.CharField(
+        "Соцсеть",
+        max_length=255,
+        unique=True,
+        choices=(
+            ("instagram", "Инстаграмм"),
+            ("facebook", "Фейсбук"),
+            ("tiktok", "Тикток"),
+            ("yotube", "Ютуб"),
+            ("vk", "Вконтакте"),
+            ("google_play", "Google Play"),
+            ("app_store", "Apple Store"),
+        ),
+    )
