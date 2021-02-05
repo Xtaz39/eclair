@@ -42,6 +42,7 @@ class Cart(models.Model):
 class Order(models.Model):
     """Заказ"""
 
+    # todo: change PK to not incrementing ID
     customer_name = models.CharField("Имя заказчика", max_length=100)
     phone = PhoneField("Номер телефона")
     address = models.TextField("Адрес", max_length=150)
