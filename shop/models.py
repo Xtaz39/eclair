@@ -11,10 +11,19 @@ class Product(models.Model):
     price_discounted = models.DecimalField(
         "Цена после скидки", max_digits=10, decimal_places=2
     )
+    amount = models.PositiveIntegerField("Доступное количество")
     description = models.TextField("Описание")
     filling = models.TextField("Начинка")
     topping = models.TextField("Декор")
     image = models.FileField("Картинка", upload_to="upload/image/product/")
+
+    category = models.ForeignKey("Category", on_delete=models.SET_NULL, null=True)
+
+
+class Category(models.Model):
+    """Категория продукта"""
+
+    name = models.CharField("Имя", max_length=100)
 
 
 class Customer(models.Model):
