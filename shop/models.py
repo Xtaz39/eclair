@@ -5,6 +5,7 @@ from phone_field import PhoneField
 class Product(models.Model):
     """Товар"""
 
+    article = models.CharField("Артикул", max_length=15, primary_key=True)
     title = models.CharField("Название", max_length=100)
     price = models.DecimalField("Цена", max_digits=10, decimal_places=2)
     price_discounted = models.DecimalField(
@@ -13,6 +14,7 @@ class Product(models.Model):
     description = models.TextField("Описание")
     filling = models.TextField("Начинка")
     topping = models.TextField("Декор")
+    image = models.FileField("Картинка", upload_to="upload/image/product/")
 
 
 class Customer(models.Model):
@@ -34,7 +36,9 @@ class DeliveryAddress:
 class Cart(models.Model):
     """Корзина"""
 
-    product = models.ForeignKey(to=Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        to=Product, on_delete=models.CASCADE, to_field="article"
+    )
     amount = models.IntegerField("Количество продукта", default=1)
     customer = models.ForeignKey(to=Customer, on_delete=models.CASCADE)
 
