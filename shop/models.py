@@ -19,11 +19,17 @@ class Product(models.Model):
 
     category = models.ForeignKey("Category", on_delete=models.SET_NULL, null=True)
 
+    def __str__(self):
+        return f"{self.title} ({self.article})"
+
 
 class Category(models.Model):
     """Категория продукта"""
 
     name = models.CharField("Имя", max_length=100)
+
+    def __str__(self):
+        return self.name
 
 
 class Customer(models.Model):

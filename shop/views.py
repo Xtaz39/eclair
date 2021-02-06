@@ -1,5 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView
+
+from .models import Product as ProductModel
 
 
 class Index(TemplateView):
@@ -7,7 +9,14 @@ class Index(TemplateView):
 
 
 class Product(TemplateView):
-    template_name = "shop/card.html"
+    template_name = "shop/product.html"
+
+    def get_context_data(self, **kwargs):
+        data = super(Product, self).get_context_data(**kwargs)
+        article = data["article"]
+        product = get_object_or_404(ProductModel, article=article.upper())
+        data["product"] = product
+        return data
 
 
 class Cabinet(TemplateView):

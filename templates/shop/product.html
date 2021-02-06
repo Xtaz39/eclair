@@ -8,8 +8,8 @@
             <div class="flex-between align-center mt-4">
                 <ul class="breadcrumbs">
                     <li class="breadcrumbs__item"><a href="/">главная</a></li>
-                    <li class="breadcrumbs__item"><a href="/">круассаны</a></li>
-                    <li class="breadcrumbs__item">Карамельный</li>
+                    <li class="breadcrumbs__item"><a href="/">{{ product.category.name }}</a></li>
+                    <li class="breadcrumbs__item">{{ product.title }}</li>
                 </ul>
                 <a href="/">
                     <svg width="26" height="25" viewBox="0 0 26 25" fill="none"
@@ -27,6 +27,7 @@
                 <div class="col-lg-6">
                     <div class="card-item__image items-switch">
                         <div class="items-switch__top">
+{#                            <img src="/{{ product.image }}" alt="">#}
                             <img src="/static/img/item-1.jpg" alt="">
                             <img src="/static/img/item-2.jpg" alt="">
                         </div>
@@ -37,21 +38,18 @@
                     </div>
                 </div>
                 <div class="col-lg-6 card-item__text">
-                    <h1 class="heading mt-5">Карамельный</h1>
+                    <h1 class="heading mt-5">{{ product.title }}</h1>
                     <div class="item__price">
-                        <span class="price-old">299,00</span>
-                        <span class="price">199,00</span>
+                        <span class="price-old">{{ product.price }}</span>
+                        <span class="price">{{ product.price_discounted }}</span>
                         <span class="currency">руб.</span>
                     </div>
                     <p class="description">
-                        Отличная новость для любителей этого таящего во рту французского
-                        кондитерского изделия! <br>
-                        Встречайте новый вкус – «Капучино» <br>
-                        Таким образом уже 17 вкусов макарон ждут вас на прилавках
+                        {{ product.description }}
                     </p>
-                    <p class="description"><b>Начинка:</b> заварной малиновый крем-фреш
+                    <p class="description"><b>Начинка:</b> {{ product.filling}}
                     </p>
-                    <p class="description"><b>Декор:</b> итальянская меренга, ягода</p>
+                    <p class="description"><b>Декор:</b> {{ product.topping }}</p>
                     <a href="#" class="mt-5 btn btn--warning">Добавить в корзину</a>
                 </div>
             </div>
