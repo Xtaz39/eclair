@@ -8,7 +8,8 @@
             <div class="flex-between align-center mt-4">
                 <ul class="breadcrumbs">
                     <li class="breadcrumbs__item"><a href="/">главная</a></li>
-                    <li class="breadcrumbs__item"><a href="/">{{ product.category.name }}</a></li>
+                    <li class="breadcrumbs__item"><a
+                            href="/">{{ product.category.name }}</a></li>
                     <li class="breadcrumbs__item">{{ product.title }}</li>
                 </ul>
                 <a href="/">
@@ -27,13 +28,14 @@
                 <div class="col-lg-6">
                     <div class="card-item__image items-switch">
                         <div class="items-switch__top">
-{#                            <img src="/{{ product.image }}" alt="">#}
-                            <img src="/static/img/item-1.jpg" alt="">
-                            <img src="/static/img/item-2.jpg" alt="">
+                            {% for img in product.img_urls %}
+                                <img src="{{ img.url }}" alt="">
+                            {% endfor %}
                         </div>
                         <div class="items-switch__bottom">
-                            <img src="/static/img/item-1.jpg" alt="">
-                            <img src="/static/img/item-2.jpg" alt="">
+                            {% for img in product.img_urls %}
+                                <img src="{{ img.url }}" alt="">
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -47,7 +49,7 @@
                     <p class="description">
                         {{ product.description }}
                     </p>
-                    <p class="description"><b>Начинка:</b> {{ product.filling}}
+                    <p class="description"><b>Начинка:</b> {{ product.filling }}
                     </p>
                     <p class="description"><b>Декор:</b> {{ product.topping }}</p>
                     <a href="#" class="mt-5 btn btn--warning">Добавить в корзину</a>

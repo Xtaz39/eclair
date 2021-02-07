@@ -9,18 +9,32 @@ class Product(models.Model):
     title = models.CharField("Название", max_length=100)
     price = models.DecimalField("Цена", max_digits=10, decimal_places=2)
     price_discounted = models.DecimalField(
-        "Цена после скидки", max_digits=10, decimal_places=2
+        "Цена после скидки",
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
     )
     amount = models.PositiveIntegerField("Доступное количество")
     description = models.TextField("Описание")
     filling = models.TextField("Начинка")
     topping = models.TextField("Декор")
-    image = models.FileField("Картинка", upload_to="upload/image/product/")
-
     category = models.ForeignKey("Category", on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return f"{self.title} ({self.article})"
+
+    @property
+    def img_urls(self):
+        result = self.images.all()
+        return [r.image for r in result]
+
+
+class ProductImage(models.Model):
+    image = models.ImageField("Картинка", upload_to="image/product/")
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="images"
+    )
 
 
 class Category(models.Model):

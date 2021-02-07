@@ -14,7 +14,9 @@ class Product(TemplateView):
     def get_context_data(self, **kwargs):
         data = super(Product, self).get_context_data(**kwargs)
         article = data["article"]
-        product = get_object_or_404(ProductModel, article=article.upper())
+        product = get_object_or_404(
+            ProductModel.objects.prefetch_related("images"), article=article.upper()
+        )
         data["product"] = product
         return data
 

@@ -114,6 +114,5 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-# todo: fix media
-MEDIA_ROOT = BASE_DIR / "upload"
-MEDIA_URL = "/upload/"
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
