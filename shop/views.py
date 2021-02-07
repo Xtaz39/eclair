@@ -17,6 +17,7 @@ class Index(TemplateView):
             .all()
         )
         data["categories"] = categories
+        data["promoted_products"] = ProductModel.objects.all()
         return data
 
 
