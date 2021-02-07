@@ -1,7 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView
 
-from .models import Product as ProductModel, Category as CategoryModel
+from .models import (
+    Product as ProductModel,
+    Category as CategoryModel,
+    Banner as BannerModel,
+)
 
 
 class Index(TemplateView):
@@ -18,6 +22,7 @@ class Index(TemplateView):
         )
         data["categories"] = categories
         data["promoted_products"] = ProductModel.objects.all()
+        data["banner"] = BannerModel.objects.order_by("order").first()
         return data
 
 

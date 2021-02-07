@@ -121,3 +121,12 @@ class FooterSocial(models.Model):
             ("app_store", "Apple Store"),
         ),
     )
+
+
+class Banner(models.Model):
+    title = models.CharField("Заголовок", max_length=100)
+    text = models.TextField("Текст")
+    image = models.ImageField("Картинка", upload_to="image/product/")
+    button_text = models.CharField("Текст кнопки", max_length=50)
+    button_url = models.CharField("Ссылка на кноке", max_length=255)
+    order = models.SmallIntegerField("Порядок")

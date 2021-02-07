@@ -1,10 +1,9 @@
-<section class="hero" id="hero">
-    <h1>вместе с eclair</h1>
+{% if banner %}
+<section class="hero" id="hero" style="background: url({{ banner.image.url }}) no-repeat 50%/cover">
+    <h1>{{ banner.title }}</h1>
     <p>
-        Отвлекитесь от суеты рабочих будних, бешеного ритма города и проведите время в
-        одной из наших
-        кондитерских.
-        Насладитесь классическими французскими макарунами.
+        {{ banner.text }}
     </p>
-    <a href="#" class="btn btn--warning">Подробнее</a>
+    <a href="{{ banner.button_url }}" class="btn btn--warning">{{ banner.button_text }}</a>
 </section>
+{% endif %}

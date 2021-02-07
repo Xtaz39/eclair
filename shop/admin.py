@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Product, Category, ProductImage
+from .models import Product, Category, ProductImage, Banner
 
 
 class ProductImageAdmin(admin.StackedInline):
@@ -20,5 +20,10 @@ class CategoryAdmin(admin.ModelAdmin):
     pass
 
 
+class BannerAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(Banner, BannerAdmin)
