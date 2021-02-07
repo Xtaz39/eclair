@@ -8,6 +8,13 @@ from .models import (
 )
 
 
+class TopMenuDataMixin:
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data["categories"] = CategoryModel.objects.exclude(product=None).all()
+        return data
+
+
 class Index(TemplateView):
     template_name = "shop/index/index.html"
 
@@ -26,7 +33,7 @@ class Index(TemplateView):
         return data
 
 
-class Product(TemplateView):
+class Product(TopMenuDataMixin, TemplateView):
     template_name = "shop/product.html"
 
     def get_context_data(self, **kwargs):
@@ -40,45 +47,49 @@ class Product(TemplateView):
         return data
 
 
-class Cabinet(TemplateView):
+class Cabinet(TopMenuDataMixin, TemplateView):
     template_name = "shop/cabinet.html"
 
 
-class About(TemplateView):
+class About(TopMenuDataMixin, TemplateView):
     template_name = "shop/about.html"
 
 
-class CakeOrder(TemplateView):
+class CakeOrder(TopMenuDataMixin, TemplateView):
     template_name = "shop/cake-order.html"
 
 
-class Contacts(TemplateView):
+class Contacts(TopMenuDataMixin, TemplateView):
     template_name = "shop/contacts.html"
 
 
-class News(TemplateView):
+class News(TopMenuDataMixin, TemplateView):
     template_name = "shop/news.html"
 
 
-class NewsItem(TemplateView):
+class NewsItem(TopMenuDataMixin, TemplateView):
     template_name = "shop/news-item.html"
 
 
-class Cart(TemplateView):
+class Cart(TopMenuDataMixin, TemplateView):
     template_name = "shop/cart.html"
 
 
-class Checkout(TemplateView):
+class Checkout(TopMenuDataMixin, TemplateView):
     template_name = "shop/checkout.html"
 
 
-class Review(TemplateView):
+class Review(TopMenuDataMixin, TemplateView):
     template_name = "shop/review.html"
 
 
-class Vacancies(TemplateView):
+class Vacancies(TopMenuDataMixin, TemplateView):
     template_name = "shop/vacancies.html"
 
 
+class NotFound(TopMenuDataMixin, TemplateView):
+    template_name = "shop/404.html"
+
+
 def not_found(request, exception=None):
-    return render(request, "shop/404.html", status=404)
+    return NotFound().get(request)
