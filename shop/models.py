@@ -31,7 +31,10 @@ class Product(models.Model):
 
     @property
     def image(self):
-        return self.productimage_set.first().image
+        img = self.productimage_set.first()
+        if img is None:
+            return ProductImage()
+        return img.image
 
 
 class ProductImage(models.Model):
