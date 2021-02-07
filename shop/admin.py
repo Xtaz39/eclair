@@ -10,6 +10,11 @@ class ProductImageAdmin(admin.StackedInline):
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductImageAdmin]
 
+    def get_readonly_fields(self, request, obj=None):
+        if obj:  # when editing an object
+            return ["article"]
+        return self.readonly_fields
+
 
 class CategoryAdmin(admin.ModelAdmin):
     pass
