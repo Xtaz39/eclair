@@ -28,12 +28,12 @@
                 <div class="col-lg-6">
                     <div class="card-item__image items-switch">
                         <div class="items-switch__top">
-                            {% for img in product.img_urls %}
+                            {% for img in product.images_all %}
                                 <img src="{{ img.url }}" alt="">
                             {% endfor %}
                         </div>
                         <div class="items-switch__bottom">
-                            {% for img in product.img_urls %}
+                            {% for img in product.images_all %}
                                 <img src="{{ img.url }}" alt="">
                             {% endfor %}
                         </div>
@@ -42,8 +42,12 @@
                 <div class="col-lg-6 card-item__text">
                     <h1 class="heading mt-5">{{ product.title }}</h1>
                     <div class="item__price">
-                        <span class="price-old">{{ product.price }}</span>
-                        <span class="price">{{ product.price_discounted }}</span>
+                        {% if product.price_discounted %}
+                            <span class="price-old">{{ product.price }}</span>
+                            <span class="price">{{ product.price_discounted }}</span>
+                        {% else %}
+                            <span class="price">{{ product.price }}</span>
+                        {% endif %}
                         <span class="currency">руб.</span>
                     </div>
                     <p class="description">

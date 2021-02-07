@@ -1,21 +1,34 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView
 
-from .models import Product as ProductModel
+from .models import Product as ProductModel, Category as CategoryModel
 
 
 class Index(TemplateView):
     template_name = "shop/index/index.html"
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        categories = (
+            CategoryModel.objects.prefetch_related(
+                "product_set", "product_set__productimage_set"
+            )
+            .exclude(product=None)
+            .all()
+        )
+        data["categories"] = categories
+        return data
 
 
 class Product(TemplateView):
     template_name = "shop/product.html"
 
     def get_context_data(self, **kwargs):
-        data = super(Product, self).get_context_data(**kwargs)
+        data = super().get_context_data(**kwargs)
         article = data["article"]
         product = get_object_or_404(
-            ProductModel.objects.prefetch_related("images"), article=article.upper()
+            ProductModel.objects.prefetch_related("productimage_set"),
+            article=article,
         )
         data["product"] = product
         return data

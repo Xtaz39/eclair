@@ -25,16 +25,18 @@ class Product(models.Model):
         return f"{self.title} ({self.article})"
 
     @property
-    def img_urls(self):
-        result = self.images.all()
+    def images_all(self):
+        result = self.productimage_set.all()
         return [r.image for r in result]
+
+    @property
+    def image(self):
+        return self.productimage_set.first().image
 
 
 class ProductImage(models.Model):
     image = models.ImageField("Картинка", upload_to="image/product/")
-    product = models.ForeignKey(
-        Product, on_delete=models.CASCADE, related_name="images"
-    )
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
 
 class Category(models.Model):
@@ -44,6 +46,10 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def products(self):
+        return list(self.product_set.all())
 
 
 class Customer(models.Model):
