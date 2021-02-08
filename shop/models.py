@@ -129,4 +129,43 @@ class Banner(models.Model):
     image = models.ImageField("Картинка", upload_to="image/product/")
     button_text = models.CharField("Текст кнопки", max_length=50)
     button_url = models.CharField("Ссылка на кноке", max_length=255)
-    order = models.SmallIntegerField("Порядок")
+    priority = models.SmallIntegerField("Приоритет", unique=True)
+
+
+class PromotedProductsSettings(models.Model):
+    mode = models.CharField(
+        "Режим",
+        max_length=100,
+        choices=(
+            ("manual", "ручной"),
+            ("auto", "автоматичесский"),
+        ),
+    )
+    title = models.CharField("Заголовок", max_length=100)
+    period = models.CharField(
+        "Промежуток времени",
+        max_length=100,
+        choices=(
+            ("week_this", "эта неделя"),
+            ("week_last", "прошлая неделя"),
+            ("month_this", "этот месяц"),
+            ("month_last", "прошлый месяц"),
+            ("year_half_this", "последние пол года"),
+            ("year_this", "текущий год"),
+        ),
+        null=True,
+        blank=True,
+    )
+    limit = models.PositiveSmallIntegerField(
+        "Максимальное количество товаров",
+        null=True,
+        blank=True,
+    )
+
+
+class PromotedProductsManual(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, unique=True)
+    priority = models.PositiveSmallIntegerField("Приоритет", unique=True)
+
+    def __str__(self):
+        return f"{self.product.title} ({self.priority})"

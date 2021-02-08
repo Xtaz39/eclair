@@ -2,8 +2,12 @@
 {% load static %}
 
 {% block content %}
-    {% include 'shop/index/_banner.html' %}
-    {% include 'shop/index/_promoted.html' %}
+    {% if banner %}
+        {% include 'shop/index/_banner.html' %}
+    {% endif %}
+    {% if promoted_products %}
+        {% include 'shop/index/_promoted.html' %}
+    {% endif %}
     {% include 'shop/index/_product_list.html' %}
     {% include 'shop/index/_about.html' %}
 {% endblock %}

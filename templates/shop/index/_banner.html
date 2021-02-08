@@ -1,11 +1,9 @@
-{% if banner %}
-    <section class="hero" id="hero"
-             style="background: url({{ banner.image.url }}) no-repeat 50%/cover">
-        <h1>{{ banner.title }}</h1>
-        <p>
-            {{ banner.text }}
-        </p>
-        <a href="{{ banner.button_url }}"
-           class="btn btn--warning">{{ banner.button_text }}</a>
-    </section>
-{% endif %}
+<section class="hero" id="hero"
+         style="background: url({{ banner.image.url }}) no-repeat 50%/cover">
+    <h1>{{ banner.title }}</h1>
+    <p>
+        {{ banner.text }}
+    </p>
+    <a href="{{ banner.button_url }}"
+       class="btn btn--warning">{{ banner.button_text }}</a>
+</section>

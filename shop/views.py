@@ -1,10 +1,12 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 
 from .models import (
     Product as ProductModel,
     Category as CategoryModel,
     Banner as BannerModel,
+    PromotedProductsSettings,
+    PromotedProductsManual,
 )
 
 
@@ -28,8 +30,18 @@ class Index(TemplateView):
             .all()
         )
         data["categories"] = categories
-        data["promoted_products"] = ProductModel.objects.all()
-        data["banner"] = BannerModel.objects.order_by("order").first()
+        data["banner"] = BannerModel.objects.order_by("priority").first()
+
+        promoted_settings: PromotedProductsSettings = (
+            PromotedProductsSettings.objects.first()
+        )
+        limit = promoted_settings.limit
+        if promoted_settings.mode == "auto":
+            data["promoted_products"] = ProductModel.objects.all()[:limit]
+        elif promoted_settings.mode == "manual":
+            pm = PromotedProductsManual.objects.select_related("product").all()[:limit]
+            data["promoted_products"] = [p.product for p in pm]
+
         return data
 
 
