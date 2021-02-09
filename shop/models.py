@@ -81,14 +81,15 @@ class DeliveryAddress:
     customer = models.ForeignKey(to=Customer, on_delete=models.CASCADE)
 
 
-class Cart(models.Model):
+class CartProduct(models.Model):
     """Корзина"""
 
     product = models.ForeignKey(
         to=Product, on_delete=models.CASCADE, to_field="article"
     )
+    session_id = models.CharField("Сессия", max_length=100, null=True)
     amount = models.IntegerField("Количество продукта", default=1)
-    customer = models.ForeignKey(to=Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(to=Customer, on_delete=models.CASCADE, null=True)
 
 
 class Order(models.Model):
