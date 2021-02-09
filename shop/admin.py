@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
 from .models import (
     Product,
@@ -8,6 +9,7 @@ from .models import (
     PromotedProductsSettings,
     PromotedProductsManual,
 )
+from .models import User
 
 
 class ProductImageAdmin(admin.StackedInline):
@@ -44,3 +46,4 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Banner, BannerAdmin)
 admin.site.register(PromotedProductsSettings, PromotedProductsSettingsAdmin)
 admin.site.register(PromotedProductsManual, PromotedProductsAdmin)
+admin.site.register(User, UserAdmin)
