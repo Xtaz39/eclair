@@ -20,6 +20,23 @@ class TopMenuDataMixin:
 class Index(TemplateView):
     template_name = "shop/index/index.html"
 
+    def _get_promoted_products(self) -> list[ProductModel]:
+        promoted_settings: PromotedProductsSettings = (
+            PromotedProductsSettings.objects.first()
+        )
+        if not promoted_settings:
+            return []
+
+        limit = promoted_settings.limit
+        if promoted_settings.mode == "auto":
+            return ProductModel.objects.all()[:limit]
+
+        if promoted_settings.mode == "manual":
+            pm = PromotedProductsManual.objects.select_related("product").all()[:limit]
+            return [p.product for p in pm]
+
+        return []
+
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         categories = (
@@ -31,16 +48,7 @@ class Index(TemplateView):
         )
         data["categories"] = categories
         data["banner"] = BannerModel.objects.order_by("priority").first()
-
-        promoted_settings: PromotedProductsSettings = (
-            PromotedProductsSettings.objects.first()
-        )
-        limit = promoted_settings.limit
-        if promoted_settings.mode == "auto":
-            data["promoted_products"] = ProductModel.objects.all()[:limit]
-        elif promoted_settings.mode == "manual":
-            pm = PromotedProductsManual.objects.select_related("product").all()[:limit]
-            data["promoted_products"] = [p.product for p in pm]
+        data["promoted_products"] = self._get_promoted_products()
 
         return data
 
