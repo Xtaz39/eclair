@@ -152,7 +152,7 @@ class PromotedProductsSettings(models.Model):
             ("auto", "автоматичесский"),
         ),
     )
-    title = models.CharField("Заголовок", max_length=100)
+    title = models.CharField("Заголовок промо", max_length=100)
     period = models.CharField(
         "Промежуток времени",
         max_length=100,
@@ -176,6 +176,7 @@ class PromotedProductsSettings(models.Model):
 
 class PromotedProductsManual(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
+    promoted = models.ForeignKey(PromotedProductsSettings, on_delete=models.CASCADE)
     priority = models.PositiveSmallIntegerField("Приоритет", unique=True)
 
     def __str__(self):

@@ -16,6 +16,10 @@ class ProductImageAdmin(admin.StackedInline):
     model = ProductImage
 
 
+class PromotedProductsAdmin(admin.StackedInline):
+    model = PromotedProductsManual
+
+
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductImageAdmin]
 
@@ -34,10 +38,7 @@ class BannerAdmin(admin.ModelAdmin):
 
 
 class PromotedProductsSettingsAdmin(admin.ModelAdmin):
-    pass
-
-
-class PromotedProductsAdmin(admin.ModelAdmin):
+    inlines = [PromotedProductsAdmin]
     pass
 
 
@@ -45,5 +46,4 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Banner, BannerAdmin)
 admin.site.register(PromotedProductsSettings, PromotedProductsSettingsAdmin)
-admin.site.register(PromotedProductsManual, PromotedProductsAdmin)
 admin.site.register(User, UserAdmin)
