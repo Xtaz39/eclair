@@ -57,7 +57,9 @@
                         </svg>
                     </i>
                     <span class="bucket__text">Корзина</span>
-                    <span class="tip tip--round">12</span>
+                    {% if cart %}
+                        <span class="tip tip--round">{{ cart.amount_total }}</span>
+                    {% endif %}
                 </a>
             </div>
         </div>

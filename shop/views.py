@@ -1,3 +1,4 @@
+from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 
@@ -7,17 +8,36 @@ from .models import (
     Banner as BannerModel,
     PromotedProductsSettings,
     PromotedProductsManual,
+    CartProduct,
 )
 
 
-class TopMenuDataMixin:
+class CategoriesDataMixin:
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         data["categories"] = CategoryModel.objects.exclude(product=None).all()
         return data
 
 
-class Index(TemplateView):
+class CartDataMixin:
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        req: WSGIRequest = self.request
+        if not (session := req.session.session_key):
+            return data
+
+        products = CartProduct.objects.filter(session_id=session).all()
+        if not products:
+            return data
+
+        data["cart"] = {
+            "products": [{"title": p.product_id, "amount": p.amount} for p in products],
+            "amount_total": sum((p.amount for p in products)),
+        }
+        return data
+
+
+class Index(CartDataMixin, TemplateView):
     template_name = "shop/index/index.html"
 
     def _get_promoted_products(self) -> list[ProductModel]:
@@ -53,7 +73,7 @@ class Index(TemplateView):
         return data
 
 
-class Product(TopMenuDataMixin, TemplateView):
+class Product(CartDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/product.html"
 
     def get_context_data(self, **kwargs):
@@ -67,47 +87,47 @@ class Product(TopMenuDataMixin, TemplateView):
         return data
 
 
-class Cabinet(TopMenuDataMixin, TemplateView):
+class Cabinet(CartDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/cabinet.html"
 
 
-class About(TopMenuDataMixin, TemplateView):
+class About(CartDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/about.html"
 
 
-class CakeOrder(TopMenuDataMixin, TemplateView):
+class CakeOrder(CartDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/cake-order.html"
 
 
-class Contacts(TopMenuDataMixin, TemplateView):
+class Contacts(CartDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/contacts.html"
 
 
-class News(TopMenuDataMixin, TemplateView):
+class News(CartDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/news.html"
 
 
-class NewsItem(TopMenuDataMixin, TemplateView):
+class NewsItem(CartDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/news-item.html"
 
 
-class Cart(TopMenuDataMixin, TemplateView):
+class Cart(CartDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/cart.html"
 
 
-class Checkout(TopMenuDataMixin, TemplateView):
+class Checkout(CartDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/checkout.html"
 
 
-class Review(TopMenuDataMixin, TemplateView):
+class Review(CartDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/review.html"
 
 
-class Vacancies(TopMenuDataMixin, TemplateView):
+class Vacancies(CartDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/vacancies.html"
 
 
-class NotFound(TopMenuDataMixin, TemplateView):
+class NotFound(CartDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/404.html"
 
 
