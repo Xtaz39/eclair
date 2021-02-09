@@ -1,6 +1,8 @@
+import http
+
 from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import F
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.generic.edit import BaseFormView
 
 from shop.models import CartProduct
@@ -9,19 +11,28 @@ from shop.models import CartProduct
 class Cart(BaseFormView):
     def get(self, request: WSGIRequest, *args, **kwargs):
         if not request.session.session_key:
+            return JsonResponse(data=[], safe=False)
+
+        cart_product = CartProduct.objects.filter(
+            session_id=request.session.session_key
+        ).all()
+
+        products = [{"title": p.product_id, "amount": p.amount} for p in cart_product]
+        return JsonResponse(data=products, safe=False)
+
+    def put(self, request: WSGIRequest, *args, **kwargs):
+        article = "donat-chocolate"
+        amount = 1
+
+        if not request.session.session_key:
             request.session.create()
 
         cart_product, is_new = CartProduct.objects.get_or_create(
-            product_id="donat-chocolate", session_id=request.session.session_key
+            product_id=article, session_id=request.session.session_key
         )
         if not is_new:
-            cart_product.amount = F("amount") + 1
+            # Todo: check that new amount won't exceed stock or some limit
+            cart_product.amount = F("amount") + amount
             cart_product.save()
 
-        return HttpResponse("Ok")
-
-    def post(self, request, *args, **kwargs):
-        return HttpResponse("Ok Post")
-
-    def delete(self, request: WSGIRequest, *args, **kwargs):
-        return HttpResponse("Ok Delete")
+        return HttpResponse(status=http.HTTPStatus.CREATED)
