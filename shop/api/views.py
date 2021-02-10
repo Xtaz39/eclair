@@ -1,4 +1,5 @@
 import http
+import json
 
 from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import F
@@ -21,8 +22,9 @@ class Cart(BaseFormView):
         return JsonResponse(data=products, safe=False)
 
     def put(self, request: WSGIRequest, *args, **kwargs):
-        article = "donat-chocolate"
-        amount = 1
+        data = json.loads(self.request.body)
+        article = data["article"]
+        amount = data["amount"]
 
         if not request.session.session_key:
             request.session.create()

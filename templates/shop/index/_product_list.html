@@ -5,38 +5,7 @@
             <div class="row mt-5">
                 {% for product in category.products %}
                     <div class="col-xl-3 col-lg-4 col-md-6 mb-5">
-                        <div class="item item--default">
-                            <a href="/p/{{ product.article }}" class="item__picture">
-                                <img src="{{ product.image.url }}" alt="">
-                                {% if product.price_discounted %}
-                                    <span class="tip">Акция</span>
-                                {% endif %}
-                            </a>
-                            <div class="item__summary">
-                                <div class="item__price">
-                                    {% if product.price_discounted %}
-                                        <span class="price-old">{{ product.price }}</span>
-                                        <span class="price">{{ product.price_discounted }}</span>
-                                    {% else %}
-                                        <span class="price">{{ product.price }}</span>
-                                    {% endif %}
-                                    <span class="currency">руб.</span>
-                                </div>
-                                <div class="item__name">
-                                    <span>{{ product.title }}</span>
-                                </div>
-                                <div class="item__actions" data-item="0">
-                                    <div class="item__quantity">
-                                        <button class="item__btn item__btn--minus">-
-                                        </button>
-                                        <span class="item__quantity-text">1</span>
-                                        <a href="{% url 'api:cart' %}"><button class="item__btn item__btn--plus">+
-                                        </button></a>
-                                    </div>
-                                    <a href="#" class="btn btn--default">В корзину</a>
-                                </div>
-                            </div>
-                        </div>
+                        {% include "shop/index/_product_card.html" %}
                     </div>
                 {% endfor %}
             </div>

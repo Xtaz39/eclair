@@ -9,16 +9,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Eclair</title>
     <link href="{% static 'main.css' %}" rel="stylesheet">
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
+<div id="app">
+    {% include "shop/base/header.html" %}
 
-{% include "shop/base/header.html" %}
+    {% block content %}{% endblock %}
 
-{% block content %}{% endblock %}
-
-{% include "shop/base/footer.html" %}
-
+    {% include "shop/base/footer.html" %}
+</div>
 <script type="text/javascript" src="{% static 'app.bundle.js' %}"></script>
-
+<script>
+    const app = Vue.createApp(
+        {
+            delimiters: ["[[", "]]"],
+            el: '#app',
+            data() {
+                return {
+                    message: "hello",
+                    cartAmount: {{ cart.amount_total|default:"0" }}
+                }
+            },
+            methods: {
+                setCartAmount(article, amount) {
+                    axios.put("/api/cart", {
+                        article: article,
+                        amount: amount
+                    })
+                        .then(() => (this.cartAmount += amount))
+                        .catch(response => (console.error(response)))
+                }
+            }
+        }
+    ).mount('#app');
+</script>
 </body>
