@@ -18,15 +18,15 @@
         <div class="item__name">
             <span>{{ product.title }}</span>
         </div>
-        <div class="item__actions" data-item="0">
-            <div class="item__quantity">
-                <button class="item__btn item__btn--minus" @click="setCartAmount('donat-yabloko', -1)">-
+        <div class="item__actions">
+            <div class="item__quantity" v-if="getInCartAmount('{{ product.article }}') > 0">
+                <button class="item__btn item__btn--minus" @click="incrementCartAmount('{{ product.article }}', -1)">-
                 </button>
-                <span class="item__quantity-text">1</span>
-                <button class="item__btn item__btn--plus" @click="setCartAmount('donat-yabloko', 1)">+
+                <span class="item__quantity-text">[[ getInCartAmount('{{ product.article }}') ]]</span>
+                <button class="item__btn item__btn--plus" @click="incrementCartAmount('{{ product.article }}', 1)">+
                 </button>
             </div>
-            <a href="#" class="btn btn--default">В корзину</a>
+            <a href="" class="btn btn--default" @click="incrementCartAmount('{{ product.article }}', 1)">В корзину</a>
         </div>
     </div>
 </div>

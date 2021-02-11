@@ -112,7 +112,7 @@ class OrderProduct(models.Model):
     title = models.CharField("Название", max_length=100)
     category = models.CharField("Категория", max_length=100)
     price = models.DecimalField("Цена", max_digits=10, decimal_places=2)
-    amount = models.IntegerField("Количество продукта", default=1)
+    amount = models.PositiveIntegerField("Количество продукта", default=1)
     order = models.ForeignKey(Order, on_delete=models.DO_NOTHING)
 
 

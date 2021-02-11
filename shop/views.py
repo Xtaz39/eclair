@@ -32,6 +32,7 @@ class CartDataMixin:
 
         data["cart"] = {
             "products": [{"title": p.product_id, "amount": p.amount} for p in products],
+            "products_amount": {p.product_id: p.amount for p in products},
             "amount_total": sum((p.amount for p in products)),
         }
         return data

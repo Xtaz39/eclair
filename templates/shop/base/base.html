@@ -22,6 +22,7 @@
     {% include "shop/base/footer.html" %}
 </div>
 <script type="text/javascript" src="{% static 'app.bundle.js' %}"></script>
+
 <script>
     const app = Vue.createApp(
         {
@@ -29,20 +30,29 @@
             el: '#app',
             data() {
                 return {
-                    message: "hello",
-                    cartAmount: {{ cart.amount_total|default:"0" }}
+                    cartAmount: {{ cart.amount_total|default:"0" }},
+                    productCartAmount: {{ cart.products_amount|safe }}
                 }
             },
             methods: {
-                setCartAmount(article, amount) {
+                incrementCartAmount(article, amount) {
                     axios.put("/api/cart", {
                         article: article,
                         amount: amount
                     })
-                        .then(() => (this.cartAmount += amount))
+                        .then(() => {
+                            this.productCartAmount[article] = this.getInCartAmount(article) + amount
+                            this.cartAmount += amount
+                        })
                         .catch(response => (console.error(response)))
+                },
+                getInCartAmount(article) {
+                    if (!this.productCartAmount[article]) {
+                        return 0
+                    }
+                    return this.productCartAmount[article]
                 }
-            }
+            },
         }
     ).mount('#app');
 </script>

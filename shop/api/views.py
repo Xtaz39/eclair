@@ -33,6 +33,12 @@ class Cart(BaseFormView):
             product_id=article, session_id=request.session.session_key
         )
         if not is_new:
+            if cart_product.amount + amount < 0:
+                return JsonResponse(
+                    data={"error_msg": "Amount can't be < 0"},
+                    status=http.HTTPStatus.BAD_REQUEST,
+                )
+
             # Todo: check that new amount won't exceed stock or some limit
             cart_product.amount = F("amount") + amount
             cart_product.save()
