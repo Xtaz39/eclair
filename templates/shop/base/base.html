@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Eclair</title>
     <link href="{% static 'main.css' %}" rel="stylesheet">
+    <link href="{% static 'animation.css' %}" rel="stylesheet">
     <script src="https://unpkg.com/vue@next"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
@@ -30,8 +31,9 @@
             el: '#app',
             data() {
                 return {
-                    cartAmount: {{ cart.amount_total|default:"0" }},
-                    productCartAmount: {{ cart.products_amount|safe }}
+                    cartAmount: {{ cart.qty_total|default:"0" }},
+                    productCartAmount: {{ cart.products_amount|safe }},
+                    productCartPrice: {{ cart.products_price|safe }}
                 }
             },
             methods: {
@@ -53,6 +55,16 @@
                     return this.productCartAmount[article]
                 }
             },
+            computed: {
+                cartTotalAmount() {
+                    let sum = 0.00
+                    for (const [article, price] of Object.entries(this.productCartPrice)) {
+                        let qty = this.productCartAmount[article]
+                        sum += qty * price
+                    }
+                    return sum.toFixed(2)
+                }
+            }
         }
     ).mount('#app');
 </script>

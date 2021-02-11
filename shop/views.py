@@ -26,14 +26,23 @@ class CartDataMixin:
         if not (session := req.session.session_key):
             return data
 
-        products = CartProduct.objects.filter(session_id=session).all()
-        if not products:
+        items: list[CartProduct] = (
+            CartProduct.objects.filter(session_id=session)
+            .prefetch_related("product")
+            .all()
+        )
+        if not items:
             return data
 
         data["cart"] = {
-            "products": [{"title": p.product_id, "amount": p.amount} for p in products],
-            "products_amount": {p.product_id: p.amount for p in products},
-            "amount_total": sum((p.amount for p in products)),
+            "products": [
+                {"title": item.product_id, "amount": item.amount} for item in items
+            ],
+            "products_price": {
+                item.product_id: float(item.product.price) for item in items
+            },
+            "products_amount": {item.product_id: item.amount for item in items},
+            "qty_total": sum((p.amount for p in items)),
         }
         return data
 
@@ -114,6 +123,25 @@ class NewsItem(CartDataMixin, CategoriesDataMixin, TemplateView):
 
 class Cart(CartDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/cart.html"
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        req: WSGIRequest = self.request
+        if not (session := req.session.session_key):
+            return data
+
+        items = (
+            CartProduct.objects.filter(session_id=session)
+            .prefetch_related(
+                "product__productimage_set", "product", "product__category"
+            )
+            .all()
+        )
+        if not items:
+            return data
+
+        data["cart_items"] = items
+        return data
 
 
 class Checkout(CartDataMixin, CategoriesDataMixin, TemplateView):
