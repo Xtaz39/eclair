@@ -47,7 +47,7 @@
                     </i>
                     <span class="bucket__text">Личный кабинет</span>
                 </a>
-                <a href="cart" class="bucket__item">
+                <a href="/cart" class="bucket__item">
                     <i class="bucket__img">
                         <svg width="18" height="20" viewBox="0 0 18 20" fill="none"
                              xmlns="http://www.w3.org/2000/svg">
@@ -72,7 +72,7 @@
                 </a>
             </div>
             <div class="bucket">
-                <a href="cart" class="bucket__item">
+                <a href="/cart" class="bucket__item">
                     <i class="bucket__img">
                         <svg width="18" height="20" viewBox="0 0 18 20" fill="none"
                              xmlns="http://www.w3.org/2000/svg">
@@ -82,7 +82,8 @@
                         </svg>
                     </i>
                     <span class="bucket__text">Корзина</span>
-                    <span class="tip tip--round">12</span>
+                    <span v-if="cartAmount"
+                          class="tip tip--round">[[ cartAmount ]]</span>
                 </a>
             </div>
             <a href="#" class="burger">
@@ -96,17 +97,10 @@
         </div>
         <nav class="header__nav header__nav--bottom">
             <ul>
-                <li><a href="#">Эклеры</a></li>
-                <li><a href="#">Круассаны</a></li>
-                <li><a href="#">Корзинки</a></li>
-                <li><a href="#">Макаруны</a></li>
-                <li><a href="#">Завтраки и обеды</a></li>
-                <li><a href="#">Пирожные</a></li>
-                <li><a href="#">Торты</a></li>
-                <li><a href="#">Пироги</a></li>
-                <li><a href="#">Хлеб</a></li>
-                <li><a href="#">Напитки</a></li>
-                <li><a href="#">Другое</a></li>
+                {% for category in categories %}
+                    <li><a href="/#{{ category.name|lower }}">{{ category.name }}</a>
+                    </li>
+                {% endfor %}
             </ul>
         </nav>
     </div>
