@@ -127,7 +127,8 @@ class Cart(CartDataMixin, CategoriesDataMixin, TemplateView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         req: WSGIRequest = self.request
-        if not (session := req.session.session_key):
+        session = req.session.session_key
+        if not session:
             return data
 
         items = (
@@ -146,6 +147,26 @@ class Cart(CartDataMixin, CategoriesDataMixin, TemplateView):
 
 class Checkout(CartDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/checkout.html"
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        req: WSGIRequest = self.request
+        session = req.session.session_key
+        if not session:
+            return data
+
+        items = (
+            CartProduct.objects.filter(session_id=session)
+            .prefetch_related("product", "product__category")
+            .all()
+        )
+
+        data["cart_items"] = items
+        data["cart_total_amount"] = sum(
+            item.amount * item.product.price for item in items
+        )
+
+        return data
 
 
 class Review(CartDataMixin, CategoriesDataMixin, TemplateView):

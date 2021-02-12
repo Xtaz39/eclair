@@ -16,47 +16,47 @@
                             <label class="form__input">
                                 <span>Номер телефона</span>
                                 <span class="input">
-                                 <input type="tel" value="+7 999 156-07-77" disabled>
-                                <button>Изменить</button>
+{#                                 <input type="tel" value="+7 999 156-07-77">#}
+                                 <input type="tel">
+{#                                <button>Изменить</button>#}
                             </span>
                             </label>
                             <label class="form__input">
                                 <span>Адрес доставки</span>
                                 <span class="input">
                                 <input type="text">
-                                <button>Изменить</button>
+{#                                <button>Изменить</button>#}
                             </span>
                             </label>
                         </div>
-                        <h2 class="my-5">Заказ на доставку</h2>
-                        <div class="fields">
-                            <label class="form__input">
-                                <span>Промокод</span>
-                                <span class="input">
-                                <input type="text">
-                                <button>Изменить</button>
-                            </span>
-                            </label>
-                            <label class="form__input score">
-                                <span>У вас 63 балла</span>
-                                <span class="input">
-                                <input type="tel">
-                                <button>Списать</button>
-                            </span>
-                            </label>
-                        </div>
+                        {#                        <h2 class="my-5">Заказ на доставку</h2>#}
+                        {#                        <div class="fields">#}
+                        {#                            <label class="form__input">#}
+                        {#                                <span>Промокод</span>#}
+                        {#                                <span class="input">#}
+                        {#                                <input type="text">#}
+                        {#                                <button>Изменить</button>#}
+                        {#                            </span>#}
+                        {#                            </label>#}
+                        {#                            <label class="form__input score">#}
+                        {#                                <span>У вас 63 балла</span>#}
+                        {#                                <span class="input">#}
+                        {#                                <input type="tel">#}
+                        {#                                <button>Списать</button>#}
+                        {#                            </span>#}
+                        {#                            </label>#}
+                        {#                        </div>#}
                         <h2 class="my-5">Способы оплаты</h2>
                         <div class="fields">
                             <label class="form__input form__input--radio">
                                 <span>Наличными</span>
-                                <input type="radio" name="pay_mathod">
+                                <input type="radio" name="pay_method">
                                 <span class="fake-input"></span>
                             </label>
                             <label class="form__input form__input--radio">
                                 <span>Картой на сайте</span>
-                                <input type="radio" name="pay_mathod">
+                                <input type="radio" name="pay_method">
                                 <span class="fake-input"></span>
-                                </span>
                             </label>
                         </div>
                         <div class="flex-between mt-4">
@@ -71,31 +71,26 @@
                 <div class="col-lg-5 order-1 order-lg-2">
                     <div class="order-total">
                         <h2 class="mb-4">Состав заказа</h2>
-                        <div class="order-total__item">
-                            <div class="item__name">
-                                <span>Карамельный</span> <br>
-                                <small class="item__category">Круассаны</small>
+                        {% for item in cart_items %}
+                            <div class="order-total__item">
+                                <div class="item__name">
+                                    <span>{{ item.product.title }}</span> <br>
+                                    <small class="item__category">{{ item.product.category.title }}</small>
+                                </div>
+                                <div class="order-total__sum">
+                                    {% if item.amount %}
+                                        <span class="multiplier">{{ item.amount }} x </span>
+                                    {% endif %}
+                                    <span>{{ item.product.price }} руб.</span>
+                                </div>
                             </div>
-                            <div class="order-total__sum">
-                                <span class="multiplier">12 x</span>
-                                <span>599,00 руб.</span>
-                            </div>
-                        </div>
-                        <div class="order-total__item">
-                            <div class="item__name">
-                                <span>Карамельный</span> <br>
-                                <small class="item__category">Круассаны</small>
-                            </div>
-                            <div class="order-total__sum">
-                                <span>99,00 руб.</span>
-                            </div>
-                        </div>
+                        {% endfor %}
                         <div class="order-total__item">
                             <div class="item__name">
                                 <span>Стоимость заказа</span>
                             </div>
                             <div class="order-total__sum">
-                                <span>5 999,00 руб.</span>
+                                <span>{{ cart_total_amount }} руб.</span>
                             </div>
                         </div>
                     </div>
