@@ -77,7 +77,7 @@ class Index(CartDataMixin, TemplateView):
             .all()
         )
         data["categories"] = categories
-        data["banner"] = BannerModel.objects.order_by("priority").first()
+        data["banners"] = BannerModel.objects.order_by("priority")
         data["promoted_products"] = self._get_promoted_products()
 
         return data

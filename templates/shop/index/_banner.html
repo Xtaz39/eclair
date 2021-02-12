@@ -1,9 +1,51 @@
-<section class="hero" id="hero"
-         style="background: url({{ banner.image.url }}) no-repeat 50%/cover">
-    <h1>{{ banner.title }}</h1>
-    <p>
-        {{ banner.text }}
-    </p>
-    <a href="{{ banner.button_url }}"
-       class="btn btn--warning">{{ banner.button_text }}</a>
+<section class="hero" id="hero">
+    <div class="slider__buttons">
+        <button class="slider__buttons--prev">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20" cy="20" r="20" fill="white"/>
+                <g>
+                    <path d="M24.1385 19.561L16.738 12.181C16.4956 11.9393 16.103 11.9397 15.8609 12.1822C15.6191 12.4247 15.6197 12.8175 15.8622 13.0593L22.8222 20.0001L15.8619 26.9408C15.6195 27.1827 15.6188 27.5752 15.8607 27.8177C15.982 27.9393 16.141 28.0001 16.3 28.0001C16.4585 28.0001 16.6169 27.9397 16.738 27.819L24.1385 20.4391C24.2553 20.323 24.3208 20.1648 24.3208 20.0001C24.3208 19.8353 24.2551 19.6774 24.1385 19.561Z"
+                          fill="black"/>
+                </g>
+                <defs>
+                    <clipPath id="clip0">
+                        <rect width="16" height="16" fill="black"
+                              transform="translate(12 12)"/>
+                    </clipPath>
+                </defs>
+            </svg>
+        </button>
+        <button class="slider__buttons--next">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20" cy="20" r="20" fill="white"/>
+                <g>
+                    <path d="M24.1385 19.561L16.738 12.181C16.4956 11.9393 16.103 11.9397 15.8609 12.1822C15.6191 12.4247 15.6197 12.8175 15.8622 13.0593L22.8222 20.0001L15.8619 26.9408C15.6195 27.1827 15.6188 27.5752 15.8607 27.8177C15.982 27.9393 16.141 28.0001 16.3 28.0001C16.4585 28.0001 16.6169 27.9397 16.738 27.819L24.1385 20.4391C24.2553 20.323 24.3208 20.1648 24.3208 20.0001C24.3208 19.8353 24.2551 19.6774 24.1385 19.561Z"
+                          fill="black"/>
+                </g>
+                <defs>
+                    <clipPath id="clip0">
+                        <rect width="16" height="16" fill="black"
+                              transform="translate(12 12)"/>
+                    </clipPath>
+                </defs>
+            </svg>
+        </button>
+    </div>
+
+    <div class="hero__slider">
+        {% for banner in banners %}
+            <div class="hero__slide"
+                 style="background-image: url({{ banner.image.url }});">
+                <h2 class="h1">{{ banner.title }}</h2>
+                <p>
+                    {{ banner.text }}
+                </p>
+                <a href="{{ banner.button_url }}"
+                   class="btn btn--warning">{{ banner.button_text }}</a>
+            </div>
+        {% endfor %}
+    </div>
+
 </section>
