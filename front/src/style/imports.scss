@@ -1,0 +1,28 @@
+/* stylelint-disable */
+$container-max-widths: (
+        sm: 540px,
+        md: 90vw,
+        lg: 960px,
+        xl: 1380px
+) !default;
+
+$grid-breakpoints: (
+        xs: 0,
+        sm: 576px,
+        md: 768px,
+        lg: 992px,
+        xl: 1200px
+) !default;
+
+$spacer: 1.7rem !default;
+
+@import "~reset-css";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/utilities/spacing";
+@import "~slick-carousel/slick/slick";
+
+@import "./fonts";
+@import "./variables";

@@ -1,0 +1,20 @@
+/* stylelint-disable */
+@font-face {
+  font-family: 'Futura Book';
+  src: url('./../static/fonts/FuturaBookC.eot');
+  src: url('./../static/fonts/FuturaBookC.eot?#iefix') format('embedded-opentype'),
+    url('./../static/fonts/FuturaBookC.woff') format('woff'),
+    url('./../static/fonts/FuturaBookC.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Futura Book';
+  src: url('./../static/fonts/FuturaDemiC.eot');
+  src: url('./../static/fonts/FuturaDemiC.eot?#iefix') format('embedded-opentype'),
+    url('./../static/fonts/FuturaDemiC.woff') format('woff'),
+    url('./../static/fonts/FuturaDemiC.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
