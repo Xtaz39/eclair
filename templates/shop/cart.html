@@ -60,75 +60,38 @@
                     </transition>
                 {% endfor %}
             </div>
-
-            <h2 class="my-5 text-center">Рекомендуем к вашему заказу</h2>
-
         </div>
 
-        <div class="carousel-recommended__wrap mb-5">
-            <div class="carousel-recommended">
-                <div class="item item--order">
-                    <div class="item__summary">
-                        <a href="/p/eclair" class="item__picture">
-                            <img src="/static/img/item-1.jpg" alt="">
-                        </a>
-                        <div class="item__name">
-                            <span>Карамельный</span> <br>
-                            <small class="item__category">Круассаны</small>
-                            <div class="item__price">
-                                <span class="price">199,00</span>
-                                <span class="currency">руб.</span>
+        {% if product_recommendations %}
+            <h2 class="my-5 text-center">Рекомендуем к вашему заказу</h2>
+            <div class="carousel-recommended__wrap mb-5">
+                <div class="carousel-recommended">
+                    {% for product in product_recommendations %}
+                        <div class="item item--order">
+                            <div class="item__summary">
+                                <a href="/p/{{ product.article }}"
+                                   class="item__picture">
+                                    <img src="{{ product.image.url }}" alt="">
+                                </a>
+                                <div class="item__name">
+                                    <span>{{ product.title }}</span> <br>
+                                    <small class="item__category">{{ product.category.title }}</small>
+                                    <div class="item__price">
+                                        {% if product.price_discounted %}
+                                            <span class="price-old">{{ product.price }}</span>
+                                            <span class="price">{{ product.price_discounted }}</span>
+                                        {% else %}
+                                            <span class="price">{{ product.price }}</span>
+                                        {% endif %}
+                                        <span class="currency">руб.</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="item item--order">
-                    <div class="item__summary">
-                        <a href="/p/eclair" class="item__picture">
-                            <img src="/static/img/item-1.jpg" alt="">
-                        </a>
-                        <div class="item__name">
-                            <span>Карамельный</span> <br>
-                            <small class="item__category">Круассаны</small>
-                            <div class="item__price">
-                                <span class="price">199,00</span>
-                                <span class="currency">руб.</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item item--order">
-                    <a href="/p/eclair" class="item__picture">
-                        <img src="/static/img/item-1.jpg" alt="">
-                    </a>
-                    <div class="item__summary">
-                        <div class="item__name">
-                            <span>Карамельный</span> <br>
-                            <small class="item__category">Круассаны</small>
-                            <div class="item__price">
-                                <span class="price">199,00</span>
-                                <span class="currency">руб.</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item item--order">
-                    <a href="/p/eclair" class="item__picture">
-                        <img src="/static/img/item-1.jpg" alt="">
-                    </a>
-                    <div class="item__summary">
-                        <div class="item__name">
-                            <span>Карамельный</span> <br>
-                            <small class="item__category">Круассаны</small>
-                            <div class="item__price">
-                                <span class="price">199,00</span>
-                                <span class="currency">руб.</span>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
-        </div>
+        {% endif %}
 
         <div class="container container--order">
             <p class="total-sum mb-5">

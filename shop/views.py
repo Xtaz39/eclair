@@ -141,14 +141,29 @@ class Cart(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
         items = (
             models.CartProduct.objects.filter(session_id=session)
             .prefetch_related(
-                "product__productimage_set", "product", "product__category"
+                "product__productimage_set",
+                "product",
+                "product__category",
+                "product__recommendations",
             )
             .all()
         )
         if not items:
             return data
 
+        # todo; fix query. return duplicates
+        recommendations = (
+            models.Product.recommendations.through.objects.filter(
+                from_product__in=[item.product for item in items]
+            )
+            .distinct()
+            .all()
+        )
+
         data["cart_items"] = items
+        data["product_recommendations"] = [
+            recommendation.to_product for recommendation in recommendations
+        ]
         return data
 
 
