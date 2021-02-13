@@ -133,6 +133,9 @@ class FooterSocial(models.Model):
         ),
     )
 
+    def __str__(self):
+        return self.media_type.title().replace("_", " ")
+
 
 class Banner(models.Model):
     title = models.CharField("Заголовок", max_length=100)
@@ -181,3 +184,12 @@ class PromotedProductsManual(models.Model):
 
     def __str__(self):
         return f"{self.product.title} ({self.priority})"
+
+
+class ContactNumber(models.Model):
+    number = PhoneField("Номер телефона", null=True, blank=True)
+
+
+class Address(models.Model):
+    location = models.CharField("Адрес", max_length=255)
+    work_hours = models.CharField("Время работы", max_length=50)

@@ -8,6 +8,9 @@ from .models import (
     Banner,
     PromotedProductsSettings,
     PromotedProductsManual,
+    FooterSocial,
+    ContactNumber,
+    Address,
 )
 from .models import User
 
@@ -42,8 +45,23 @@ class PromotedProductsSettingsAdmin(admin.ModelAdmin):
     pass
 
 
+class FooterSocialAdmin(admin.ModelAdmin):
+    model = FooterSocial
+
+
+class ContactsAdmin(admin.ModelAdmin):
+    model = ContactNumber
+
+
+class AddressAdmin(admin.ModelAdmin):
+    model = Address
+
+
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Banner, BannerAdmin)
 admin.site.register(PromotedProductsSettings, PromotedProductsSettingsAdmin)
 admin.site.register(User, UserAdmin)
+admin.site.register(FooterSocial, FooterSocialAdmin)
+admin.site.register(ContactNumber, ContactsAdmin)
+admin.site.register(Address, AddressAdmin)
