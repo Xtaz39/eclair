@@ -30,6 +30,7 @@ class Product(models.Model):
     filling = models.TextField("Начинка")
     topping = models.TextField("Декор")
     category = models.ForeignKey("Category", on_delete=models.SET_NULL, null=True)
+    recommendations = models.ManyToManyField("self", blank=True, symmetrical=False)
 
     def __str__(self):
         return f"{self.title} ({self.article})"

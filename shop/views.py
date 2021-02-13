@@ -100,6 +100,7 @@ class Product(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView)
             article=article,
         )
         data["product"] = product
+        data["recommendations"] = product.recommendations.all()
         return data
 
 
