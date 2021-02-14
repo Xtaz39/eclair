@@ -4,7 +4,8 @@
 {% block content %}
     <section class="order">
         <div class="container container--order">
-            <h2 class="text-center my-5">Корзина</h2>
+            <h2 v-if="cartTotalAmount > 0" class="text-center my-5">Корзина</h2>
+            <h2 v-else class="text-center my-5">Корзина пуста</h2>
             <div class="order__form">
                 {% for item in cart_items %}
                     <transition name="slide-right">
@@ -62,46 +63,51 @@
             </div>
         </div>
 
-        {% if product_recommendations %}
-            <h2 class="my-5 text-center">Рекомендуем к вашему заказу</h2>
-            <div class="carousel-recommended__wrap mb-5">
-                <div class="carousel-recommended">
-                    {% for product in product_recommendations %}
-                        <div class="item item--order">
-                            <div class="item__summary">
-                                <a href="/p/{{ product.article }}"
-                                   class="item__picture">
-                                    <img src="{{ product.image.url }}" alt="">
-                                </a>
-                                <div class="item__name">
-                                    <span>{{ product.title }}</span> <br>
-                                    <small class="item__category">{{ product.category.title }}</small>
-                                    <div class="item__price">
-                                        {% if product.price_discounted %}
-                                            <span class="price-old">{{ product.price }}</span>
-                                            <span class="price">{{ product.price_discounted }}</span>
-                                        {% else %}
-                                            <span class="price">{{ product.price }}</span>
-                                        {% endif %}
-                                        <span class="currency">руб.</span>
+        <transition name="slide-right">
+            <section v-if="cartTotalAmount > 0"
+                     class="recommendations">
+                <h2 class="my-5 text-center">Рекомендуем к вашему заказу</h2>
+                <div class="carousel-recommended__wrap mb-5">
+                    <div class="carousel-recommended">
+                        {% for product in product_recommendations %}
+                            <div class="item item--order">
+                                <div class="item__summary">
+                                    <a href="/p/{{ product.article }}"
+                                       class="item__picture">
+                                        <img src="{{ product.image.url }}" alt="">
+                                    </a>
+                                    <div class="item__name">
+                                        <span>{{ product.title }}</span> <br>
+                                        <small class="item__category">{{ product.category.title }}</small>
+                                        <div class="item__price">
+                                            {% if product.price_discounted %}
+                                                <span class="price-old">{{ product.price }}</span>
+                                                <span class="price">{{ product.price_discounted }}</span>
+                                            {% else %}
+                                                <span class="price">{{ product.price }}</span>
+                                            {% endif %}
+                                            <span class="currency">руб.</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+        </transition>
+
+        <transition name="slide-right">
+            <div v-if="cartTotalAmount > 0" class="container container--order">
+                <p class="total-sum mb-5">
+                    Сумма заказа: <b>[[ cartTotalAmount ]] руб.</b>
+                </p>
+                <div class="flex-between">
+                    <a href="/" class="btn btn--default">Вернуться в меню</a>
+                    <a href="checkout" class="btn btn--warning">Оформить заказ</a>
                 </div>
             </div>
-        {% endif %}
-
-        <div class="container container--order">
-            <p class="total-sum mb-5">
-                Сумма заказа: <b>[[ cartTotalAmount ]] руб.</b>
-            </p>
-            <div class="flex-between">
-                <a href="/" class="btn btn--default">Вернуться в меню</a>
-                <a href="checkout" class="btn btn--warning">Оформить заказ</a>
-            </div>
-        </div>
+        </transition>
 
     </section>
 {% endblock %}
