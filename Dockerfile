@@ -3,7 +3,7 @@ WORKDIR app
 
 RUN pip install -U pip && pip install pipenv
 
-COPY Pipfile* .
+COPY Pipfile* ./
 RUN pipenv install --system
 
 COPY . .
