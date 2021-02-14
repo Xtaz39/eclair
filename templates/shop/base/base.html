@@ -32,8 +32,8 @@
             data() {
                 return {
                     cartAmount: {{ cart.qty_total|default:"0" }},
-                    productCartAmount: {{ cart.products_amount|safe }},
-                    productCartPrice: {{ cart.products_price|safe }}
+                    productCartAmount: {{ cart.products_amount|safe|default:"{}" }},
+                    productCartPrice: {{ cart.products_price|safe|default:"0" }}
                 }
             },
             methods: {
