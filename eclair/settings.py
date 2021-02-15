@@ -120,3 +120,14 @@ STATIC_URL = "/static/"
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
 STATIC_ROOT = BASE_DIR / "static"
+
+
+# AmoCRM Integration
+AMOCRM_INTEGRATION_ID = os.environ.get("AMOCRM_INTEGRATION_ID")
+AMOCRM_SECRET_KEY = os.environ.get("AMOCRM_SECRET_KEY")
+AMOCRM_ACCESS_TOKEN = os.environ.get("AMOCRM_ACCESS_TOKEN")
+AMOCRM_REFRESH_TOKEN = os.environ.get("AMOCRM_REFRESH_TOKEN")
+# This toke expires after 20 minutes. It's usually ok if it's empty.
+# Required only to get access token. Can be obtained in Eclair widget settings
+# https://dennabiullin.amocrm.ru/settings/widgets/
+AMOCRM_AUTH_CODE = os.environ.get("AMOCRM_AUTH_CODE")
