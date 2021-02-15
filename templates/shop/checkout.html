@@ -7,24 +7,24 @@
             <h2 class="my-5">Заказ на доставку</h2>
             <div class="row">
                 <div class="col-lg-6 order-2 order-lg-1">
-                    <form action="#" class="order-form">
+                    <form action="{% url 'shop:order-create' %}" method="POST" class="order-form">
                         <div class="fields">
-                            <label class="form__input">
+                            <label class="form__input" for="name">
                                 <span>Имя</span>
-                                <input type="text">
+                                <input type="text" id="name" name="name">
                             </label>
-                            <label class="form__input">
+                            <label class="form__input" for="phone">
                                 <span>Номер телефона</span>
                                 <span class="input">
 {#                                 <input type="tel" value="+7 999 156-07-77">#}
-                                 <input type="tel">
+                                 <input type="tel" id="phone" name="phone">
 {#                                <button>Изменить</button>#}
                             </span>
                             </label>
-                            <label class="form__input">
+                            <label class="form__input" for="address">
                                 <span>Адрес доставки</span>
                                 <span class="input">
-                                <input type="text">
+                                <input type="text" id="address" name="address">
 {#                                <button>Изменить</button>#}
                             </span>
                             </label>
@@ -50,21 +50,20 @@
                         <div class="fields">
                             <label class="form__input form__input--radio">
                                 <span>Наличными</span>
-                                <input type="radio" name="pay_method">
+                                <input type="radio" name="pay_method" value="cash" checked>
                                 <span class="fake-input"></span>
                             </label>
                             <label class="form__input form__input--radio">
                                 <span>Картой на сайте</span>
-                                <input type="radio" name="pay_method">
+                                <input type="radio" name="pay_method" value="card">
                                 <span class="fake-input"></span>
                             </label>
                         </div>
                         <div class="flex-between mt-4">
-                            <a href="cart" class="btn btn--default">Вернуться в
+                            <a href="/cart" class="btn btn--default">Вернуться в
                                 корзину</a>
-                            <a href="cart" class="btn btn--warning">Оформить заказ на
-                                <span>5 999,00 руб.</span>
-                            </a>
+                            <button type="submit" class="submit btn btn--warning">
+                                Оформить заказ на <span>{{ cart_total_amount }} руб.</span></button>
                         </div>
                     </form>
                 </div>
