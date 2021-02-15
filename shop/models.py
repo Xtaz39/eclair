@@ -1,3 +1,6 @@
+import datetime
+import random
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from phone_field import PhoneField
@@ -96,7 +99,7 @@ class CartProduct(models.Model):
 class Order(models.Model):
     """Заказ"""
 
-    # todo: change PK to not incrementing ID
+    order_number = models.CharField("Номер заказа", max_length=50)
     customer_name = models.CharField("Имя заказчика", max_length=100)
     phone = PhoneField("Номер телефона")
     address = models.TextField("Адрес", max_length=150)
@@ -106,12 +109,18 @@ class Order(models.Model):
         max_length=100,
     )
 
+    @staticmethod
+    def generate_order_number():
+        date = datetime.date.today().strftime("%y%d%m")
+        number = random.randint(100000, 999999)
+        return f"{date}-{number}"
+
 
 class OrderProduct(models.Model):
     """Продукт из заказа"""
 
+    article = models.CharField("Артикул", max_length=100)
     title = models.CharField("Название", max_length=100)
-    category = models.CharField("Категория", max_length=100)
     price = models.DecimalField("Цена", max_digits=10, decimal_places=2)
     amount = models.PositiveIntegerField("Количество продукта", default=1)
     order = models.ForeignKey(Order, on_delete=models.DO_NOTHING)

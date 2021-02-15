@@ -1,6 +1,11 @@
+import http
+
 from django.core.handlers.wsgi import WSGIRequest
+from django import forms
+from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
+from django.views.generic.edit import BaseFormView
 
 from . import models
 
@@ -196,6 +201,56 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView
         )
 
         return data
+
+
+class OrderCreate(BaseFormView):
+    class Form(forms.Form):
+        name = forms.CharField()
+        phone = forms.CharField()
+        address = forms.CharField()
+        pay_method = forms.CharField()
+
+    form_class = Form
+
+    def post(self, request: WSGIRequest, *args, **kwargs):
+        if not request.session.session_key:
+            raise Http404()
+
+        form = self.get_form()
+        if not form.is_valid():
+            return HttpResponse(str(form.errors), status=http.HTTPStatus.BAD_REQUEST)
+
+        customer = form.cleaned_data
+
+        order_items = (
+            models.CartProduct.objects.filter(session_id=request.session.session_key)
+            .prefetch_related("product")
+            .all()
+        )
+
+        total_amount = sum(item.amount * item.product.price for item in order_items)
+        order = models.Order.objects.create(
+            order_number=models.Order.generate_order_number(),
+            customer_name=customer["name"],
+            phone=customer["phone"],
+            address=customer["address"],
+            payment_type=customer["pay_method"],
+        )
+        order_products = [
+            models.OrderProduct(
+                order_id=order.pk,
+                article=item.product.article,
+                title=item.product.title,
+                price=item.product.price,
+                amount=item.amount,
+            )
+            for item in order_items
+        ]
+        models.OrderProduct.objects.bulk_create(order_products)
+
+        return HttpResponse(
+            f"Done! Your order for {total_amount} руб. is {order.order_number}"
+        )
 
 
 class Review(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
