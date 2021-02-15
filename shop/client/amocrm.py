@@ -15,7 +15,6 @@ class ClientOptions(TypedDict):
     integration_id: str
     secret_key: str
     access_token: str
-    refresh_token: str
     auth_code: str
 
 
@@ -30,6 +29,7 @@ class Order:
     total_amount: int
     payment_type: PaymentType
     content: str
+    address: str
 
 
 class Client:
@@ -39,13 +39,13 @@ class Client:
     def __init__(self, options: ClientOptions):
         self._url = "https://dennabiullin.amocrm.ru"
         self._access_token = options["access_token"]
-        self._refresh_token = options["refresh_token"]
+        self._refresh_token = ""
         self._secret_key = options["secret_key"]
         self._integration_id = options["integration_id"]
         self._auth_code = options["auth_code"]
         self._http_client = requests.Session()
 
-    def _get_access_token(self):
+    def _obtain_access_token(self):
         """https://www.amocrm.ru/developers/content/oauth/step-by-step#get_access_token"""
         url = urljoin(self._url, "/oauth2/access_token")
         resp = self._http_client.post(
@@ -66,7 +66,8 @@ class Client:
         self._refresh_token = data["refresh_token"]
         return
 
-    def _refresh_token(self):
+    def _refresh_access_token(self):
+        """https://www.amocrm.ru/developers/content/oauth/step-by-step#easy_auth"""
         url = urljoin(self._url, "/oauth2/access_token")
         resp = self._http_client.post(
             url,
@@ -114,6 +115,7 @@ class Client:
         """https://www.amocrm.ru/developers/content/crm_platform/leads-api"""
         url = urljoin(self._url, "api/v4/leads")
         product_field_id = 472641
+        content_field_id = 500753
 
         resp = self._http_client.post(
             url,
@@ -130,7 +132,11 @@ class Client:
                         {
                             "field_id": product_field_id,
                             "values": [{"value": order.content}],
-                        }
+                        },
+                        {
+                            "field_id": content_field_id,
+                            "values": [{"value": order.address}],
+                        },
                     ],
                     "_embedded": {
                         "contacts": [
@@ -172,9 +178,11 @@ class Client:
         data = resp.json()
         return data
 
-    def create_contact(self, name: str, phone: str, address: str) -> str:
+    def create_contact(self, name: str, phone: str) -> str:
         """https://www.amocrm.ru/developers/content/crm_platform/contacts-api"""
         url = urljoin(self._url, "api/v4/contacts")
+        name_id = 430823
+        email_id = 430825
         resp = self._http_client.post(
             url,
             headers={"Authorization": f"Bearer {self._access_token}"},
@@ -184,13 +192,9 @@ class Client:
                     "created_by": self.ROBOT_ID,
                     "custom_fields_values": [
                         {
-                            "field_id": 430823,
+                            "field_id": name_id,
                             "values": [{"value": phone, "enum_id": 806581}],
-                        },
-                        {
-                            "field_id": 430825,
-                            "values": [{"value": address, "enum_id": 806593}],
-                        },
+                        }
                     ],
                 }
             ],
@@ -208,7 +212,6 @@ client = Client(
         "integration_id": settings.AMOCRM_INTEGRATION_ID,
         "secret_key": settings.AMOCRM_SECRET_KEY,
         "access_token": settings.AMOCRM_ACCESS_TOKEN,
-        "refresh_token": settings.AMOCRM_REFRESH_TOKEN,
         "auth_code": settings.AMOCRM_AUTH_CODE,
     }
 )

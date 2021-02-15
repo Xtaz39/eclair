@@ -4,11 +4,13 @@ from django import forms
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import transaction
 from django.http import HttpResponse, Http404
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
 from django.views.generic import TemplateView
 from django.views.generic.edit import BaseFormView
 
 from . import models
+from .client import amocrm
 
 
 class CategoriesDataMixin:
@@ -237,6 +239,7 @@ class OrderCreate(BaseFormView):
             phone=customer["phone"],
             address=customer["address"],
             payment_type=customer["pay_method"],
+            session_id=request.session.session_key,
         )
         order_products = [
             models.OrderProduct(
@@ -255,9 +258,65 @@ class OrderCreate(BaseFormView):
             session_id=request.session.session_key
         ).delete()
 
-        return HttpResponse(
-            f"Done! Your order for {total_amount} руб. is {order.order_number}"
+        client_card_id = amocrm.client.create_contact(
+            customer["name"], customer["phone"]
         )
+
+        order_content = "\n".join(
+            (
+                f"{item.product.title} x {item.amount} по {item.product.price}"
+                for item in order_items
+            )
+        )
+
+        payment_type = amocrm.PaymentType.CASH.value
+        if customer["pay_method"] == "card":
+            payment_type = amocrm.PaymentType.CARD.value
+
+        amocrm.client.create_lead(
+            client_card_id,
+            amocrm.Order(
+                order_id=order.order_number,
+                total_amount=int(total_amount),
+                payment_type=payment_type,
+                content=order_content,
+                address=customer["address"],
+            ),
+        )
+
+        return redirect(
+            to=reverse(
+                "shop:order-success", kwargs={"order_number": order.order_number}
+            ),
+        )
+
+
+class OrderSuccess(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
+    template_name = "shop/order_success.html"
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        if not self.request.session.session_key or not kwargs["order_number"]:
+            raise Http404()
+
+        try:
+            models.Order.objects.get(
+                session_id=self.request.session.session_key,
+                order_number=kwargs["order_number"],
+            )
+        except models.Order.DoesNotExist:
+            raise Http404()
+
+        data["order_number"] = kwargs["order_number"]
+        return data
+
+
+class RefreshClientToken(BaseFormView):
+    def get(self, request, *args, **kwargs):
+        token = kwargs["token"]
+        amocrm.client._auth_code = token
+        amocrm.client._obtain_access_token()
+        return HttpResponse("Done 👍")
 
 
 class Review(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):

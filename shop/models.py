@@ -108,10 +108,11 @@ class Order(models.Model):
         choices=(("cash", "Наличными"), ("card", "Картой на сайте")),
         max_length=100,
     )
+    session_id = models.CharField("Сессия", max_length=100)
 
     @staticmethod
     def generate_order_number():
-        date = datetime.date.today().strftime("%y%d%m")
+        date = datetime.date.today().strftime("%y%m%d")
         number = random.randint(100000, 999999)
         return f"{date}-{number}"
 
