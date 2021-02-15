@@ -1,8 +1,9 @@
 import http
 
-from django.core.handlers.wsgi import WSGIRequest
 from django import forms
-from django.http import HttpResponse, HttpResponseNotFound, Http404
+from django.core.handlers.wsgi import WSGIRequest
+from django.db import transaction
+from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 from django.views.generic.edit import BaseFormView
@@ -212,6 +213,7 @@ class OrderCreate(BaseFormView):
 
     form_class = Form
 
+    @transaction.atomic
     def post(self, request: WSGIRequest, *args, **kwargs):
         if not request.session.session_key:
             raise Http404()
