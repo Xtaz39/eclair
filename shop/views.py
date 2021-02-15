@@ -248,6 +248,11 @@ class OrderCreate(BaseFormView):
         ]
         models.OrderProduct.objects.bulk_create(order_products)
 
+        # clear cart
+        models.CartProduct.objects.filter(
+            session_id=request.session.session_key
+        ).delete()
+
         return HttpResponse(
             f"Done! Your order for {total_amount} руб. is {order.order_number}"
         )
