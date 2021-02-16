@@ -114,8 +114,8 @@ class Client:
     def create_lead(self, contact_id: int, order: Order):
         """https://www.amocrm.ru/developers/content/crm_platform/leads-api"""
         url = urljoin(self._url, "api/v4/leads")
-        product_field_id = 472641
-        content_field_id = 500753
+        product_field_id = 608539
+        address_field_id = 608543
 
         resp = self._http_client.post(
             url,
@@ -134,7 +134,7 @@ class Client:
                             "values": [{"value": order.content}],
                         },
                         {
-                            "field_id": content_field_id,
+                            "field_id": address_field_id,
                             "values": [{"value": order.address}],
                         },
                     ],
