@@ -4,13 +4,13 @@ from django import forms
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import transaction
 from django.http import HttpResponse, Http404
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.generic import TemplateView
 from django.views.generic.edit import BaseFormView
 
 from . import models
-from .client import amocrm
+from .client import amocrm, sberbank
 
 
 class CategoriesDataMixin:
@@ -284,31 +284,64 @@ class OrderCreate(BaseFormView):
             ),
         )
 
+        if customer["pay_method"] == "card":
+            payment_url = sberbank.client.generate_payment(
+                order.order_number, int(total_amount)
+            )
+            return redirect(to=payment_url)
+
         return redirect(
             to=reverse(
-                "shop:order-success", kwargs={"order_number": order.order_number}
+                "shop:order-success",
+                kwargs={
+                    "order_number": order.order_number,
+                },
             ),
         )
 
 
 class OrderSuccess(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
-    template_name = "shop/order_success.html"
+    template_name = "shop/order_status.html"
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         if not self.request.session.session_key or not kwargs["order_number"]:
             raise Http404()
 
+        order_number = kwargs["order_number"]
         try:
-            models.Order.objects.get(
+            order = models.Order.objects.get(
                 session_id=self.request.session.session_key,
-                order_number=kwargs["order_number"],
+                order_number=order_number,
             )
         except models.Order.DoesNotExist:
             raise Http404()
 
+        msg = "Ваш заказ успешно создан"
+        if order.payment_type == "card":
+            if sberbank.client.check_order_payed(order_number):
+                msg = "Ваш заказ успешно оплачен"
+            else:
+                msg = "Не удалось оплатить заказ"
+
         data["order_number"] = kwargs["order_number"]
+        data["message"] = msg
         return data
+
+
+class PaymentFailed(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
+    def get(self, request: WSGIRequest, *args, **kwargs):
+        if "order_number" not in kwargs:
+            raise Http404()
+
+        return render(
+            request,
+            "shop/order_status.html",
+            context={
+                "order_number": kwargs["order_number"],
+                "message": "Не удалось оплатить заказ",
+            },
+        )
 
 
 class RefreshClientToken(BaseFormView):

@@ -131,3 +131,8 @@ AMOCRM_REFRESH_TOKEN = os.environ.get("AMOCRM_REFRESH_TOKEN")
 # Required only to get access token. Can be obtained in Eclair widget settings
 # https://dennabiullin.amocrm.ru/settings/widgets/
 AMOCRM_AUTH_CODE = os.environ.get("AMOCRM_AUTH_CODE")
+
+# Sberbank integration
+SBERBANK_URL = os.getenv("SBERBANK_URL")
+SBERBANK_USER = os.getenv("SBERBANK_USER")
+SBERBANK_PASSWORD = os.getenv("SBERBANK_PASSWORD")

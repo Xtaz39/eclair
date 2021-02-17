@@ -16,9 +16,14 @@ urlpatterns = [
     path("checkout", views.Checkout.as_view(), name="checkout"),
     path("order-create", views.OrderCreate.as_view(), name="order-create"),
     path(
-        "order-success/<slug:order_number>",
+        "order/success/<slug:order_number>",
         views.OrderSuccess.as_view(),
         name="order-success",
+    ),
+    path(
+        "order/fail/<slug:order_number>",
+        views.PaymentFailed.as_view(),
+        name="payment-failed",
     ),
     path("_private/refresh_token/<str:token>", views.RefreshClientToken.as_view()),
 ]
