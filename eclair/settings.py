@@ -24,6 +24,7 @@ SECRET_KEY = "+=yug9l(!=hk8f45&u)otai0oc6q4ppa69u87s@p3!vv397dde"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+SITE_ADDR = os.getenv("SITE_ADDR", "http://localhost:8080")
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
 
 # Application definition

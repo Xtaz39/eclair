@@ -9,11 +9,12 @@ class ClientError(Exception):
 
 
 class Client:
-    def __init__(self, url: str, username: str, password: str):
+    def __init__(self, url: str, username: str, password: str, redirect_addr: str):
         self._base_url = url
         self._username = username
         self._password = password
         self._http_client = requests.Session()
+        self._redirect_addr = redirect_addr
 
     def generate_payment(self, order: str, amount: int) -> str:
         """
@@ -27,8 +28,8 @@ class Client:
                 "orderNumber": order,
                 # умножаем на 100 так как сумма отправляется в копейках
                 "amount": amount * 100,
-                "returnUrl": f"http://127.0.0.1:8000/order/success/{order}",
-                "failUrl": f"http://127.0.0.1:8000/order/fail/{order}",
+                "returnUrl": f"{self._redirect_addr}/order/success/{order}",
+                "failUrl": f"{self._redirect_addr}/order/fail/{order}",
             },
             headers={"Content-type": "application/x-www-form-urlencoded"},
         )
@@ -72,10 +73,13 @@ class Client:
         if "errorCode" in data and data["errorCode"] != "0":
             raise ClientError(f"Error {data['errorCode']}: {data['errorMessage']}")
 
-        payment_held, payed = 1, 2
-        return data["orderStatus"] in (payment_held, payed)
+        money_held, payed = 1, 2
+        return data["orderStatus"] in (money_held, payed)
 
 
 client = Client(
-    settings.SBERBANK_URL, settings.SBERBANK_USER, settings.SBERBANK_PASSWORD
+    settings.SBERBANK_URL,
+    settings.SBERBANK_USER,
+    settings.SBERBANK_PASSWORD,
+    settings.SITE_ADDR,
 )
