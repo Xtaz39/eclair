@@ -1,6 +1,6 @@
 import enum
 from dataclasses import dataclass
-from typing import TypedDict
+from typing import TypedDict, Any, Optional
 from urllib.parse import urljoin
 
 import requests
@@ -14,7 +14,6 @@ class ClientError(Exception):
 class ClientOptions(TypedDict):
     integration_id: str
     secret_key: str
-    access_token: str
     auth_code: str
 
 
@@ -38,14 +37,16 @@ class Client:
 
     def __init__(self, options: ClientOptions):
         self._url = "https://dennabiullin.amocrm.ru"
-        self._access_token = options["access_token"]
-        self._refresh_token = ""
         self._secret_key = options["secret_key"]
         self._integration_id = options["integration_id"]
         self._auth_code = options["auth_code"]
         self._http_client = requests.Session()
+        try:
+            self._obtain_access_token_local()
+        except FileNotFoundError:
+            self._obtain_access_token_external()
 
-    def _obtain_access_token(self):
+    def _obtain_access_token_external(self):
         """https://www.amocrm.ru/developers/content/oauth/step-by-step#get_access_token"""
         url = urljoin(self._url, "/oauth2/access_token")
         resp = self._http_client.post(
@@ -64,6 +65,7 @@ class Client:
         data = resp.json()
         self._access_token = data["access_token"]
         self._refresh_token = data["refresh_token"]
+        self._write_tokens(self._access_token, self._refresh_token)
         return
 
     def _refresh_access_token(self):
@@ -85,42 +87,74 @@ class Client:
         data = resp.json()
         self._access_token = data["access_token"]
         self._refresh_token = data["refresh_token"]
+        self._write_tokens(self._access_token, self._refresh_token)
         return
+
+    def _obtain_access_token_local(self):
+        with open(settings.BASE_DIR / ".amocrm_tokens", "r") as fh:
+            self._access_token = fh.readline()
+            self._refresh_token = fh.readline()
+
+    def _write_tokens(self, access_token: str, refresh_token: str):
+        with open(settings.BASE_DIR / ".amocrm_tokens", "w") as fh:
+            fh.writelines((access_token, refresh_token))
+
+    def _send_get(self, endpoint: str) -> dict[Any, Any]:
+        url = urljoin(self._url, endpoint)
+
+        for _ in range(2):
+            resp = self._http_client.get(
+                url, headers={"Authorization": f"Bearer {self._access_token}"}
+            )
+            if not resp.ok:
+                # refresh token and retry
+                self._refresh_access_token()
+            else:
+                break
+
+        if not resp.ok:
+            raise ClientError(resp.text)
+
+        data = resp.json()
+        return data
+
+    def _send_post(self, endpoint: str, data: Optional[Any]) -> dict[Any, Any]:
+        url = urljoin(self._url, endpoint)
+
+        for _ in range(2):
+            resp = self._http_client.post(
+                url,
+                headers={"Authorization": f"Bearer {self._access_token}"},
+                json=data,
+            )
+            if not resp.ok:
+                # refresh token and retry
+                self._refresh_access_token()
+            else:
+                break
+
+        if not resp.ok:
+            raise ClientError(resp.text)
+
+        data = resp.json()
+        return data
 
     def get_leads(self):
         """https://www.amocrm.ru/developers/content/crm_platform/leads-api"""
-        url = urljoin(self._url, "api/v4/leads")
-        resp = self._http_client.get(
-            url, headers={"Authorization": f"Bearer {self._access_token}"}
-        )
-        if not resp.ok:
-            raise ClientError(resp.text)
-
-        data = resp.json()
-        return data
+        return self._send_get("api/v4/leads")
 
     def get_lead(self, id_: int):
         """https://www.amocrm.ru/developers/content/crm_platform/leads-api"""
-        url = urljoin(self._url, f"api/v4/leads/{id_}")
-        resp = self._http_client.get(
-            url, headers={"Authorization": f"Bearer {self._access_token}"}
-        )
-        if not resp.ok:
-            raise ClientError(resp.text)
-
-        data = resp.json()
-        return data
+        return self._send_get(f"api/v4/leads/{id_}")
 
     def create_lead(self, contact_id: int, order: Order):
         """https://www.amocrm.ru/developers/content/crm_platform/leads-api"""
-        url = urljoin(self._url, "api/v4/leads")
         product_field_id = 608539
         address_field_id = 608543
 
-        resp = self._http_client.post(
-            url,
-            headers={"Authorization": f"Bearer {self._access_token}"},
-            json=[
+        data = self._send_post(
+            "api/v4/leads",
+            [
                 {
                     "name": order.order_id,
                     "price": order.total_amount,
@@ -148,45 +182,24 @@ class Client:
                 }
             ],
         )
-        if not resp.ok:
-            raise ClientError(resp.text)
-
-        data = resp.json()
         return data
 
     def list_contacts(self):
         """https://www.amocrm.ru/developers/content/crm_platform/contacts-api"""
-        url = urljoin(self._url, f"api/v4/contacts/")
-        resp = self._http_client.get(
-            url, headers={"Authorization": f"Bearer {self._access_token}"}
-        )
-        if not resp.ok:
-            raise ClientError(resp.text)
-
-        data = resp.json()
-        return data
+        return self._send_get("api/v4/contacts/")
 
     def get_contact(self, id_: int):
         """https://www.amocrm.ru/developers/content/crm_platform/contacts-api"""
-        url = urljoin(self._url, f"api/v4/contacts/{id_}")
-        resp = self._http_client.get(
-            url, headers={"Authorization": f"Bearer {self._access_token}"}
-        )
-        if not resp.ok:
-            raise ClientError(resp.text)
-
-        data = resp.json()
-        return data
+        return self._send_get(f"api/v4/contacts/{id_}")
 
     def create_contact(self, name: str, phone: str) -> str:
         """https://www.amocrm.ru/developers/content/crm_platform/contacts-api"""
-        url = urljoin(self._url, "api/v4/contacts")
         name_id = 430823
         email_id = 430825
-        resp = self._http_client.post(
-            url,
-            headers={"Authorization": f"Bearer {self._access_token}"},
-            json=[
+
+        data = self._send_post(
+            "api/v4/contacts",
+            data=[
                 {
                     "first_name": name,
                     "created_by": self.ROBOT_ID,
@@ -199,10 +212,7 @@ class Client:
                 }
             ],
         )
-        if not resp.ok:
-            raise ClientError(resp.text)
 
-        data = resp.json()
         contact = data["_embedded"]["contacts"][0]
         return contact["id"]
 
@@ -211,7 +221,6 @@ client = Client(
     {
         "integration_id": settings.AMOCRM_INTEGRATION_ID,
         "secret_key": settings.AMOCRM_SECRET_KEY,
-        "access_token": settings.AMOCRM_ACCESS_TOKEN,
         "auth_code": settings.AMOCRM_AUTH_CODE,
     }
 )

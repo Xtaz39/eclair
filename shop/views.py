@@ -348,7 +348,7 @@ class RefreshClientToken(BaseFormView):
     def get(self, request, *args, **kwargs):
         token = kwargs["token"]
         amocrm.client._auth_code = token
-        amocrm.client._obtain_access_token()
+        amocrm.client._obtain_access_token_external()
         return HttpResponse("Done 👍")
 
 
