@@ -2,6 +2,7 @@ import datetime
 import random
 
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models
 from phone_field import PhoneField
 
@@ -201,6 +202,23 @@ class ContactNumber(models.Model):
     number = PhoneField("Номер телефона", null=True, blank=True)
 
 
+def is_coordinates(value: str):
+    long, lat = value.replace(" ", "").split(",", maxsplit=1)
+    try:
+        float(long)
+        float(lat)
+    except ValueError:
+        raise ValidationError("Введите широту и долготу через запятую")
+
+
 class Address(models.Model):
+    name = models.CharField("Название точки", max_length=255)
     location = models.CharField("Адрес", max_length=255)
     work_hours = models.CharField("Время работы", max_length=50)
+    coordinates = models.CharField(
+        "Координаты",
+        max_length=50,
+        validators=[is_coordinates],
+        null=True,
+        blank=True,
+    )

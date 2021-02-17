@@ -7,12 +7,12 @@
         <div class="container">
             <h2 class="text-center">Наши рестораны</h2>
             <div class="row addresses my-5">
-                <div class="col-md-4 col-lg-3 offset-md-2 offset-lg-3 addresses__item">
-                    <b>ул. Кремлевская, д. 19</b> <br><br> <span>8:00-22:00</span>
-                </div>
-                <div class="col-md-4 col-lg-3 addresses__item">
-                    <b>ул. Чистопольская, д.36</b> <br><br> <span>7:00-22:00 (вых: 8:00-22:00)</span>
-                </div>
+                {% for address in addresses %}
+                    <div class="col-md-4 col-lg-3 {% if forloop.first %}offset-md-2 offset-lg-3{% endif %} addresses__item">
+                        <b>{{ address.location }}</b> <br><br>
+                        <span>{{ address.work_hours }}</span>
+                    </div>
+                {% endfor %}
             </div>
 
             <div class="eclair-map">
@@ -24,15 +24,27 @@
                 <h2 class="my-5">Связаться с нами</h2>
                 <div class="contact-us__item">
                     <h3>Телефон</h3>
-                    <a href="tel:+79625658560">+7-962-565-85-60</a>
+                    {% for phone in phones %}
+                        <a href="tel:{{ phone.number }}">{{ phone.number }}</a>
+                    {% endfor %}
                 </div>
                 <div class="contact-us__item">
                     <h3>Мы в соцсетях</h3>
-                    <a href="#">Instagram</a> <br>
-                    <a href="#">Facebook</a> <br>
-                    <a href="#">TikTok</a> <br>
-                    <a href="#">Youtube</a> <br>
-                    <a href="#">Vk.com</a>
+                    {% if social.instagramm %}
+                        <a href="{{ social.instagramm.link }}">Instagram</a> <br>
+                    {% endif %}
+                    {% if social.facebook %}
+                        <a href="{{ social.facebook.link }}">Facebook</a> <br>
+                    {% endif %}
+                    {% if social.tiktok %}
+                        <a href="{{ social.tiktok.link }}">TikTok</a> <br>
+                    {% endif %}
+                    {% if social.yotube %}
+                        <a href="{{ social.yotube.link }}">Youtube</a> <br>
+                    {% endif %}
+                    {% if social.vk %}
+                        <a href="{{ social.vk.link }}">Vk.com</a>
+                    {% endif %}
                 </div>
             </div>
 
