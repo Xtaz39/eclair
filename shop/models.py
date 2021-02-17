@@ -157,6 +157,9 @@ class Banner(models.Model):
     button_url = models.CharField("Ссылка на кноке", max_length=255)
     priority = models.SmallIntegerField("Приоритет", unique=True)
 
+    def __str__(self):
+        return f"{self.title} ({self.priority})"
+
 
 class PromotedProductsSettings(models.Model):
     mode = models.CharField(
@@ -188,6 +191,9 @@ class PromotedProductsSettings(models.Model):
         blank=True,
     )
 
+    def __str__(self):
+        return str(self.title)
+
 
 class PromotedProductsManual(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
@@ -200,6 +206,9 @@ class PromotedProductsManual(models.Model):
 
 class ContactNumber(models.Model):
     number = PhoneField("Номер телефона", null=True, blank=True)
+
+    def __str__(self):
+        return str(self.number)
 
 
 def is_coordinates(value: str):
@@ -222,3 +231,6 @@ class Address(models.Model):
         null=True,
         blank=True,
     )
+
+    def __str__(self):
+        return f"{self.name} ({self.location})"
