@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 blank=True,
                 max_length=50,
                 null=True,
-                validators=[shop.models.is_coordinates],
+                validators=[shop.validators.is_coordinates],
                 verbose_name="Координаты",
             ),
         ),

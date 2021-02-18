@@ -7,24 +7,27 @@
             <h2 class="my-5">Заказ на доставку</h2>
             <div class="row">
                 <div class="col-lg-6 order-2 order-lg-1">
-                    <form action="{% url 'shop:order-create' %}" method="POST" class="order-form">
+                    <form action="{% url 'shop:checkout' %}" method="POST" class="order-form">
                         <div class="fields">
                             <label class="form__input" for="name">
                                 <span>Имя</span>
-                                <input type="text" id="name" name="name" required>
+                                <input type="text" id="name" name="name" value="{{ form.name.value|default:"" }}" required>
+                                {{ form.name.errors }}
                             </label>
                             <label class="form__input" for="phone">
                                 <span>Номер телефона</span>
                                 <span class="input">
 {#                                 <input type="tel" value="+7 999 156-07-77">#}
-                                 <input type="tel" id="phone" name="phone" required>
+                                 <input type="tel" id="phone" name="phone" value="{{ form.phone.value|default:"" }}" required>
+                                    {{ form.phone.errors }}
 {#                                <button>Изменить</button>#}
                             </span>
                             </label>
                             <label class="form__input" for="address">
                                 <span>Адрес доставки</span>
                                 <span class="input">
-                                <input type="text" id="address" name="address" required>
+                                <input type="text" id="address" name="address" value="{{ form.address.value|default:"" }}" required>
+                                    {{ form.address.errors }}
 {#                                <button>Изменить</button>#}
                             </span>
                             </label>

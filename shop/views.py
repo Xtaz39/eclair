@@ -7,9 +7,9 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.generic import TemplateView
-from django.views.generic.edit import BaseFormView
+from django.views.generic.edit import BaseFormView, FormView
 
-from . import models
+from . import models, validators
 from .client import amocrm, sberbank
 
 
@@ -182,7 +182,14 @@ class Cart(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
         return data
 
 
-class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
+class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
+    class Form(forms.Form):
+        name = forms.CharField(required=True)
+        phone = forms.CharField(required=True, validators=[validators.is_phone])
+        address = forms.CharField(required=True)
+        pay_method = forms.CharField(required=True)
+
+    form_class = Form
     template_name = "shop/checkout.html"
 
     def get_context_data(self, **kwargs):
@@ -205,27 +212,13 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView
 
         return data
 
-
-class OrderCreate(BaseFormView):
-    class Form(forms.Form):
-        name = forms.CharField()
-        phone = forms.CharField()
-        address = forms.CharField()
-        pay_method = forms.CharField()
-
-    form_class = Form
-
     @transaction.atomic
-    def post(self, request: WSGIRequest, *args, **kwargs):
-        if not request.session.session_key:
+    def form_valid(self, form):
+        request: WSGIRequest = self.request
+        if not self.request.session.session_key:
             raise Http404()
 
-        form = self.get_form()
-        if not form.is_valid():
-            return HttpResponse(str(form.errors), status=http.HTTPStatus.BAD_REQUEST)
-
         customer = form.cleaned_data
-
         order_items = (
             models.CartProduct.objects.filter(session_id=request.session.session_key)
             .prefetch_related("product")

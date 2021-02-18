@@ -1,0 +1,11 @@
+/* this file was created to no touch main.css */
+/* there was no time to normally integrate with front and buil all css together */
+
+ul.errorlist {
+    padding-top: 5px;
+}
+
+ul.errorlist > li {
+    color: #ac3540;
+    font-size: 1.4rem;
+}

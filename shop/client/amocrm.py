@@ -97,7 +97,7 @@ class Client:
 
     def _write_tokens(self, access_token: str, refresh_token: str):
         with open(settings.BASE_DIR / ".amocrm_tokens", "w") as fh:
-            fh.writelines((access_token, refresh_token))
+            fh.write(f"{access_token}\n{refresh_token}")
 
     def _send_get(self, endpoint: str) -> dict[Any, Any]:
         url = urljoin(self._url, endpoint)

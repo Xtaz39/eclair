@@ -33,6 +33,7 @@ class ProductAdmin(admin.ModelAdmin):
         return self.readonly_fields
 
     def get_object(self, request, object_id, from_field=None):
+        # hack to pass obj_id to formfield_for_manytomany
         self._obj_id = object_id
         return super().get_object(request, object_id, from_field)
 
