@@ -1,35 +1,48 @@
+from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.core.exceptions import ValidationError
 
-from .models import (
-    Product,
-    Category,
-    ProductImage,
-    Banner,
-    PromotedProductsSettings,
-    PromotedProductsManual,
-    FooterSocial,
-    ContactNumber,
-    Address,
-)
-from .models import User
+from . import models
 
 
 class ProductImageAdmin(admin.StackedInline):
-    model = ProductImage
+    model = models.ProductImage
 
 
 class PromotedProductsAdmin(admin.StackedInline):
-    model = PromotedProductsManual
+    model = models.PromotedProductsManual
+
+
+class ProductForm(forms.ModelForm):
+    def clean_recommendations(self):
+        data = self.cleaned_data["recommendations"]
+        if data and len(data) < 4:
+            raise ValidationError("Нужно выбрать не менее 4 товаров.")
+
+        return data
 
 
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductImageAdmin]
+    form = ProductForm
 
     def get_readonly_fields(self, request, obj=None):
         if obj:  # when editing an object
             return ["article"]
         return self.readonly_fields
+
+    def get_object(self, request, object_id, from_field=None):
+        self._obj_id = object_id
+        return super().get_object(request, object_id, from_field)
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "recommendations":
+            kwargs["queryset"] = db_field.remote_field.model.objects.exclude(
+                article=self._obj_id
+            )
+
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -46,22 +59,22 @@ class PromotedProductsSettingsAdmin(admin.ModelAdmin):
 
 
 class FooterSocialAdmin(admin.ModelAdmin):
-    model = FooterSocial
+    model = models.FooterSocial
 
 
 class ContactsAdmin(admin.ModelAdmin):
-    model = ContactNumber
+    model = models.ContactNumber
 
 
 class AddressAdmin(admin.ModelAdmin):
-    model = Address
+    model = models.Address
 
 
-admin.site.register(Product, ProductAdmin)
-admin.site.register(Category, CategoryAdmin)
-admin.site.register(Banner, BannerAdmin)
-admin.site.register(PromotedProductsSettings, PromotedProductsSettingsAdmin)
-admin.site.register(User, UserAdmin)
-admin.site.register(FooterSocial, FooterSocialAdmin)
-admin.site.register(ContactNumber, ContactsAdmin)
-admin.site.register(Address, AddressAdmin)
+admin.site.register(models.Product, ProductAdmin)
+admin.site.register(models.Category, CategoryAdmin)
+admin.site.register(models.Banner, BannerAdmin)
+admin.site.register(models.PromotedProductsSettings, PromotedProductsSettingsAdmin)
+admin.site.register(models.User, UserAdmin)
+admin.site.register(models.FooterSocial, FooterSocialAdmin)
+admin.site.register(models.ContactNumber, ContactsAdmin)
+admin.site.register(models.Address, AddressAdmin)
