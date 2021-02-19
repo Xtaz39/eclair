@@ -1,6 +1,7 @@
 import datetime
 import random
 
+import pendulum
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from phone_field import PhoneField
@@ -245,6 +246,28 @@ class PromotedProductsSettings(models.Model):
     class Meta:
         verbose_name = "Настройка промо"
         verbose_name_plural = "Настройки промо"
+
+    def get_period_interval(self):
+        dt = pendulum.now()
+        if self.period == "week_this":
+            return dt.start_of("week"), dt
+
+        elif self.period == "week_last":
+            last_week = dt.subtract(weeks=1)
+            return last_week.start_of("week"), last_week.end_of("week")
+
+        elif self.period == "month_this":
+            return dt.start_of("month"), dt
+
+        elif self.period == "month_last":
+            month_last = dt.subtract(weeks=1)
+            return month_last.start_of("month"), month_last.end_of("month")
+
+        elif self.period == "year_half_this":
+            return dt.subtract(6).start_of("month"), dt
+
+        elif self.period == "year_this":
+            return dt.start_of("year"), dt
 
 
 class PromotedProductsManual(models.Model):

@@ -9,6 +9,7 @@ django-phone-field = "*"
 pillow = "*"
 uwsgi = "*"
 requests = "*"
+pendulum = "*"
 
 [dev-packages]
 black = "*"

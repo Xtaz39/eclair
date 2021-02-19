@@ -1,8 +1,7 @@
-import http
-
 from django import forms
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import transaction
+from django.db.models import Sum
 from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -71,7 +70,19 @@ class Index(CartDataMixin, FooterDataMixin, TemplateView):
 
         limit = promoted_settings.limit
         if promoted_settings.mode == "auto":
-            return models.Product.objects.all()[:limit]
+            start, end = promoted_settings.get_period_interval()
+            top_articles = (
+                models.OrderProduct.objects.filter(
+                    created_at__gte=start, created_at__lte=end
+                )
+                .values("article")
+                .annotate(bought_times=Sum("amount"))
+                .order_by("-bought_times")[:limit]
+            )
+            products = models.Product.objects.filter(
+                article__in=(t["article"] for t in top_articles)
+            )
+            return products.all()[:limit]
 
         if promoted_settings.mode == "manual":
             pm = models.PromotedProductsManual.objects.select_related("product").all()[
