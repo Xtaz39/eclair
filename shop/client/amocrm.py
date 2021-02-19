@@ -1,10 +1,13 @@
 import enum
+import logging
 from dataclasses import dataclass
 from typing import TypedDict, Any, Optional
 from urllib.parse import urljoin
 
 import requests
 from django.conf import settings
+
+logger = logging.getLogger(__name__)
 
 
 class ClientError(Exception):
@@ -41,6 +44,10 @@ class Client:
         self._integration_id = options["integration_id"]
         self._auth_code = options["auth_code"]
         self._http_client = requests.Session()
+        self._access_token = ""
+        self._refresh_token = ""
+
+    def init_token(self):
         try:
             self._obtain_access_token_local()
         except FileNotFoundError:
@@ -224,3 +231,8 @@ client = Client(
         "auth_code": settings.AMOCRM_AUTH_CODE,
     }
 )
+
+try:
+    client.init_token()
+except Exception as ex:
+    logger.error("Failed to init amocrm client. Order creation will not work: %s", ex)
