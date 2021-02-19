@@ -16,6 +16,10 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date = models.DateField("Дата рождения", null=True, blank=True)
 
+    class Meta:
+        verbose_name = "Профиль"
+        verbose_name_plural = "Профили"
+
 
 class Product(models.Model):
     """Товар"""
@@ -34,7 +38,9 @@ class Product(models.Model):
     description = models.TextField("Описание")
     filling = models.TextField("Начинка")
     topping = models.TextField("Декор")
-    category = models.ForeignKey("Category", on_delete=models.SET_NULL, null=True)
+    category = models.ForeignKey(
+        "Category", verbose_name="Категория", on_delete=models.SET_NULL, null=True
+    )
     recommendations = models.ManyToManyField("self", blank=True, symmetrical=False)
 
     def __str__(self):
@@ -52,10 +58,18 @@ class Product(models.Model):
             return ProductImage()
         return img.image
 
+    class Meta:
+        verbose_name = "Продукт"
+        verbose_name_plural = "Продукты"
+
 
 class ProductImage(models.Model):
     image = models.ImageField("Картинка", upload_to="image/product/")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Картинка продукта"
+        verbose_name_plural = "Картинки продуктов"
 
 
 class Category(models.Model):
@@ -70,6 +84,10 @@ class Category(models.Model):
     def products(self):
         return list(self.product_set.all())
 
+    class Meta:
+        verbose_name = "Категория"
+        verbose_name_plural = "Категории"
+
 
 class Customer(models.Model):
     """Пользователь"""
@@ -79,12 +97,20 @@ class Customer(models.Model):
     email = models.CharField("Почта", max_length=50)
     birth = models.DateField("Дата рождения")
 
+    class Meta:
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"
+
 
 class DeliveryAddress:
     """Адрес доставки"""
 
     address = models.TextField("Адрес", max_length=150)
     customer = models.ForeignKey(to=Customer, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Адрес доставки"
+        verbose_name_plural = "Адреса доставки"
 
 
 class CartProduct(models.Model):
@@ -96,6 +122,10 @@ class CartProduct(models.Model):
     session_id = models.CharField("Сессия", max_length=100, null=True)
     amount = models.IntegerField("Количество продукта", default=1)
     customer = models.ForeignKey(to=Customer, on_delete=models.CASCADE, null=True)
+
+    class Meta:
+        verbose_name = "Корзина"
+        verbose_name_plural = "Корзины"
 
 
 class Order(models.Model):
@@ -118,6 +148,10 @@ class Order(models.Model):
         number = random.randint(100000, 999999)
         return f"{date}-{number}"
 
+    class Meta:
+        verbose_name = "Заказ"
+        verbose_name_plural = "Заказы"
+
 
 class OrderProduct(models.Model):
     """Продукт из заказа"""
@@ -127,6 +161,11 @@ class OrderProduct(models.Model):
     price = models.DecimalField("Цена", max_digits=10, decimal_places=2)
     amount = models.PositiveIntegerField("Количество продукта", default=1)
     order = models.ForeignKey(Order, on_delete=models.DO_NOTHING)
+    created_at = models.DateTimeField("Дата покупки", auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Продукт из заказа"
+        verbose_name_plural = "Продукты из заказа"
 
 
 class FooterSocial(models.Model):
@@ -149,6 +188,10 @@ class FooterSocial(models.Model):
     def __str__(self):
         return self.media_type.title().replace("_", " ")
 
+    class Meta:
+        verbose_name = "Соцсеть"
+        verbose_name_plural = "Соцсети"
+
 
 class Banner(models.Model):
     title = models.CharField("Заголовок", max_length=100)
@@ -160,6 +203,10 @@ class Banner(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.priority})"
+
+    class Meta:
+        verbose_name = "Баннер"
+        verbose_name_plural = "Баннеры"
 
 
 class PromotedProductsSettings(models.Model):
@@ -195,6 +242,10 @@ class PromotedProductsSettings(models.Model):
     def __str__(self):
         return str(self.title)
 
+    class Meta:
+        verbose_name = "Настройка промо"
+        verbose_name_plural = "Настройки промо"
+
 
 class PromotedProductsManual(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
@@ -204,12 +255,20 @@ class PromotedProductsManual(models.Model):
     def __str__(self):
         return f"{self.product.title} ({self.priority})"
 
+    class Meta:
+        verbose_name = "Промо ручная настройка"
+        verbose_name_plural = "Промо ручная настройка"
+
 
 class ContactNumber(models.Model):
     number = PhoneField("Номер телефона", null=True, blank=True)
 
     def __str__(self):
         return str(self.number)
+
+    class Meta:
+        verbose_name = "Телефон"
+        verbose_name_plural = "Телефоны"
 
 
 class Address(models.Model):
@@ -223,6 +282,10 @@ class Address(models.Model):
         null=True,
         blank=True,
     )
+
+    class Meta:
+        verbose_name = "Адрес"
+        verbose_name_plural = "Адреса"
 
     def __str__(self):
         return f"{self.name} ({self.location})"
