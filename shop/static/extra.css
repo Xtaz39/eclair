@@ -9,3 +9,7 @@ ul.errorlist > li {
     color: #ac3540;
     font-size: 1.4rem;
 }
+
+div.eclair-map {
+    height: 400px;
+}

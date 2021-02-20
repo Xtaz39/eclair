@@ -1,8 +1,38 @@
 {% extends "shop/base/base.html" %}
 {% load static %}
 
-{% block content %}
+{% block js_extra %}
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=05e8f966-07f3-4153-a375-86e198861a29"
+            type="text/javascript"></script>
+    <script>
+        ymaps.ready(function () {
+            var myMap = new ymaps.Map('map', {
+                center: [55.808078, 49.119505],
+                zoom: 13
+            }, {
+                searchControlProvider: 'yandex#search'
+            })
 
+            myMap.geoObjects
+            {% for addr in addresses %}
+                {% if addr.coordinates %}
+                    .add(new ymaps.Placemark([{{addr.coordinates}}], {
+                            balloonContent: '{{ addr.location }}',
+                            iconCaption: '{{ addr.name }}'
+                        })
+                    )
+                {% endif %}
+            {% endfor %}
+        });
+    </script>
+    <style>
+    html, body, #map {
+        width: 100%; height: 100%; padding: 0; margin: 0;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
     <section class="contacts">
         <div class="container">
             <h2 class="text-center">Наши рестораны</h2>
@@ -16,8 +46,7 @@
             </div>
 
             <div class="eclair-map">
-                <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A6a9ce24f2060815a580a96511b14da1b7340ed730af58fbc2e4f89f4d0a6872f&amp;source=constructor"
-                        width="100%" height="400" frameborder="0"></iframe>
+                <div id="map" style="height: 100%; width: 100%"></div>
             </div>
 
             <div class="contact-us text-center">
