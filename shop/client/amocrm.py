@@ -36,7 +36,7 @@ class Client:
     ROBOT_ID = 0
 
     def __init__(self, options):
-        self._url = "https://dennabiullin.amocrm.ru"
+        self._url = options["url"]
         self._secret_key = options["secret_key"]
         self._integration_id = options["integration_id"]
         self._auth_code = options["auth_code"]
@@ -224,6 +224,7 @@ class Client:
 
 client = Client(
     {
+        "url": settings.AMOCRM_URL,
         "integration_id": settings.AMOCRM_INTEGRATION_ID,
         "secret_key": settings.AMOCRM_SECRET_KEY,
         "auth_code": settings.AMOCRM_AUTH_CODE,

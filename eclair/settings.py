@@ -152,6 +152,7 @@ if os.getenv("SENTRY_DSN"):
 # AmoCRM Integration
 AMOCRM_INTEGRATION_ID = os.environ.get("AMOCRM_INTEGRATION_ID")
 AMOCRM_SECRET_KEY = os.environ.get("AMOCRM_SECRET_KEY")
+AMOCRM_URL = os.getenv("AMOCRM_URL")
 AMOCRM_REDIRECT_URL = os.getenv("AMOCRM_REDIRECT_URL")
 # This toke expires after 20 minutes. It's usually ok if it's empty.
 # Required only to get access token. Can be obtained in Eclair widget settings
@@ -165,6 +166,6 @@ SBERBANK_PASSWORD = os.getenv("SBERBANK_PASSWORD")
 
 # IIKO integration
 IIKO_LOGIN = os.getenv("IIKO_LOGIN")
-IIKO_URL = os.getenv("IIKO_LOGIN")
+IIKO_URL = os.getenv("IIKO_URL")
 IIKO_REDIRECT_URL = os.getenv("IIKO_LOGIN")
 IIKO_PASSWORD = os.getenv("IIKO_PASSWORD")
