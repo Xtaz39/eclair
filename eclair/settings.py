@@ -19,13 +19,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "+=yug9l(!=hk8f45&u)otai0oc6q4ppa69u87s@p3!vv397dde"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "not secret")
 
 SITE_ADDR = os.getenv("SITE_ADDR", "http://localhost:8080")
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = bool(os.getenv("DJANGO_DEBUG", False))
 
 # Application definition
 
@@ -69,15 +69,31 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "eclair.wsgi.application"
 
+SESSION_COOKIE_SECURE = True
+
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
+use_db = os.getenv("USE_DB", "sqlite")
+if use_db.lower() == "mysql":
+    DB = {
+        "ENGINE": "mysql.connector.django",
+        "NAME": os.getenv("MYSQL_NAME"),
+        "HOST": os.getenv("MYSQL_HOST"),
+        "PORT": os.getenv("MYSQL_PORT"),
+        "USER": os.getenv("MYSQL_USER"),
+        "PASSWORD": os.getenv("MYSQL_PASSWORD"),
+        "OPTIONS": {
+            "autocommit": True,
+        },
+    }
+else:
+    DB = {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
-}
+
+DATABASES = {"default": DB}
 
 # Auth
 AUTH_USER_MODEL = "shop.User"
@@ -105,7 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "ru-RU"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Moscow"
 
 USE_I18N = True
 
@@ -126,6 +142,7 @@ STATIC_ROOT = BASE_DIR / "static"
 # AmoCRM Integration
 AMOCRM_INTEGRATION_ID = os.environ.get("AMOCRM_INTEGRATION_ID")
 AMOCRM_SECRET_KEY = os.environ.get("AMOCRM_SECRET_KEY")
+AMOCRM_REDIRECT_URL = os.getenv("AMOCRM_REDIRECT_URL")
 # This toke expires after 20 minutes. It's usually ok if it's empty.
 # Required only to get access token. Can be obtained in Eclair widget settings
 # https://dennabiullin.amocrm.ru/settings/widgets/
@@ -138,4 +155,6 @@ SBERBANK_PASSWORD = os.getenv("SBERBANK_PASSWORD")
 
 # IIKO integration
 IIKO_LOGIN = os.getenv("IIKO_LOGIN")
+IIKO_URL = os.getenv("IIKO_LOGIN")
+IIKO_REDIRECT_URL = os.getenv("IIKO_LOGIN")
 IIKO_PASSWORD = os.getenv("IIKO_PASSWORD")

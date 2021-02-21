@@ -1,7 +1,7 @@
 import enum
 import logging
 from dataclasses import dataclass
-from typing import TypedDict, Any, Optional
+from typing import Any, Optional
 from urllib.parse import urljoin
 
 import requests
@@ -12,12 +12,6 @@ logger = logging.getLogger(__name__)
 
 class ClientError(Exception):
     pass
-
-
-class ClientOptions(TypedDict):
-    integration_id: str
-    secret_key: str
-    auth_code: str
 
 
 class PaymentType(enum.Enum):
@@ -38,7 +32,7 @@ class Client:
     SITE_PIPELINE_ID = 3428449
     ROBOT_ID = 0
 
-    def __init__(self, options: ClientOptions):
+    def __init__(self, options):
         self._url = "https://dennabiullin.amocrm.ru"
         self._secret_key = options["secret_key"]
         self._integration_id = options["integration_id"]
@@ -46,6 +40,7 @@ class Client:
         self._http_client = requests.Session()
         self._access_token = ""
         self._refresh_token = ""
+        self._redirect_url = options["redirect_url"]
 
     def init_token(self):
         try:
@@ -63,7 +58,7 @@ class Client:
                 "client_secret": self._secret_key,
                 "grant_type": "authorization_code",
                 "code": self._auth_code,
-                "redirect_uri": "https://dmssk.github.io/",
+                "redirect_uri": self._redirect_url,
             },
         )
         if not resp.ok:
@@ -229,6 +224,7 @@ client = Client(
         "integration_id": settings.AMOCRM_INTEGRATION_ID,
         "secret_key": settings.AMOCRM_SECRET_KEY,
         "auth_code": settings.AMOCRM_AUTH_CODE,
+        "redirect_url": settings.AMOCRM_REDIRECT_URL,
     }
 )
 

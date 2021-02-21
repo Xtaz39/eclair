@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.7
 WORKDIR app
 
 RUN pip install -U pip && pip install pipenv

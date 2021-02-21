@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Optional, List
+from typing import Any, List
 from urllib.parse import urljoin
 
 import requests
@@ -11,8 +11,8 @@ class ClientError(Exception):
 
 
 class Client:
-    def __init__(self, login: str, password: str):
-        self._url = "https://iiko.biz:9900/api/0/"
+    def __init__(self, url: str, login: str, password: str):
+        self._url = url
         self._login = login
         self._password = password
         self._token = ""
@@ -41,28 +41,6 @@ class Client:
         for _ in range(2):
             params["access_token"] = self._token
             resp = self._http_client.get(url, params=params)
-            if not resp.ok:
-                # refresh token and retry
-                self._refresh_access_token()
-            else:
-                break
-
-        if not resp.ok:
-            raise ClientError(resp.text)
-
-        data = resp.json()
-        return data
-
-    def _send_post(self, endpoint: str, data: Optional[Any] = None) -> dict[Any, Any]:
-        url = urljoin(self._url, endpoint)
-        data = data or {}
-
-        for _ in range(2):
-            resp = self._http_client.post(
-                url,
-                headers={"Authorization": f"Bearer {self._access_token}"},
-                json=data,
-            )
             if not resp.ok:
                 # refresh token and retry
                 self._refresh_access_token()
@@ -160,4 +138,4 @@ class StopListAtOrganization:
     items: List[StopListItem]
 
 
-client = Client(settings.IIKO_LOGIN, settings.IIKO_PASSWORD)
+client = Client(settings.IIKO_URL, settings.IIKO_LOGIN, settings.IIKO_PASSWORD)

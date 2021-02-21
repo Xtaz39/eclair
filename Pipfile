@@ -10,6 +10,7 @@ pillow = "*"
 uwsgi = "*"
 requests = "*"
 pendulum = "*"
+mysql-connector-python = "*"
 
 [dev-packages]
 black = "*"
