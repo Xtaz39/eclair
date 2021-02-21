@@ -5,3 +5,5 @@ media
 *.http
 .env
 .amocrm_tokens
+node_modules
+front/dist

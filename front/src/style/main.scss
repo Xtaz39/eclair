@@ -486,6 +486,7 @@ h2 {
 
     .item__picture {
       max-width: 100px;
+      min-width: 100px;
       height: 80px;
       margin-right: 20px;
     }
@@ -494,6 +495,16 @@ h2 {
     .item__name {
       margin-bottom: 0;
       margin-right: auto;
+    }
+
+    .item__name {
+      max-width: 200px;
+      min-width: 200px;
+    }
+
+    .item__price {
+      max-width: 120px;
+      min-width: 120px;
     }
 
     .item__summary {
@@ -1361,6 +1372,7 @@ h2 {
 
   &__text {
     font-size: 1.4rem;
+    text-align: center;
 
     a {
       display: inline;
