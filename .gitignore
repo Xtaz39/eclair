@@ -5,3 +5,4 @@ media
 *.http
 .env
 .amocrm_tokens
+static/

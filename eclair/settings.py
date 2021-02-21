@@ -87,7 +87,6 @@ if use_db.lower() == "mysql":
         "PASSWORD": os.getenv("MYSQL_PASSWORD"),
         "OPTIONS": {
             "autocommit": True,
-            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
         },
     }
 else:
