@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django import forms
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import transaction
