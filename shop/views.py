@@ -373,10 +373,10 @@ class NotFound(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView
     def get_context_data(self, **kwargs):
         kwargs = super().get_context_data(**kwargs)
         msgs = {
-            400: "неправильно",
-            403: "нельзя",
-            404: "не туда",
-            500: "ой",
+            400: "Неправильный запрос",
+            403: "Доступ запрещен",
+            404: "Страница не найдена",
+            500: "Что-то пошло не так. Информация передана разработчикам",
         }
         msg = msgs.get(kwargs["code"], "Что-то пошло не так")
 
