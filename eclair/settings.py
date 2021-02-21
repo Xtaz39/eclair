@@ -71,7 +71,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "eclair.wsgi.application"
 
-SESSION_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
