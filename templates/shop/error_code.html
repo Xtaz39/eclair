@@ -1,0 +1,16 @@
+{% extends "shop/base/base.html" %}
+
+{% block content %}
+
+    <div class="page-404 text-center">
+        <h1>
+            {{ error_code }}
+        </h1>
+
+        <p>
+            {{ error_message }}
+            {#        Страницы не существует. Попробуйте начать с <a href="/">главной</a>#}
+        </p>
+    </div>
+
+{% endblock %}

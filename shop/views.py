@@ -365,8 +365,34 @@ class Vacancies(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateVie
 
 
 class NotFound(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
-    template_name = "shop/404.html"
+    template_name = "shop/error_code.html"
+
+    def get_context_data(self, **kwargs):
+        kwargs = super().get_context_data(**kwargs)
+        msgs = {
+            400: "неправильно",
+            403: "нельзя",
+            404: "не туда",
+            500: "ой",
+        }
+        msg = msgs.get(kwargs["code"], "Что-то пошло не так")
+
+        kwargs["error_message"] = msg
+        kwargs["error_code"] = kwargs.pop("code")
+        return kwargs
 
 
-def not_found(request, exception=None):
-    return NotFound().get(request)
+def error_400(request, exception=None):
+    return NotFound.as_view()(request, code=400)
+
+
+def error_403(request, exception=None):
+    return NotFound.as_view()(request, code=403)
+
+
+def error_404(request, exception=None):
+    return NotFound.as_view()(request, code=404)
+
+
+def error_500(request, exception=None):
+    return NotFound.as_view()(request, code=500)

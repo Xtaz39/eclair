@@ -24,8 +24,10 @@ urlpatterns = [
     path("admin/", admin.site.urls),
 ]
 
-handler404 = "shop.views.not_found"
-handler400 = "shop.views.not_found"
+handler400 = "shop.views.error_400"
+handler403 = "shop.views.error_403"
+handler404 = "shop.views.error_404"
+handler500 = "shop.views.error_500"
 
 
 if settings.DEBUG:
