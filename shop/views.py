@@ -34,7 +34,8 @@ class CartDataMixin:
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         req: WSGIRequest = self.request
-        if not (session := req.session.session_key):
+        session = req.session.session_key
+        if not session:
             return data
 
         items: list[models.CartProduct] = (
