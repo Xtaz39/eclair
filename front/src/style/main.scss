@@ -9,7 +9,8 @@ html {
   min-height: 100vh;
 }
 
-body {
+body,
+div#app {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
