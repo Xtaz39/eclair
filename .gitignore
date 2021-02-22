@@ -5,6 +5,6 @@ media
 *.http
 .env
 .amocrm_tokens
-static/
+shop/static/
 node_modules
 front/dist

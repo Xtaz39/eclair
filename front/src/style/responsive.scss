@@ -164,6 +164,12 @@
       flex-wrap: wrap;
     }
   }
+
+  .categories {
+    &__item {
+      width: 100%;
+    }
+  }
 }
 
 @media screen and (max-width: 500px) {
@@ -203,18 +209,6 @@
 
     p {
       font-size: 2rem;
-    }
-  }
-
-  .cake-form {
-    .items-carousel {
-      display: block;
-    }
-
-    &__cakes {
-      &--desktop {
-        display: none;
-      }
     }
   }
 
