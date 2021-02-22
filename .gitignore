@@ -6,3 +6,5 @@ media
 .env
 .amocrm_tokens
 static/
+node_modules
+front/dist

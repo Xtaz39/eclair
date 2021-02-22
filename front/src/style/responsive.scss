@@ -44,6 +44,11 @@
       }
     }
   }
+  .cookies {
+    &__text {
+      text-align: left;
+    }
+  }
 }
 
 @media screen and (max-width: 992px) {
@@ -151,6 +156,16 @@
   }
 }
 
+@media screen and (max-width: 650px) {
+  .item--order {
+    flex-direction: column;
+
+    .item__summary {
+      flex-wrap: wrap;
+    }
+  }
+}
+
 @media screen and (max-width: 500px) {
   .footer {
     &__wrap {
@@ -208,12 +223,6 @@
   }
 
   .item--order {
-    flex-direction: column;
-
-    .item__summary {
-      flex-wrap: wrap;
-    }
-
     .delete-item,
     .item__price,
     .item__actions {
