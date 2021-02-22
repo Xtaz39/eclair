@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import 'slick-carousel';
+import 'ion-rangeslider';
 
 if (module.hot) {
   module.hot.accept();
@@ -109,4 +110,26 @@ $(window).on('load', () => {
     e.preventDefault();
     $('.address-field').first().clone().appendTo('.fields');
   });
+
+  // $(".js-rangeInput").ionRangeSlider({
+  //
+  // });
+
+  (function() {
+    var e = $(".js-rangeInput")
+      , t = parseFloat($(".js-rangeInput").attr("data-min-weight"))
+      , n = parseFloat($(".js-rangeInput").attr("data-max-weight"));
+    e.ionRangeSlider({
+      min: t,
+      max: n,
+      step: .5,
+      postfix: " кг",
+      grid: !1,
+      onChange (data) {
+        $('.cake-weight').text(data.from)
+        const peopleCount = (data.from * 6.5).toFixed(0)
+        $('.range-wrap__descr .peoples').text(peopleCount)
+      }
+    })
+  })()
 });
