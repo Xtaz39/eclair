@@ -38,7 +38,7 @@ class ProductAdmin(admin.ModelAdmin):
         return super().get_object(request, object_id, from_field)
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if db_field.name == "recommendations":
+        if hasattr(self, "_obj_id") and db_field.name == "recommendations":
             kwargs["queryset"] = db_field.remote_field.model.objects.exclude(
                 article=self._obj_id
             )
