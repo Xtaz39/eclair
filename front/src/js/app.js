@@ -111,10 +111,8 @@ $(window).on('load', () => {
     $('.address-field').first().clone().appendTo('.fields');
   });
 
-  // $(".js-rangeInput").ionRangeSlider({
-  //
-  // });
 
+  // CAKE CONSTRUCTOR
   (function() {
     var e = $(".js-rangeInput")
       , t = parseFloat($(".js-rangeInput").attr("data-min-weight"))
@@ -131,5 +129,82 @@ $(window).on('load', () => {
         $('.range-wrap__descr .peoples').text(peopleCount)
       }
     })
-  })()
+  })();
+
+  $('a[data-feature-select]').on('click', function (e) {
+    e.preventDefault()
+    const action = $(this).data('feature-select');
+
+    switch (action) {
+      case 'filling':
+        $('.feature-modal.feature-filling').addClass('active')
+        break
+      case 'design':
+        $('.feature-modal.feature-design').addClass('active')
+        break
+    }
+  })
+  $('.get-back-btn-link').on('click', function (e) {
+    e.preventDefault()
+    $('.feature-modal').removeClass('active')
+  })
+
+  const filledIds = new Set()
+  const cakeData = {
+    fillIds: [],
+    designId: ''
+  }
+
+  $('.feature-filling__item-btn[data-feature-fill]').on('click', function (e) {
+    e.preventDefault()
+    const parent = $(this).parent('.feature-filling__item')
+    const fill = {
+      title: parent.find('.feature-filling__item-title').text(),
+      src: parent.find('img').attr('src'),
+      data: parent.data('feature-fill')
+    }
+    if (filledIds.has(fill.data)) { return }
+
+    const image = `
+    <div class="cake-filling-item" data-feature-fill="${fill.data}">
+      <img class="cake-filling-item__image" src="${fill.src}">
+      <button class="cake-filling-item__remove" data-feature-fill="${fill.data}"></button>
+      <span class="cake-filling-item__name">${fill.title}</span>
+    </div>
+    `
+    $('.cake-order-images').append(image)
+    parent.addClass('selected')
+
+    filledIds.add(fill.data)
+    cakeData.fillIds.push(fill.data)
+
+    // refresh click handler
+    $('.cake-filling-item__remove').on('click', function () {
+      const fillData = $(this).data('feature-fill')
+      filledIds.delete(fillData)
+      cakeData.fillIds = cakeData.fillIds.filter(id => id !== fillData)
+      $(`.feature-filling__item[data-feature-fill=${fillData}]`).removeClass('selected')
+      $(`.cake-filling-item[data-feature-fill=${fillData}]`).remove()
+    })
+  })
+
+  $('.feature-filling__item-btn[data-feature-design]').on('click', function (e) {
+    e.preventDefault()
+    $('.feature-design .feature-filling__item').removeClass('selected')
+    const parent = $(this).parent('.feature-filling__item')
+    const fill = {
+      src: parent.find('img').attr('src'),
+      data: parent.data('feature-design')
+    }
+
+    const image = `<div class="image" style="background-image: url(${fill.src})"></div>`
+
+    $('.cake-design-images').empty()
+    $('.cake-design-images').append(image)
+    parent.addClass('selected')
+
+    cakeData.designId = fill.data
+
+  })
+
 });

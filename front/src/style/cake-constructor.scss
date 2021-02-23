@@ -28,25 +28,6 @@
       background: #FFFFFF no-repeat 50% 50%;
     }
   }
-  &__features {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    flex-flow: row nowrap;
-    align-content: flex-start;
-    align-items: flex-start;
-    justify-content: flex-start;
-    width: 100%;
-    margin-top: 50px;
-  }
-
-  &__feature {
-    display: block;
-    width: calc(45% - 10px);
-    flex-basis: calc(45% - 10px);
-    margin: 0 30px 0 0;
-
-  }
 
   .form__field-title,
   .title {
@@ -301,5 +282,75 @@
     font-size: 2.1rem;
     line-height: 30px;
     color: #2C2724;
+  }
+}
+
+.feature-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  z-index: -1;
+  height: 100%;
+  padding: 20px;
+
+  &.active {
+    opacity: 1;
+    pointer-events: all;
+    visibility: visible;
+    z-index: 3;
+  }
+}
+.feature-filling {
+
+  &__wrap {
+
+  }
+
+  &__item {
+    box-shadow: 0 0 5px 0 rgba(0,0,0,0.3);
+
+    img {
+      height: 150px;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    span.selected {
+      display: none;
+    }
+
+    &-title {
+      font-size: 2rem;
+      margin: 10px 0;
+      padding: 0 10px;
+    }
+    &-description {
+      padding: 0 10px 15px;
+      font-size: 1.5rem;
+    }
+    &-btn {
+      font-size: 1.4rem;
+      width: 100%;
+    }
+
+    &.selected {
+
+      .btn {
+        background: $default-c;
+        color: $white-c;
+      }
+
+      span.selected {
+        display: inline;
+      }
+      span.not-selected {
+        display: none;
+      }
+    }
   }
 }

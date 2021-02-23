@@ -189,30 +189,23 @@
     <h2>Заказать авторский торт</h2>
 
     <div class="row">
-      <div class="col-md-9">
-        <div class="cake-constructor__features">
-          <div class="cake-constructor__feature">
+      <div class="col-lg-9 col-md-7">
+        <div class="row mt-5">
+          <div class="col-lg-6">
             <div class="title">
               Дизайн торта
             </div>
-            <div class="images">
-              <div class="image">
+            <div class="images cake-design-images">
 
-              </div>
             </div>
             <a href="#" class="btn btn--default" data-feature-select="design">Выбрать дизайн</a>
           </div>
-          <div class="cake-constructor__feature">
+          <div class="col-lg-6 mt-xl-0 mt-4">
             <div class="title">
               Дизайн торта
             </div>
-            <div class="images">
-              <div class="cake-filling-item">
-                <img class="cake-filling-item__image"
-                     src="https://cakeburo.ru/uploads/author_cake/8/A4ifns7a8qoIGIk4rT9nEMKpxGTZgSSW.jpg">
-                <button class="cake-filling-item__remove" data-cake-id="0"></button>
-                <span class="cake-filling-item__name">Сгущёнка и чернослив</span>
-              </div>
+            <div class="images cake-order-images">
+
             </div>
             <a href="#" class="btn btn--default" data-feature-select="filling">Выбрать начинку</a>
           </div>
@@ -220,7 +213,7 @@
         <div class="fields">
           <div class="title mt-4">Вес торта — <span class="cake-weight">3</span>кг</div>
           <div class="row mb-4">
-            <div class="col-md-6">
+            <div class="col-lg-6">
               <div class="range-wrap">
                 <div class="range-wrap__cover">
                   <input type="text" class="js-rangeInput" data-min-weight="3" data-max-weight="100" data-from="1.5">
@@ -228,75 +221,75 @@
                 <div class="range-wrap__descr">Примерно на <span class="peoples">20</span> человек</div>
               </div>
             </div>
-            <div class="col-md-4 d-flex align-center">
+            <div class="col-lg-4 d-flex align-center">
               <span class="form__tip">Минимальный срок изготовления − 4 дня</span>
             </div>
           </div>
           <div class="title">Контактные данные</div>
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-lg-6">
               <label class="form__input">
                 <span>Ваше имя</span>
                 <input type="text">
               </label>
             </div>
-            <div class="col-md-4">
+            <div class="col-lg-4">
 
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-lg-6">
               <label class="form__input">
                 <span>Номер телефона</span>
                 <input type="tel">
               </label>
             </div>
-            <div class="col-md-4">
+            <div class="col-lg-4">
 
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-lg-6">
               <label class="form__input">
                 <span>Электронная почта</span>
                 <input type="email">
               </label>
             </div>
-            <div class="col-md-4">
+            <div class="col-lg-4">
 
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-lg-6">
               <label class="form__input">
                 <span>Дата рождения</span>
                 <input type="date">
               </label>
             </div>
-            <div class="col-md-4">
+            <div class="col-lg-4">
 
             </div>
           </div>
           <div class="title">Доставка</div>
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-lg-6">
               <label class="form__input address-field">
                 <span>Адрес для доставки</span>
                 <input type="text">
               </label>
             </div>
-            <div class="col-md-4">
+            <div class="col-lg-4">
 
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-lg-6">
               <label class="form__input">
                 <span>Дата доставки</span>
                 <input type="date">
               </label>
             </div>
-            <div class="col-md-4 d-flex align-center">
+            <div class="col-lg-4 d-flex align-center">
               <span class="form__tip">Забрать торт вы сможете
               в любом нашем ресторане
               с 10:00 до 23:00.</span>
@@ -310,8 +303,112 @@
             данных.</a>
           </div>
         </div>
+        <div class="feature-modal feature-filling">
+          <div class="feature-filling__wrap row">
+            <div class="col-lg-4 col-sm-6 mb-4">
+              <div data-feature-fill="0" class="feature-filling__item">
+                <img src="./static/img/about-img-2.jpg" alt="">
+                <h4 class="feature-filling__item-title">
+                  Лимон и земляника 1
+                </h4>
+                <p class="feature-filling__item-description">
+                  лимонный бисквит в сочетании с трио кремов: земляничный, мандариновый и сливочно-сырный с белым
+                  шоколадом
+                </p>
+                <a href="#" data-feature-fill="0" class="feature-filling__item-btn btn btn--default">
+                  <span class="not-selected">выбрать</span>
+                  <span class="selected">выбрано</span>
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 mb-4">
+              <div data-feature-fill="1" class="feature-filling__item">
+                <img src="./static/img/about-img-3.jpg" alt="">
+                <h4 class="feature-filling__item-title">
+                  Лимон и земляника 2
+                </h4>
+                <p class="feature-filling__item-description">
+                  лимонный бисквит в сочетании с трио кремов: земляничный, мандариновый и сливочно-сырный с белым
+                  шоколадом
+                </p>
+                <a href="#" data-feature-fill="1" class="feature-filling__item-btn btn btn--default">
+                  <span class="not-selected">выбрать</span>
+                  <span class="selected">выбрано</span>
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 mb-4">
+              <div data-feature-fill="test-string" class="feature-filling__item">
+                <img src="./static/img/about-img-4.jpg" alt="">
+                <h4 class="feature-filling__item-title">
+                  Лимон и земляника 3
+                </h4>
+                <p class="feature-filling__item-description">
+                  лимонный бисквит в сочетании с трио кремов: земляничный, мандариновый и сливочно-сырный с белым
+                  шоколадом
+                </p>
+                <a href="#" data-feature-fill="test-string" class="feature-filling__item-btn btn btn--default">
+                  <span class="not-selected">выбрать</span>
+                  <span class="selected">выбрано</span>
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 mb-4">
+              <div data-feature-fill="99" class="feature-filling__item">
+                <img src="./static/img/about-img.jpg" alt="">
+                <h4 class="feature-filling__item-title">
+                  Лимон и земляника 4
+                </h4>
+                <p class="feature-filling__item-description">
+                  лимонный бисквит в сочетании с трио кремов: земляничный, мандариновый и сливочно-сырный с белым
+                  шоколадом
+                </p>
+                <a href="#" data-feature-fill="99" class="feature-filling__item-btn btn btn--default">
+                  <span class="not-selected">выбрать</span>
+                  <span class="selected">выбрано</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="feature-modal feature-design">
+          <div class="feature-filling__wrap row">
+            <div class="col-lg-4 col-sm-6 mb-4">
+              <div data-feature-design="0" class="feature-filling__item">
+                <img src="./static/img/about-img-2.jpg" alt="">
+                <h4 class="feature-filling__item-title">
+                  Лимон и земляника design 1
+                </h4>
+                <p class="feature-filling__item-description">
+                  лимонный бисквит в сочетании с трио кремов: земляничный, мандариновый и сливочно-сырный с белым
+                  шоколадом
+                </p>
+                <a href="#" data-feature-design="0" class="feature-filling__item-btn btn btn--default">
+                  <span class="not-selected">выбрать</span>
+                  <span class="selected">выбрано</span>
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 mb-4">
+              <div data-feature-design="2" class="feature-filling__item">
+                <img src="./static/img/about-img-3.jpg" alt="">
+                <h4 class="feature-filling__item-title">
+                  Лимон и земляника design 1
+                </h4>
+                <p class="feature-filling__item-description">
+                  лимонный бисквит в сочетании с трио кремов: земляничный, мандариновый и сливочно-сырный с белым
+                  шоколадом
+                </p>
+                <a href="#" data-feature-design="2" class="feature-filling__item-btn btn btn--default">
+                  <span class="not-selected">выбрать</span>
+                  <span class="selected">выбрано</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <aside class="col-md-3 pt-4">
+      <aside class="col-lg-3 col-md-4 offset-md-1 offset-lg-0 pt-4 mt-4 mt-xl-0">
         <span class="cake-order-info__title">Торты авторского дизайна и любого уровня сложности.</span>
         <div class="cake-order-info__terms">
           Срок изготовления
@@ -323,19 +420,8 @@
         </div>
         <div class="cake-order-info__terms">
           Начинка
-          <div class="images">
-            <div class="cake-filling-item">
-              <img class="cake-filling-item__image"
-                   src="https://cakeburo.ru/uploads/author_cake/8/A4ifns7a8qoIGIk4rT9nEMKpxGTZgSSW.jpg">
-              <button class="cake-filling-item__remove" data-cake-id="0"></button>
-              <span class="cake-filling-item__name">Сгущёнка и чернослив</span>
-            </div>
-            <div class="cake-filling-item">
-              <img class="cake-filling-item__image"
-                   src="https://cakeburo.ru/uploads/author_cake/9/2bJ2tB_Ue4ZTi7Uy6aDV1b_-QoaBPYXG.jpg">
-              <button class="cake-filling-item__remove" data-cake-id="1"></button>
-              <span class="cake-filling-item__name">Лимон и земляника</span>
-            </div>
+          <div class="images cake-order-images">
+
           </div>
         </div>
         <a class="get-back-btn-link btn btn--default" href="javascript:void(0);">Вернуться к оформлению</a>
