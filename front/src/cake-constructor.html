@@ -200,7 +200,7 @@
 
               </div>
             </div>
-            <a href="#" class="feature__select" data-feature-select="design">Выбрать дизайн</a>
+            <a href="#" class="btn btn--default" data-feature-select="design">Выбрать дизайн</a>
           </div>
           <div class="cake-constructor__feature">
             <div class="title">
@@ -208,168 +208,110 @@
             </div>
             <div class="images">
               <div class="cake-filling-item">
-                <img class="cake-filling-item__image" src="https://cakeburo.ru/uploads/author_cake/8/A4ifns7a8qoIGIk4rT9nEMKpxGTZgSSW.jpg">
+                <img class="cake-filling-item__image"
+                     src="https://cakeburo.ru/uploads/author_cake/8/A4ifns7a8qoIGIk4rT9nEMKpxGTZgSSW.jpg">
                 <button class="cake-filling-item__remove" data-cake-id="0"></button>
                 <span class="cake-filling-item__name">Сгущёнка и чернослив</span>
               </div>
             </div>
-            <a href="#" class="feature__select" data-feature-select="filling">Выбрать начинку</a>
+            <a href="#" class="btn btn--default" data-feature-select="filling">Выбрать начинку</a>
           </div>
         </div>
-        <div class="title">
-          Вес торта — <span class="cake-weight">3</span>кг
-        </div>
-        <div class="form__field-wrap form__input-wrap">
-          <div class="form__input-inner-wrap">
-            <div class="range-wrap">
-              <div class="range-wrap__cover">
-                <input type="text" class="js-rangeInput" data-min-weight="3" data-max-weight="100" data-from="1.5">
+        <div class="fields">
+          <div class="title mt-4">Вес торта — <span class="cake-weight">3</span>кг</div>
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <div class="range-wrap">
+                <div class="range-wrap__cover">
+                  <input type="text" class="js-rangeInput" data-min-weight="3" data-max-weight="100" data-from="1.5">
+                </div>
+                <div class="range-wrap__descr">Примерно на <span class="peoples">20</span> человек</div>
               </div>
-              <div class="range-wrap__descr">Примерно на <span class="peoples">20</span> человек</div>
+            </div>
+            <div class="col-md-4 d-flex align-center">
+              <span class="form__tip">Минимальный срок изготовления − 4 дня</span>
             </div>
           </div>
-          <div class="form__input-descr">
-            Минимальный срок изготовления − 4 дня
-          </div>
-        </div>
-        <div class="form__field-wrap">
-          <div class="form__field">
-            <div class="form__field-title">Надпись на торте</div>
-            <div class="form__input-wrap">
-              <div class="form__input-inner-wrap">
-                <div class="form__input-cover form__input-cover_filled">
-                  <input type="text" id="plate" name="plate" class="form__input">
-                  <label class="form__label">
-                    <span class="form__label-text"></span>
-                  </label>
-                </div>
-              </div>
-              <div class="form__input-descr">
-                + 500 руб.
-              </div>
+          <div class="title">Контактные данные</div>
+          <div class="row">
+            <div class="col-md-6">
+              <label class="form__input">
+                <span>Ваше имя</span>
+                <input type="text">
+              </label>
+            </div>
+            <div class="col-md-4">
+
             </div>
           </div>
-        </div>
-        <div class="form__field-wrap">
-          <div class="form__field">
-            <div class="form__field-title">Контактные данные</div>
-            <div class="form__input-wrap">
-              <div class="form__input-inner-wrap">
-                <div class="form__input-cover form__input-cover_filled">
-                  <input type="text" required="1" id="fullName" name="fullName" class="form__input">
-                  <label class="form__label">
-                    <span class="form__label-text">ФИО</span>
-                  </label>
-                  <a href="javascript:void(0);" class="form__clear-field"></a>
-                </div>
-                <div class="form__error-message">
-                  Не указано ФИО
-                </div>
-              </div>
-              <div class="form__input-descr"></div>
+          <div class="row">
+            <div class="col-md-6">
+              <label class="form__input">
+                <span>Номер телефона</span>
+                <input type="tel">
+              </label>
             </div>
-            <div class="form__input-wrap">
-              <div class="form__input-inner-wrap">
-                <div class="form__input-cover form__input-cover_filled">
-                  <input type="email" required="1" id="email" name="email" class="form__input">
-                  <label class="form__label">
-                    <span class="form__label-text">Электронная почта</span>
-                  </label>
-                  <a href="javascript:void(0);" class="form__clear-field"></a>
-                </div>
-              </div>
-              <div class="form__input-descr"></div>
-            </div>
-            <div class="form__input-wrap">
-              <div class="form__input-inner-wrap">
-                <div class="form__input-cover">
-                  <input type="tel" required="1" id="phone" name="phone" class="form__input js-input-phone">
-                  <label class="form__label">
-                    <span class="form__label-text">Телефон</span>
-                  </label>
-                  <a href="javascript:void(0);" class="form__clear-field"></a>
-                </div>
-                <div class="form__error-message">
-                  Не указан телефон
-                </div>
-              </div>
-              <div class="form__input-descr">Менеджер свяжется с вами по телефону<br>для выяснения деталей заказа.</div>
+            <div class="col-md-4">
+
             </div>
           </div>
-        </div>
-        <div class="form__field-wrap">
-          <div class="form__field">
-            <div class="form__field-title">Доставка</div>
-            <div class="form__input-wrap">
-              <div class="form__input-inner-wrap">
-                <div class="form__input-cover form__input-cover_datetimepicker">
-                  <input name="date" type="text" required="1" class="form__input js-datetimepicker">
-                  <label class="form__label">
-                    <span class="form__label-text">Дата доставки</span>
-                  </label>
-                  <div class="form__warning" style="display: none;">Дата не доступна для заказа после 16:00</div>
-                  <a href="javascript:void(0);" class="form__clear-field"></a>
-                </div>
-              </div>
-              <div class="form__input-descr">
-                Забрать торт вы сможете<br>
-                в любом нашем ресторане<br>
-                с 10:00 до 23:00.
-              </div>
+          <div class="row">
+            <div class="col-md-6">
+              <label class="form__input">
+                <span>Электронная почта</span>
+                <input type="email">
+              </label>
             </div>
-            <div class="form__input-wrap">
-              <div class="form__input-inner-wrap ">
-                <div class="form__input-cover form__input-cover_select focused">
-                  <select class="form__select js-select2 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
-                    <option></option>
-                    <option value="3" data-code="330">Аврора</option>
-                    <option value="4" data-code="359">Белая площадь</option>
-                    <option value="5" data-code="343">Большая Полянка</option>
-                    <option value="6" data-code="352">Внуково Outlet</option>
-                    <option value="7" data-code="358">ГУМ</option>
-                    <option value="8" data-code="350">Комсомольский</option>
-                    <option value="9" data-code="326">Кудринская</option>
-                    <option value="10" data-code="355">Кутузовский</option>
-                    <option value="19" data-code="354">Метрополис</option>
-                    <option value="11" data-code="327">Неглинная</option>
-                    <option value="12" data-code="325">Никитская</option>
-                    <option value="13" data-code="356">Новая площадь</option>
-                    <option value="14" data-code="347">Отель Moss</option>
-                    <option value="15" data-code="360">Покровка</option>
-                    <option value="17" data-code="346">ТД «Весна»</option>
-                    <option value="1" data-code="349">ТЦ «Хорошо»</option>
-                    <option value="2" data-code="357">Тверская</option>
-                    <option value="18" data-code="348">Усачёвский</option>
-                    <option value="20" data-code="">Четыре Ветра</option>
-                    <option value="21" data-code="">Novaya Riga Outlet Village</option>
-                    <option value="22" data-code="">Wall Street</option>
-                    <option value="23" data-code="">Мосфильмовская</option>
-                    <option value="24" data-code="">Павлово</option>
-                    <option value="25" data-code="">Кофемания ХП</option>
-                    <option value="26" data-code="">Кофемания Kinki</option>
-                  </select><span class="select2 select2-container select2-container--default select2-container--below" dir="ltr" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single select-restaurant-container" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-vjoi-container"><span class="select2-selection__rendered" id="select2-vjoi-container"><span class="select2-selection__placeholder">Ресторан</span></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-                  <label class="form__label">
-                    <span class="form__label-text">Ресторан</span>
-                  </label>
-                  <a href="javascript:void(0);" class="form__clear-field"></a>
-                </div>
-                <div class="form__error-message">
-                  Не указан ресторан
-                </div>
-              </div>
-              <div class="form__input-descr"></div>
+            <div class="col-md-4">
+
             </div>
-            <div class="form-submit-block">
-              <button class="form-submit-btn btn_disabled">Заказать</button>
-              <div class="privacy-policy">
-                Нажимая на кнопку, вы даете согласие <br> <a href="/privacy-policy.pdf" target="_blank" class="privacy-policy__link">на обработку своих персональных
-                данных.</a>
-              </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <label class="form__input">
+                <span>Дата рождения</span>
+                <input type="date">
+              </label>
             </div>
+            <div class="col-md-4">
+
+            </div>
+          </div>
+          <div class="title">Доставка</div>
+          <div class="row">
+            <div class="col-md-6">
+              <label class="form__input address-field">
+                <span>Адрес для доставки</span>
+                <input type="text">
+              </label>
+            </div>
+            <div class="col-md-4">
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <label class="form__input">
+                <span>Дата доставки</span>
+                <input type="date">
+              </label>
+            </div>
+            <div class="col-md-4 d-flex align-center">
+              <span class="form__tip">Забрать торт вы сможете
+              в любом нашем ресторане
+              с 10:00 до 23:00.</span>
+            </div>
+          </div>
+          <button class="form-submit-btn btn btn--warning">Заказать</button>
+          <div class="privacy-policy">
+            Нажимая на кнопку, вы даете согласие <br> <a href="/privacy-policy.pdf" target="_blank"
+                                                         class="privacy-policy__link">на обработку своих
+            персональных
+            данных.</a>
           </div>
         </div>
       </div>
-      <aside class="col-md-3">
+      <aside class="col-md-3 pt-4">
         <span class="cake-order-info__title">Торты авторского дизайна и любого уровня сложности.</span>
         <div class="cake-order-info__terms">
           Срок изготовления
@@ -383,18 +325,20 @@
           Начинка
           <div class="images">
             <div class="cake-filling-item">
-              <img class="cake-filling-item__image" src="https://cakeburo.ru/uploads/author_cake/8/A4ifns7a8qoIGIk4rT9nEMKpxGTZgSSW.jpg">
+              <img class="cake-filling-item__image"
+                   src="https://cakeburo.ru/uploads/author_cake/8/A4ifns7a8qoIGIk4rT9nEMKpxGTZgSSW.jpg">
               <button class="cake-filling-item__remove" data-cake-id="0"></button>
               <span class="cake-filling-item__name">Сгущёнка и чернослив</span>
             </div>
             <div class="cake-filling-item">
-              <img class="cake-filling-item__image" src="https://cakeburo.ru/uploads/author_cake/9/2bJ2tB_Ue4ZTi7Uy6aDV1b_-QoaBPYXG.jpg">
+              <img class="cake-filling-item__image"
+                   src="https://cakeburo.ru/uploads/author_cake/9/2bJ2tB_Ue4ZTi7Uy6aDV1b_-QoaBPYXG.jpg">
               <button class="cake-filling-item__remove" data-cake-id="1"></button>
               <span class="cake-filling-item__name">Лимон и земляника</span>
             </div>
           </div>
         </div>
-        <a class="get-back-btn-link" href="javascript:void(0);">Вернуться к оформлению</a>
+        <a class="get-back-btn-link btn btn--default" href="javascript:void(0);">Вернуться к оформлению</a>
         <div class="delivery-about delivery-about_checkout">
           <div class="delivery-about__box">
             <div class="delivery-about__title">Заказы принимаются</div>
