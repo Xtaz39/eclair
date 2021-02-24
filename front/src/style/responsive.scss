@@ -154,6 +154,19 @@
     height: 400px;
     flex-wrap: wrap;
   }
+  .modal {
+    .modal__close {
+      top: initial;
+      bottom: calc(100% + 15px);
+      left: 0;
+    }
+    .form__input .input {
+      margin-left: 0;
+    }
+    &__wrap .personal-data {
+      margin-top: 20px;
+    }
+  }
 }
 
 @media screen and (max-width: 650px) {

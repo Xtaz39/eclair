@@ -204,7 +204,31 @@ $(window).on('load', () => {
     parent.addClass('selected')
 
     cakeData.designId = fill.data
+  })
+  // CAKE CONSTRUCTOR END
 
+  $('.modal__close').on('click', function (e) {
+    e.preventDefault()
+    $(this).parent().parent('.modal').removeClass('active')
+  })
+  $('.login-btn').on('click', function (e) {
+    e.preventDefault()
+    const stage1Input = $('.login-stage-1')
+    const stage2Input = $('.login-stage-2')
+    if(stage2Input.hasClass('active')) {
+      // submit form
+    } else {
+      stage1Input.removeClass('active')
+      stage2Input.addClass('active')
+      stage1Input.find('input').prop('disabled', true)
+      stage1Input.find('button').show()
+    }
+  })
+
+  $('.input button').on('click', function () {
+    $('.login-stage-2').removeClass('active')
+    $(this).siblings('input').prop('disabled', false)
+    $(this).hide()
   })
 
 });

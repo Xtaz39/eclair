@@ -1434,4 +1434,74 @@ h2 {
   font-size: 1.2rem;
 }
 
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 5;
+
+  display: none;
+  &.active {
+    display: flex;
+  }
+
+  &__wrap {
+    position: relative;
+    width: 600px;
+    max-width: 100%;
+    background: $white-c;
+    padding: 48px 40px 40px;
+
+    a {
+      color: $white-c;
+    }
+
+    .personal-data {
+      font-size: 1.4rem;
+
+      a {
+        display: inline;
+        font-size: 1.4rem;
+        padding: 0;
+        margin: 0;
+        color: #d5a203;
+        text-decoration: none;
+      }
+    }
+  }
+
+  .form__input {
+    &.login-stage-1 {
+      button {
+        display: none;
+      }
+    }
+    &.login-stage-2 {
+      display: none;
+      &.active {
+        display: flex;
+      }
+    }
+
+    width: 100%;
+    .input {
+      margin-left: 20px;
+    }
+  }
+
+
+  .modal__close {
+    position: absolute;
+    top: 0;
+    left: calc(100% + 15px);
+    padding: 0;
+  }
+}
+
 @import "responsive";
