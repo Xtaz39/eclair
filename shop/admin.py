@@ -71,6 +71,14 @@ class AddressAdmin(admin.ModelAdmin):
     model = models.Address
 
 
+class CakeDesignAdmin(admin.ModelAdmin):
+    model = models.CakeDesign
+
+
+class CakeToppingAdmin(admin.ModelAdmin):
+    model = models.CakeTopping
+
+
 admin.site.register(models.Product, ProductAdmin)
 admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Banner, BannerAdmin)
@@ -79,3 +87,5 @@ admin.site.register(models.User, UserAdmin)
 admin.site.register(models.FooterSocial, FooterSocialAdmin)
 admin.site.register(models.ContactNumber, ContactsAdmin)
 admin.site.register(models.Address, AddressAdmin)
+admin.site.register(models.CakeDesign, CakeDesignAdmin)
+admin.site.register(models.CakeTopping, CakeToppingAdmin)

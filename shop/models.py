@@ -181,7 +181,7 @@ class FooterSocial(models.Model):
             ("instagram", "Инстаграмм"),
             ("facebook", "Фейсбук"),
             ("tiktok", "Тикток"),
-            ("yotube", "Ютуб"),
+            ("youtube", "Ютуб"),
             ("vk", "Вконтакте"),
             ("google_play", "Google Play"),
             ("app_store", "Apple Store"),
@@ -314,3 +314,27 @@ class Address(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.location})"
+
+
+class CakeDesign(models.Model):
+    title = models.CharField("Название", max_length=100)
+    image = models.ImageField("Картинка", upload_to="image/cake/")
+
+    class Meta:
+        verbose_name = "Торт на заказ дизайн"
+        verbose_name_plural = "Торт на заказ (дизайн)"
+
+    def __str__(self):
+        return self.title
+
+
+class CakeTopping(models.Model):
+    title = models.CharField("Название", max_length=100)
+    image = models.ImageField("Картинка", upload_to="image/cake/")
+
+    class Meta:
+        verbose_name = "Торт на заказ начинка"
+        verbose_name_plural = "Торт на заказ (начинка)"
+
+    def __str__(self):
+        return self.title
