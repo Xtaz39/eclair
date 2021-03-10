@@ -138,161 +138,47 @@
                     </div>
                     <div class="feature-modal feature-filling">
                         <div class="feature-filling__wrap row">
-                            <div class="col-lg-4 col-sm-6 mb-4">
-                                <div data-feature-fill="0"
+                            {% for cake_topping in cake_toppings %}
+                                <div class="col-lg-4 col-sm-6 mb-4">
+                                <div data-feature-fill="{{ cake_topping.id }}"
                                      class="feature-filling__item">
-                                    <img src="{% static 'img/about-img-2.jpg' %}"
+                                    <img src="{{ cake_topping.image.url }}"
                                          alt="">
                                     <h4 class="feature-filling__item-title">
-                                        Лимон и земляника 1
+                                        {{ cake_topping.title }}
                                     </h4>
-                                    <p class="feature-filling__item-description">
-                                        лимонный бисквит в сочетании с трио кремов:
-                                        земляничный, мандариновый и сливочно-сырный с
-                                        белым
-                                        шоколадом
-                                    </p>
+
                                     <a href="#"
-                                       data-feature-fill="0"
+                                       data-feature-fill="{{ cake_topping.id }}"
                                        class="feature-filling__item-btn btn btn--default">
                                         <span class="not-selected">выбрать</span>
                                         <span class="selected">выбрано</span>
                                     </a>
                                 </div>
                             </div>
-                            <div class="col-lg-4 col-sm-6 mb-4">
-                                <div data-feature-fill="1"
-                                     class="feature-filling__item">
-                                    <img src="{% static 'img/about-img-3.jpg' %}"
-                                         alt="">
-                                    <h4 class="feature-filling__item-title">
-                                        Лимон и земляника 2
-                                    </h4>
-                                    <p class="feature-filling__item-description">
-                                        лимонный бисквит в сочетании с трио кремов:
-                                        земляничный, мандариновый и сливочно-сырный с
-                                        белым
-                                        шоколадом
-                                    </p>
-                                    <a href="#"
-                                       data-feature-fill="1"
-                                       class="feature-filling__item-btn btn btn--default">
-                                        <span class="not-selected">выбрать</span>
-                                        <span class="selected">выбрано</span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-sm-6 mb-4">
-                                <div data-feature-fill="test-string"
-                                     class="feature-filling__item">
-                                    <img src="{% static 'img/about-img-4.jpg' %}"
-                                         alt="">
-                                    <h4 class="feature-filling__item-title">
-                                        Лимон и земляника 3
-                                    </h4>
-                                    <p class="feature-filling__item-description">
-                                        лимонный бисквит в сочетании с трио кремов:
-                                        земляничный, мандариновый и сливочно-сырный с
-                                        белым
-                                        шоколадом
-                                    </p>
-                                    <a href="#"
-                                       data-feature-fill="test-string"
-                                       class="feature-filling__item-btn btn btn--default">
-                                        <span class="not-selected">выбрать</span>
-                                        <span class="selected">выбрано</span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-sm-6 mb-4">
-                                <div data-feature-fill="99"
-                                     class="feature-filling__item">
-                                    <img src="./static/img/about-img.jpg" alt="">
-                                    <h4 class="feature-filling__item-title">
-                                        Лимон и земляника 4
-                                    </h4>
-                                    <p class="feature-filling__item-description">
-                                        лимонный бисквит в сочетании с трио кремов:
-                                        земляничный, мандариновый и сливочно-сырный с
-                                        белым
-                                        шоколадом
-                                    </p>
-                                    <a href="#"
-                                       data-feature-fill="99"
-                                       class="feature-filling__item-btn btn btn--default">
-                                        <span class="not-selected">выбрать</span>
-                                        <span class="selected">выбрано</span>
-                                    </a>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="feature-modal feature-design">
                         <div class="feature-filling__wrap row">
-                            <div class="col-lg-4 col-sm-6 mb-4">
-                                <div data-feature-design="0"
-                                     class="feature-filling__item">
-                                    <img src="{% static 'img/about-img-2.jpg' %}"
-                                         alt="">
-                                    <h4 class="feature-filling__item-title">
-                                        Лимон и земляника design 1
-                                    </h4>
-                                    <p class="feature-filling__item-description">
-                                        лимонный бисквит в сочетании с трио кремов:
-                                        земляничный, мандариновый и сливочно-сырный с
-                                        белым
-                                        шоколадом
-                                    </p>
-                                    <a href="#"
-                                       data-feature-design="0"
-                                       class="feature-filling__item-btn btn btn--default">
-                                        <span class="not-selected">выбрать</span>
-                                        <span class="selected">выбрано</span>
-                                    </a>
+                            {% for cake_design in cake_designs %}
+                                <div class="col-lg-4 col-sm-6 mb-4">
+                                    <div data-feature-design="{{ cake_design.id }}"
+                                         class="feature-filling__item">
+                                        <img src="{{ cake_design.image.url }}"
+                                             alt="">
+                                        <h4 class="feature-filling__item-title">
+                                            {{ cake_design.title }}
+                                        </h4>
+                                        <a href="#"
+                                           data-feature-design="{{ cake_design.id }}"
+                                           class="feature-filling__item-btn btn btn--default">
+                                            <span class="not-selected">выбрать</span>
+                                            <span class="selected">выбрано</span>
+                                        </a>
+                                    </div>
                                 </div>
-                                <div data-feature-design="0"
-                                     class="feature-filling__item">
-                                    <img src="{% static 'img/about-img-2.jpg' %}"
-                                         alt="">
-                                    <h4 class="feature-filling__item-title">
-                                        Лимон и земляника design 1
-                                    </h4>
-                                    <p class="feature-filling__item-description">
-                                        лимонный бисквит в сочетании с трио кремов:
-                                        земляничный, мандариновый и сливочно-сырный с
-                                        белым
-                                        шоколадом
-                                    </p>
-                                    <a href="#"
-                                       data-feature-design="0"
-                                       class="feature-filling__item-btn btn btn--default">
-                                        <span class="not-selected">выбрать</span>
-                                        <span class="selected">выбрано</span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-sm-6 mb-4">
-                                <div data-feature-design="2"
-                                     class="feature-filling__item">
-                                    <img src="{% static 'img/about-img-3.jpg' %}"
-                                         alt="">
-                                    <h4 class="feature-filling__item-title">
-                                        Лимон и земляника design 1
-                                    </h4>
-                                    <p class="feature-filling__item-description">
-                                        лимонный бисквит в сочетании с трио кремов:
-                                        земляничный, мандариновый и сливочно-сырный с
-                                        белым
-                                        шоколадом
-                                    </p>
-                                    <a href="#"
-                                       data-feature-design="2"
-                                       class="feature-filling__item-btn btn btn--default">
-                                        <span class="not-selected">выбрать</span>
-                                        <span class="selected">выбрано</span>
-                                    </a>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

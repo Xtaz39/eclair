@@ -143,6 +143,12 @@ class CakeConstructor(
 ):
     template_name = "shop/cake-constructor.html"
 
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data["cake_designs"] = models.CakeDesign.objects.all()
+        data["cake_toppings"] = models.CakeTopping.objects.all()
+        return data
+
 
 class Contacts(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/contacts.html"
