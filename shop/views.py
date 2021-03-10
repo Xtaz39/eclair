@@ -138,6 +138,12 @@ class CakeOrder(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateVie
     template_name = "shop/cake-order.html"
 
 
+class CakeConstructor(
+    CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView
+):
+    template_name = "shop/cake-constructor.html"
+
+
 class Contacts(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/contacts.html"
 

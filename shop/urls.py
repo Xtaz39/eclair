@@ -5,6 +5,7 @@ urlpatterns = [
     path("", views.Index.as_view(), name="index"),
     path("p/<str:article>", views.Product.as_view(), name="product"),
     path("cake-order", views.CakeOrder.as_view(), name="cake-order"),
+    path("cake-constructor", views.CakeConstructor.as_view(), name="cake-constructor"),
     path("about", views.About.as_view(), name="about"),
     path("contacts", views.Contacts.as_view(), name="contacts"),
     path("vacancies", views.Vacancies.as_view(), name="vacancies"),

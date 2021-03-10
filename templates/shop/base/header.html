@@ -16,8 +16,7 @@
                     <li><a href="/">Главная</a></li>
                     <li><a href="{% url 'shop:about' %}">О нас</a></li>
                     <li><a href="{% url 'shop:contacts' %}">Контакты</a></li>
-                    {# Sections in development #}
-                    {#                    <li><a href="cake-order">Торт на заказ <span class="tip">Хит</span></a></li>#}
+                    <li><a href="{% url 'shop:cake-order' %}">Торт на заказ <span class="tip">Хит</span></a></li>
                 </ul>
             </nav>
             <div class="logo">
