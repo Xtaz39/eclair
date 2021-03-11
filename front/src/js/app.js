@@ -196,6 +196,7 @@ $(window).on('load', () => {
       src: parent.find('img').attr('src'),
       data: parent.data('feature-design')
     }
+    parent.find('input:radio').prop("checked", true).trigger("click")
 
     const image = `<div class="image" style="background-image: url(${fill.src})"></div>`
 

@@ -138,16 +138,38 @@ class CakeOrder(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateVie
     template_name = "shop/cake-order.html"
 
 
-class CakeConstructor(
-    CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView
-):
+class AnyValue:
+    def __eq__(self, other):
+        return True
+
+
+class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
+    class Form(forms.Form):
+        cake_design = forms.CharField(required=False)
+        cake_toppings = forms.MultipleChoiceField(
+            required=False, choices=((AnyValue(), AnyValue()),)
+        )
+        weight = forms.CharField(required=True)
+        name = forms.CharField(required=True)
+        phone = forms.CharField(required=True, validators=[validators.is_phone])
+        email = forms.CharField(required=True)
+        birthdate = forms.DateTimeField(required=False)
+        address = forms.CharField(required=True)
+        delivery_date = forms.CharField(required=True)
+
+    form_class = Form
     template_name = "shop/cake-constructor.html"
+    success_url = "/"
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         data["cake_designs"] = models.CakeDesign.objects.all()
         data["cake_toppings"] = models.CakeTopping.objects.all()
         return data
+
+    def form_valid(self, form):
+        data = form.cleaned_data
+        return super(CakeConstructor, self).form_valid(form)
 
 
 class Contacts(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):

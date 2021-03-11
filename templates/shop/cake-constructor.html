@@ -9,178 +9,189 @@
 
             <div class="row">
                 <div class="col-lg-9 col-md-7">
-                    <div class="row mt-5">
-                        <div class="col-lg-6">
-                            <div class="title">
-                                Дизайн торта
-                            </div>
-                            <div class="images cake-design-images">
+                    <form action="{% url 'shop:cake-constructor' %}" method="POST">
 
-                            </div>
-                            <a href="#"
-                               class="btn btn--default"
-                               data-feature-select="design">Выбрать дизайн</a>
-                        </div>
-                        <div class="col-lg-6 mt-xl-0 mt-4">
-                            <div class="title">
-                                Начинка торта
-                            </div>
-                            <div class="images cake-order-images">
-
-                            </div>
-                            <a href="#"
-                               class="btn btn--default"
-                               data-feature-select="filling">Выбрать начинку</a>
-                        </div>
-                    </div>
-                    <div class="fields">
-                        <div class="title mt-4">Вес торта —
-                            <span class="cake-weight">3</span>кг
-                        </div>
-                        <div class="row mb-4">
+                        <div class="row mt-5">
                             <div class="col-lg-6">
-                                <div class="range-wrap">
-                                    <div class="range-wrap__cover">
-                                        <input type="text"
-                                               class="js-rangeInput"
-                                               data-min-weight="3"
-                                               data-max-weight="100"
-                                               data-from="1.5">
-                                    </div>
-                                    <div class="range-wrap__descr">Примерно на <span
-                                            class="peoples">20</span> человек
+                                <div class="title">
+                                    Дизайн торта
+                                </div>
+                                <div class="images cake-design-images">
+
+                                </div>
+                                <a href="#"
+                                   class="btn btn--default"
+                                   data-feature-select="design">Выбрать дизайн</a>
+                            </div>
+                            <div class="col-lg-6 mt-xl-0 mt-4">
+                                <div class="title">
+                                    Начинка торта
+                                </div>
+                                <div class="images cake-order-images">
+
+                                </div>
+                                <a href="#"
+                                   class="btn btn--default"
+                                   data-feature-select="filling">Выбрать начинку</a>
+                            </div>
+                        </div>
+                        <div class="fields">
+                            <div class="title mt-4">Вес торта —
+                                <span class="cake-weight">3</span>кг
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-6">
+                                    <div class="range-wrap">
+                                        <div class="range-wrap__cover">
+                                            <input type="text"
+                                                   class="js-rangeInput"
+                                                   data-min-weight="3"
+                                                   data-max-weight="100"
+                                                   name="weight"
+                                                   data-from="1.5">
+                                        </div>
+                                        <div class="range-wrap__descr">Примерно на <span
+                                                class="peoples">20</span> человек
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="col-lg-4 d-flex align-center">
+                                    <span class="form__tip">Минимальный срок изготовления − 4 дня</span>
+                                </div>
                             </div>
-                            <div class="col-lg-4 d-flex align-center">
-                                <span class="form__tip">Минимальный срок изготовления − 4 дня</span>
-                            </div>
-                        </div>
-                        <div class="title">Контактные данные</div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <label class="form__input">
-                                    <span>Ваше имя</span>
-                                    <input type="text">
-                                </label>
-                            </div>
-                            <div class="col-lg-4">
+                            <div class="title">Контактные данные</div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label class="form__input">
+                                        <span>Ваше имя</span>
+                                        <input type="text" name="name" required>
+                                    </label>
+                                </div>
+                                <div class="col-lg-4">
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <label class="form__input">
-                                    <span>Номер телефона</span>
-                                    <input type="tel">
-                                </label>
-                            </div>
-                            <div class="col-lg-4">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label class="form__input">
+                                        <span>Номер телефона</span>
+                                        <input type="tel" name="phone" required>
+                                    </label>
+                                </div>
+                                <div class="col-lg-4">
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <label class="form__input">
-                                    <span>Электронная почта</span>
-                                    <input type="email">
-                                </label>
-                            </div>
-                            <div class="col-lg-4">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label class="form__input">
+                                        <span>Электронная почта</span>
+                                        <input type="email" name="email" required>
+                                    </label>
+                                </div>
+                                <div class="col-lg-4">
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <label class="form__input">
-                                    <span>Дата рождения</span>
-                                    <input type="date">
-                                </label>
-                            </div>
-                            <div class="col-lg-4">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label class="form__input">
+                                        <span>Дата рождения</span>
+                                        <input type="date" name="birthdate" required>
+                                    </label>
+                                </div>
+                                <div class="col-lg-4">
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="title">Доставка</div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <label class="form__input address-field">
-                                    <span>Адрес для доставки</span>
-                                    <input type="text">
-                                </label>
-                            </div>
-                            <div class="col-lg-4">
+                            <div class="title">Доставка</div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label class="form__input address-field">
+                                        <span>Адрес для доставки</span>
+                                        <input type="text" name="address" required>
+                                    </label>
+                                </div>
+                                <div class="col-lg-4">
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <label class="form__input">
-                                    <span>Дата доставки</span>
-                                    <input type="date">
-                                </label>
-                            </div>
-                            <div class="col-lg-4 d-flex align-center">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label class="form__input">
+                                        <span>Дата доставки</span>
+                                        <input type="date"
+                                               name="delivery_date"
+                                               required>
+                                    </label>
+                                </div>
+                                <div class="col-lg-4 d-flex align-center">
               <span class="form__tip">Забрать торт вы сможете
               в любом нашем ресторане
               с 10:00 до 23:00.</span>
+                                </div>
+                            </div>
+                            <button class="form-submit-btn btn btn--warning">Заказать
+                            </button>
+                            <div class="privacy-policy">
+                                Нажимая на кнопку, вы даете согласие <br>
+                                <a href="/privacy-policy.pdf" target="_blank"
+                                   class="privacy-policy__link">на обработку своих
+                                    персональных
+                                    данных.</a>
                             </div>
                         </div>
-                        <button class="form-submit-btn btn btn--warning">Заказать
-                        </button>
-                        <div class="privacy-policy">
-                            Нажимая на кнопку, вы даете согласие <br>
-                            <a href="/privacy-policy.pdf" target="_blank"
-                               class="privacy-policy__link">на обработку своих
-                                персональных
-                                данных.</a>
-                        </div>
-                    </div>
-                    <div class="feature-modal feature-filling">
-                        <div class="feature-filling__wrap row">
-                            {% for cake_topping in cake_toppings %}
-                                <div class="col-lg-4 col-sm-6 mb-4">
-                                <div data-feature-fill="{{ cake_topping.id }}"
-                                     class="feature-filling__item">
-                                    <img src="{{ cake_topping.image.url }}"
-                                         alt="">
-                                    <h4 class="feature-filling__item-title">
-                                        {{ cake_topping.title }}
-                                    </h4>
+                        <div class="feature-modal feature-filling">
+                            <div class="feature-filling__wrap row">
+                                {% for cake_topping in cake_toppings %}
+                                    <div class="col-lg-4 col-sm-6 mb-4">
+                                        <div data-feature-fill="{{ cake_topping.id }}"
+                                             class="feature-filling__item">
+                                            <img src="{{ cake_topping.image.url }}"
+                                                 alt="">
+                                            <h4 class="feature-filling__item-title">
+                                                {{ cake_topping.title }}
+                                            </h4>
 
-                                    <a href="#"
-                                       data-feature-fill="{{ cake_topping.id }}"
-                                       class="feature-filling__item-btn btn btn--default">
-                                        <span class="not-selected">выбрать</span>
-                                        <span class="selected">выбрано</span>
-                                    </a>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="feature-modal feature-design">
-                        <div class="feature-filling__wrap row">
-                            {% for cake_design in cake_designs %}
-                                <div class="col-lg-4 col-sm-6 mb-4">
-                                    <div data-feature-design="{{ cake_design.id }}"
-                                         class="feature-filling__item">
-                                        <img src="{{ cake_design.image.url }}"
-                                             alt="">
-                                        <h4 class="feature-filling__item-title">
-                                            {{ cake_design.title }}
-                                        </h4>
-                                        <a href="#"
-                                           data-feature-design="{{ cake_design.id }}"
-                                           class="feature-filling__item-btn btn btn--default">
-                                            <span class="not-selected">выбрать</span>
-                                            <span class="selected">выбрано</span>
-                                        </a>
+                                            <a href="#"
+                                               data-feature-fill="{{ cake_topping.id }}"
+                                               class="feature-filling__item-btn btn btn--default">
+                                                <span class="not-selected">выбрать</span>
+                                                <span class="selected">выбрано</span>
+                                            </a>
+                                            <input type="checkbox" name="cake_toppings" value="{{ cake_topping.id }}">
+                                        </div>
                                     </div>
-                                </div>
-                            {% endfor %}
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
+                        <div class="feature-modal feature-design">
+                            <div class="feature-filling__wrap row">
+                                {% for cake_design in cake_designs %}
+                                    <div class="col-lg-4 col-sm-6 mb-4">
+                                        <div data-feature-design="{{ cake_design.id }}"
+                                             class="feature-filling__item">
+                                            <img src="{{ cake_design.image.url }}"
+                                                 alt="">
+                                            <h4 class="feature-filling__item-title">
+                                                {{ cake_design.title }}
+                                            </h4>
+                                            <a href="#"
+                                               data-feature-design="{{ cake_design.id }}"
+                                               class="feature-filling__item-btn btn btn--default">
+                                                <span class="not-selected">выбрать</span>
+                                                <span class="selected">выбрано</span>
+                                            </a>
+                                            <input type="radio"
+                                                   name="cake_design"
+                                                   value="{{ cake_design.id }}"
+                                                   style="display: none">
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <aside class="col-lg-3 col-md-4 offset-md-1 offset-lg-0 pt-4 mt-4 mt-xl-0">
                     <span class="cake-order-info__title">Торты авторского дизайна и любого уровня сложности.</span>
