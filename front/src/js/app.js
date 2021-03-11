@@ -125,6 +125,7 @@ $(window).on('load', () => {
       grid: !1,
       onChange (data) {
         $('.cake-weight').text(data.from)
+        $('input#weight').val(data.from)
         const peopleCount = (data.from * 6.5).toFixed(0)
         $('.range-wrap__descr .peoples').text(peopleCount)
       }
