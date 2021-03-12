@@ -125,6 +125,7 @@ $(window).on('load', () => {
       grid: !1,
       onChange (data) {
         $('.cake-weight').text(data.from)
+        $('input#weight').val(data.from)
         const peopleCount = (data.from * 6.5).toFixed(0)
         $('.range-wrap__descr .peoples').text(peopleCount)
       }
@@ -177,12 +178,14 @@ $(window).on('load', () => {
 
     filledIds.add(fill.data)
     cakeData.fillIds.push(fill.data)
+    $('input#fills').val(cakeData.fillIds.join(','))
 
     // refresh click handler
     $('.cake-filling-item__remove').on('click', function () {
       const fillData = $(this).data('feature-fill')
       filledIds.delete(fillData)
       cakeData.fillIds = cakeData.fillIds.filter(id => id !== fillData)
+      $('input#fills').val(cakeData.fillIds.join(','))
       $(`.feature-filling__item[data-feature-fill=${fillData}]`).removeClass('selected')
       $(`.cake-filling-item[data-feature-fill=${fillData}]`).remove()
     })
@@ -205,6 +208,7 @@ $(window).on('load', () => {
     parent.addClass('selected')
 
     cakeData.designId = fill.data
+    $('input#design').val(cakeData.designId)
   })
   // CAKE CONSTRUCTOR END
 

@@ -34,7 +34,7 @@
                                     </div>
                                 </div>
                                 <div class="item__price">
-                                    <span class="price">{{ item.product.price }}</span>
+                                    <span class="price">{{ item.product.price }} </span>
                                     <span class="currency">руб.</span>
                                 </div>
                                 <a href="" class="delete-item"
@@ -83,9 +83,9 @@
                                             <div class="item__price">
                                                 {% if product.price_discounted %}
                                                     <span class="price-old">{{ product.price }}</span>
-                                                    <span class="price">{{ product.price_discounted }}</span>
+                                                    <span class="price">{{ product.price_discounted }} </span>
                                                 {% else %}
-                                                    <span class="price">{{ product.price }}</span>
+                                                    <span class="price">{{ product.price }} </span>
                                                 {% endif %}
                                                 <span class="currency">руб.</span>
                                             </div>
@@ -101,7 +101,7 @@
 
         <transition name="slide-right">
             <div v-if="cartTotalAmount > 0" class="container container--order">
-                <p class="total-sum mb-5">
+                <p class="total-sum mt-4 mb-5">
                     Сумма заказа: <b>[[ cartTotalAmount ]] руб.</b>
                 </p>
                 <div class="flex-between">
