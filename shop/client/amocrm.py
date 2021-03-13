@@ -327,7 +327,3 @@ try:
     client.init_token()
 except Exception as ex:
     logger.error("Failed to init amocrm client. Order creation will not work: %s", ex)
-
-l = client.get_lead(24173293)
-# l = client.get_contact(40425063)
-print(l)
