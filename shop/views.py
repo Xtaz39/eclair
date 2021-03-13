@@ -138,28 +138,22 @@ class CakeOrder(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateVie
     template_name = "shop/cake-order.html"
 
 
-class AnyValue:
-    def __eq__(self, other):
-        return True
-
-
 class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
     class Form(forms.Form):
-        cake_design = forms.CharField(required=False)
-        cake_toppings = forms.MultipleChoiceField(
-            required=False, choices=((AnyValue(), AnyValue()),)
-        )
+        cake_design = forms.CharField(required=True)
+        cake_toppings = forms.CharField(required=True)
         weight = forms.CharField(required=True)
         name = forms.CharField(required=True)
         phone = forms.CharField(required=True, validators=[validators.is_phone])
         email = forms.CharField(required=True)
-        birthdate = forms.DateTimeField(required=False)
+        birthdate = forms.DateField(required=False)
         address = forms.CharField(required=True)
-        delivery_date = forms.CharField(required=True)
+        delivery_date = forms.DateField(required=True)
+        delivery_time = forms.TimeField(required=True)
+        comment = forms.CharField(required=False)
 
     form_class = Form
     template_name = "shop/cake-constructor.html"
-    success_url = "/"
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
@@ -169,7 +163,39 @@ class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormV
 
     def form_valid(self, form):
         data = form.cleaned_data
-        return super(CakeConstructor, self).form_valid(form)
+
+        design = models.CakeDesign.objects.get(pk=int(data["cake_design"]))
+        toppings = models.CakeTopping.objects.filter(
+            pk__in=[int(id_) for id_ in data["cake_toppings"].split(",")]
+        )
+
+        contact_id = amocrm.client.create_contact(
+            name=data["name"],
+            phone=data["phone"],
+            email=data["email"],
+            birthday=data["birthdate"],
+        )
+
+        toppings_names = ", ".join(topping.title for topping in toppings)
+        content = f"{design.title} с начинками: {toppings_names}"
+        order_id = amocrm.client.order_custom_cake(
+            contact_id,
+            content=content,
+            delivery_date=data["delivery_date"],
+            delivery_time=data["delivery_time"],
+            address=data["address"],
+            weight=f"{data['weight']} кг",
+            comment=data["comment"],
+        )
+
+        return render(
+            self.request,
+            "shop/order_status.html",
+            {
+                "order_number": order_id,
+                "message": "Ваш заказ принят. Наш менеджер свяжется с вами в ближайшее время.",
+            },
+        )
 
 
 class Contacts(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
@@ -314,7 +340,7 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         if customer["pay_method"] == "card":
             payment_type = amocrm.PaymentType.CARD.value
 
-        amocrm.client.create_lead(
+        amocrm.client.create_order(
             client_card_id,
             amocrm.Order(
                 order_id=order.order_number,

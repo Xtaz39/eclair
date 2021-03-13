@@ -178,14 +178,14 @@ $(window).on('load', () => {
 
     filledIds.add(fill.data)
     cakeData.fillIds.push(fill.data)
-    $('input#fills').val(cakeData.fillIds.join(','))
+    $('input#toppings').val(cakeData.fillIds.join(','))
 
     // refresh click handler
     $('.cake-filling-item__remove').on('click', function () {
       const fillData = $(this).data('feature-fill')
       filledIds.delete(fillData)
       cakeData.fillIds = cakeData.fillIds.filter(id => id !== fillData)
-      $('input#fills').val(cakeData.fillIds.join(','))
+      $('input#toppings').val(cakeData.fillIds.join(','))
       $(`.feature-filling__item[data-feature-fill=${fillData}]`).removeClass('selected')
       $(`.cake-filling-item[data-feature-fill=${fillData}]`).remove()
     })
@@ -199,7 +199,6 @@ $(window).on('load', () => {
       src: parent.find('img').attr('src'),
       data: parent.data('feature-design')
     }
-    parent.find('input:radio').prop("checked", true).trigger("click")
 
     const image = `<div class="image" style="background-image: url(${fill.src})"></div>`
 

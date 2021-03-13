@@ -10,12 +10,18 @@
             <div class="row">
                 <div class="col-lg-9 col-md-7">
                     <form action="{% url 'shop:cake-constructor' %}" method="POST">
+                        <input type="hidden" id="design" name="cake_design" value="">
+                        <input type="hidden"
+                               id="toppings"
+                               name="cake_toppings"
+                               value="">
 
                         <div class="row mt-5">
                             <div class="col-lg-6">
                                 <div class="title">
                                     Дизайн торта
                                 </div>
+                                {{ form.cake_design.errors }}
                                 <div class="images cake-design-images">
 
                                 </div>
@@ -27,6 +33,7 @@
                                 <div class="title">
                                     Начинка торта
                                 </div>
+                                {{ form.cake_toppings.errors }}
                                 <div class="images cake-order-images">
 
                                 </div>
@@ -65,6 +72,7 @@
                                     <label class="form__input">
                                         <span>Ваше имя</span>
                                         <input type="text" name="name" required>
+                                        {{ form.name.errors }}
                                     </label>
                                 </div>
                                 <div class="col-lg-4">
@@ -76,6 +84,7 @@
                                     <label class="form__input">
                                         <span>Номер телефона</span>
                                         <input type="tel" name="phone" required>
+                                        {{ form.phone.errors }}
                                     </label>
                                 </div>
                                 <div class="col-lg-4">
@@ -87,6 +96,7 @@
                                     <label class="form__input">
                                         <span>Электронная почта</span>
                                         <input type="email" name="email" required>
+                                        {{ form.email.errors }}
                                     </label>
                                 </div>
                                 <div class="col-lg-4">
@@ -97,7 +107,8 @@
                                 <div class="col-lg-6">
                                     <label class="form__input">
                                         <span>Дата рождения</span>
-                                        <input type="date" name="birthdate" required>
+                                        <input type="date" name="birthdate">
+                                        {{ form.birthdate.errors }}
                                     </label>
                                 </div>
                                 <div class="col-lg-4">
@@ -110,6 +121,7 @@
                                     <label class="form__input address-field">
                                         <span>Адрес для доставки</span>
                                         <input type="text" name="address" required>
+                                        {{ form.address.errors }}
                                     </label>
                                 </div>
                                 <div class="col-lg-4">
@@ -117,18 +129,37 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-4">
                                     <label class="form__input">
                                         <span>Дата доставки</span>
                                         <input type="date"
                                                name="delivery_date"
                                                required>
+                                        {{ form.delivery_date.errors }}
+                                    </label>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label class="form__input">
+                                        <span>Время доставки</span>
+                                        <input type="time"
+                                               name="delivery_time"
+                                               required>
+                                        {{ form.delivery_time.errors }}
                                     </label>
                                 </div>
                                 <div class="col-lg-4 d-flex align-center">
               <span class="form__tip">Забрать торт вы сможете
               в любом нашем ресторане
               с 10:00 до 23:00.</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label class="form__input">
+                                        <span>Комментарий</span>
+                                        <textarea name="comment"></textarea>
+                                        {{ form.comment.errors }}
+                                    </label>
                                 </div>
                             </div>
                             <button class="form-submit-btn btn btn--warning">Заказать
@@ -159,7 +190,6 @@
                                                 <span class="not-selected">выбрать</span>
                                                 <span class="selected">выбрано</span>
                                             </a>
-                                            <input type="checkbox" name="cake_toppings" value="{{ cake_topping.id }}">
                                         </div>
                                     </div>
                                 {% endfor %}
@@ -182,10 +212,6 @@
                                                 <span class="not-selected">выбрать</span>
                                                 <span class="selected">выбрано</span>
                                             </a>
-                                            <input type="radio"
-                                                   name="cake_design"
-                                                   value="{{ cake_design.id }}"
-                                                   style="display: none">
                                         </div>
                                     </div>
                                 {% endfor %}

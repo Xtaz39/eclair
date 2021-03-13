@@ -4,6 +4,7 @@ from __future__ import annotations
 import enum
 import logging
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Any, Optional
 from urllib.parse import urljoin
 
@@ -32,7 +33,6 @@ class Order:
 
 
 class Client:
-    SITE_PIPELINE_ID = 3428449
     ROBOT_ID = 0
 
     def __init__(self, options):
@@ -97,12 +97,12 @@ class Client:
 
     def _obtain_access_token_local(self):
         with open(settings.BASE_DIR / ".amocrm_tokens", "r") as fh:
-            self._access_token = fh.readline()
+            self._access_token = fh.readline().rstrip("\n")
             self._refresh_token = fh.readline()
 
     def _write_tokens(self, access_token: str, refresh_token: str):
         with open(settings.BASE_DIR / ".amocrm_tokens", "w") as fh:
-            fh.write(f"{access_token}\n{refresh_token}")
+            fh.writelines((access_token, f"\n{refresh_token}"))
 
     def _send_get(self, endpoint: str) -> dict[Any, Any]:
         url = urljoin(self._url, endpoint)
@@ -152,10 +152,11 @@ class Client:
         """https://www.amocrm.ru/developers/content/crm_platform/leads-api"""
         return self._send_get(f"api/v4/leads/{id_}")
 
-    def create_lead(self, contact_id: int, order: Order):
+    def create_order(self, contact_id: int, order: Order):
         """https://www.amocrm.ru/developers/content/crm_platform/leads-api"""
         product_field_id = 608539
         address_field_id = 608543
+        order_pipeline_id = 3428428
 
         data = self._send_post(
             "api/v4/leads",
@@ -163,7 +164,7 @@ class Client:
                 {
                     "name": order.order_id,
                     "price": order.total_amount,
-                    "pipeline_id": self.SITE_PIPELINE_ID,
+                    "pipeline_id": order_pipeline_id,
                     "created_by": self.ROBOT_ID,
                     "status_id": order.payment_type,
                     # https://www.amocrm.ru/developers/content/crm_platform/custom-fields#cf-fill-examples
@@ -189,6 +190,72 @@ class Client:
         )
         return data
 
+    def order_custom_cake(
+        self,
+        contact_id: int,
+        address: str,
+        delivery_date: datetime.date,
+        delivery_time: datetime.time,
+        content: str,
+        weight: int,
+        comment: str = "",
+    ) -> int:
+        """https://www.amocrm.ru/developers/content/crm_platform/leads-api"""
+        product_field_id = 608539
+        address_field_id = 608543
+        weight_field_id = 472643
+        order_time_field_id = 472647
+        order_date_field_id = 472649
+        comment_field_id = 615959
+
+        data = self._send_post(
+            "api/v4/leads",
+            [
+                {
+                    "pipeline_id": 3428428,
+                    "created_by": self.ROBOT_ID,
+                    "custom_fields_values": [
+                        {
+                            "field_id": product_field_id,
+                            "values": [{"value": content}],
+                        },
+                        {
+                            "field_id": address_field_id,
+                            "values": [{"value": address}],
+                        },
+                        {
+                            "field_id": weight_field_id,
+                            "values": [{"value": weight}],
+                        },
+                        {
+                            "field_id": order_date_field_id,
+                            "values": [
+                                # send as unix timestamp
+                                {"value": int(delivery_date.strftime("%s"))}
+                            ],
+                        },
+                        {
+                            "field_id": order_time_field_id,
+                            "values": [{"value": delivery_time.strftime("%H:%M")}],
+                        },
+                        {
+                            "field_id": comment_field_id,
+                            "values": [{"value": comment}],
+                        },
+                    ],
+                    "_embedded": {
+                        "contacts": [
+                            {
+                                "id": contact_id,
+                            }
+                        ]
+                    },
+                }
+            ],
+        )
+        order_id = data["_embedded"]["leads"][0]["id"]
+        return order_id
+
     def list_contacts(self):
         """https://www.amocrm.ru/developers/content/crm_platform/contacts-api"""
         return self._send_get("api/v4/contacts/")
@@ -197,10 +264,39 @@ class Client:
         """https://www.amocrm.ru/developers/content/crm_platform/contacts-api"""
         return self._send_get(f"api/v4/contacts/{id_}")
 
-    def create_contact(self, name: str, phone: str) -> str:
+    def create_contact(
+        self,
+        name: str,
+        phone: str,
+        email: str = "",
+        birthday: Optional[datetime.date] = None,
+    ) -> str:
         """https://www.amocrm.ru/developers/content/crm_platform/contacts-api"""
-        name_id = 430823
+        phone_id = 430823
         email_id = 430825
+        birthday_id = 615957
+
+        fields = [
+            {
+                "field_id": phone_id,
+                "values": [{"value": phone, "enum_id": 806581}],
+            }
+        ]
+        if email:
+            fields.append(
+                {
+                    "field_id": email_id,
+                    "values": [{"value": email, "enum_id": 806593}],
+                }
+            )
+        if birthday:  # as int?
+            fields.append(
+                {
+                    "field_id": birthday_id,
+                    # send as unix timestamp
+                    "values": [{"value": int(birthday.strftime("%s"))}],
+                }
+            )
 
         data = self._send_post(
             "api/v4/contacts",
@@ -208,12 +304,7 @@ class Client:
                 {
                     "first_name": name,
                     "created_by": self.ROBOT_ID,
-                    "custom_fields_values": [
-                        {
-                            "field_id": name_id,
-                            "values": [{"value": phone, "enum_id": 806581}],
-                        }
-                    ],
+                    "custom_fields_values": fields,
                 }
             ],
         )
@@ -236,3 +327,7 @@ try:
     client.init_token()
 except Exception as ex:
     logger.error("Failed to init amocrm client. Order creation will not work: %s", ex)
+
+l = client.get_lead(24173293)
+# l = client.get_contact(40425063)
+print(l)
