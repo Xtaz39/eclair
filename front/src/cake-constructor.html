@@ -202,12 +202,30 @@
           </div>
           <div class="col-lg-6 mt-xl-0 mt-4">
             <div class="title">
-              Дизайн торта
+              Начинка торта
             </div>
-            <div class="images cake-order-images">
+            <div class="images feature-fill-images">
 
             </div>
             <a href="#" class="btn btn--default" data-feature-select="filling">Выбрать начинку</a>
+          </div>
+          <div class="col-lg-6 mt-4">
+            <div class="title">
+              Декор торта
+            </div>
+            <div class="images feature-decor-images">
+
+            </div>
+            <a href="#" class="btn btn--default" data-feature-select="decor">Выбрать декор</a>
+          </div>
+          <div class="col-lg-6 mt-4">
+            <div class="title">
+              Открытка торта
+            </div>
+            <div class="images feature-postcard-images">
+
+            </div>
+            <a href="#" class="btn btn--default" data-feature-select="postcard">Выбрать открытку</a>
           </div>
         </div>
         <div class="fields">
@@ -296,7 +314,9 @@
             </div>
           </div>
           <input type="hidden" id="weight" value="">
-          <input type="hidden" id="fills" value="">
+          <input type="hidden" id="feature-fill" value="">
+          <input type="hidden" id="feature-decor" value="">
+          <input type="hidden" id="feature-postcard" value="">
           <input type="hidden" id="design" value="">
           <button class="form-submit-btn btn btn--warning">Заказать</button>
           <div class="privacy-policy">
@@ -304,6 +324,142 @@
                                                          class="privacy-policy__link">на обработку своих
             персональных
             данных.</a>
+          </div>
+        </div>
+        <div class="feature-modal feature-postcard">
+          <div class="feature-filling__wrap row">
+            <div class="col-lg-4 col-sm-6 mb-4">
+              <div data-feature-postcard="0" class="feature-filling__item">
+                <img src="./static/img/about-img-2.jpg" alt="">
+                <h4 class="feature-filling__item-title">
+                  открытка 1
+                </h4>
+                <p class="feature-filling__item-description">
+                  лимонный бисквит в сочетании с трио кремов: земляничный, мандариновый и сливочно-сырный с белым
+                  шоколадом
+                </p>
+                <a href="#" data-feature-postcard="0" class="feature-filling__item-btn btn btn--default">
+                  <span class="not-selected">выбрать</span>
+                  <span class="selected">выбрано</span>
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 mb-4">
+              <div data-feature-postcard="1" class="feature-filling__item">
+                <img src="./static/img/about-img-3.jpg" alt="">
+                <h4 class="feature-filling__item-title">
+                  открытка 2
+                </h4>
+                <p class="feature-filling__item-description">
+                  лимонный бисквит в сочетании с трио кремов: земляничный, мандариновый и сливочно-сырный с белым
+                  шоколадом
+                </p>
+                <a href="#" data-feature-postcard="1" class="feature-filling__item-btn btn btn--default">
+                  <span class="not-selected">выбрать</span>
+                  <span class="selected">выбрано</span>
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 mb-4">
+              <div data-feature-postcard="test-string" class="feature-filling__item">
+                <img src="./static/img/about-img-4.jpg" alt="">
+                <h4 class="feature-filling__item-title">
+                  Лимон и земляника 3
+                </h4>
+                <p class="feature-filling__item-description">
+                  лимонный бисквит в сочетании с трио кремов: земляничный, мандариновый и сливочно-сырный с белым
+                  шоколадом
+                </p>
+                <a href="#" data-feature-postcard="test-string" class="feature-filling__item-btn btn btn--default">
+                  <span class="not-selected">выбрать</span>
+                  <span class="selected">выбрано</span>
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 mb-4">
+              <div data-feature-postcard="99" class="feature-filling__item">
+                <img src="./static/img/about-img.jpg" alt="">
+                <h4 class="feature-filling__item-title">
+                  Лимон и земляника 4
+                </h4>
+                <p class="feature-filling__item-description">
+                  лимонный бисквит в сочетании с трио кремов: земляничный, мандариновый и сливочно-сырный с белым
+                  шоколадом
+                </p>
+                <a href="#" data-feature-postcard="99" class="feature-filling__item-btn btn btn--default">
+                  <span class="not-selected">выбрать</span>
+                  <span class="selected">выбрано</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="feature-modal feature-decor">
+          <div class="feature-filling__wrap row">
+            <div class="col-lg-4 col-sm-6 mb-4">
+              <div data-feature-decor="0" class="feature-filling__item">
+                <img src="./static/img/about-img-2.jpg" alt="">
+                <h4 class="feature-filling__item-title">
+                  Декор 1
+                </h4>
+                <p class="feature-filling__item-description">
+                  лимонный бисквит в сочетании с трио кремов: земляничный, мандариновый и сливочно-сырный с белым
+                  шоколадом
+                </p>
+                <a href="#" data-feature-decor="0" class="feature-filling__item-btn btn btn--default">
+                  <span class="not-selected">выбрать</span>
+                  <span class="selected">выбрано</span>
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 mb-4">
+              <div data-feature-decor="1" class="feature-filling__item">
+                <img src="./static/img/about-img-3.jpg" alt="">
+                <h4 class="feature-filling__item-title">
+                  декор 2
+                </h4>
+                <p class="feature-filling__item-description">
+                  лимонный бисквит в сочетании с трио кремов: земляничный, мандариновый и сливочно-сырный с белым
+                  шоколадом
+                </p>
+                <a href="#" data-feature-decor="1" class="feature-filling__item-btn btn btn--default">
+                  <span class="not-selected">выбрать</span>
+                  <span class="selected">выбрано</span>
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 mb-4">
+              <div data-feature-decor="test-string" class="feature-filling__item">
+                <img src="./static/img/about-img-4.jpg" alt="">
+                <h4 class="feature-filling__item-title">
+                  Лимон и земляника 3
+                </h4>
+                <p class="feature-filling__item-description">
+                  лимонный бисквит в сочетании с трио кремов: земляничный, мандариновый и сливочно-сырный с белым
+                  шоколадом
+                </p>
+                <a href="#" data-feature-decor="test-string" class="feature-filling__item-btn btn btn--default">
+                  <span class="not-selected">выбрать</span>
+                  <span class="selected">выбрано</span>
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 mb-4">
+              <div data-feature-decor="99" class="feature-filling__item">
+                <img src="./static/img/about-img.jpg" alt="">
+                <h4 class="feature-filling__item-title">
+                  Лимон и земляника 4
+                </h4>
+                <p class="feature-filling__item-description">
+                  лимонный бисквит в сочетании с трио кремов: земляничный, мандариновый и сливочно-сырный с белым
+                  шоколадом
+                </p>
+                <a href="#" data-feature-decor="99" class="feature-filling__item-btn btn btn--default">
+                  <span class="not-selected">выбрать</span>
+                  <span class="selected">выбрано</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
         <div class="feature-modal feature-filling">
@@ -422,8 +578,26 @@
           <span>от 3 кг</span>
         </div>
         <div class="cake-order-info__terms">
+          Дизайн
+          <div class="images cake-design-images">
+
+          </div>
+        </div>
+        <div class="cake-order-info__terms">
           Начинка
-          <div class="images cake-order-images">
+          <div class="images feature-fill-images">
+
+          </div>
+        </div>
+        <div class="cake-order-info__terms">
+          Декор
+          <div class="images feature-decor-images">
+
+          </div>
+        </div>
+        <div class="cake-order-info__terms">
+          Открытки
+          <div class="images feature-postcard-images">
 
           </div>
         </div>
