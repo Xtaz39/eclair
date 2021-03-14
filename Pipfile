@@ -12,6 +12,7 @@ requests = "*"
 pendulum = "*"
 mysql-connector-python = "*"
 sentry-sdk = "*"
+python-dotenv = "*"
 
 [dev-packages]
 black = "*"
