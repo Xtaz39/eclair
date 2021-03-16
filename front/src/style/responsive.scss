@@ -170,6 +170,12 @@
       margin-top: 20px;
     }
   }
+  .hero {
+
+    &__slider {
+      max-width: 100vw;
+    }
+  }
 }
 
 @media screen and (max-width: 650px) {

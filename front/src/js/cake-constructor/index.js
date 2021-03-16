@@ -77,7 +77,7 @@ function initFeatures(features) {
 
       cakeData.featuresList[feature].add(fill.data);
       $(`input#${feature}`).val(Array.from(cakeData.featuresList[feature]).join(','));
-
+      $('.feature-modal').removeClass('active');
       // refresh click handler
       $('.cake-filling-item__remove').on('click', function () {
         const fillData = $(this).data(feature);
@@ -113,5 +113,6 @@ $('.feature-filling__item-btn[data-feature-design]').on('click', function (e) {
 
   cakeData.designId = fill.data;
   $('input#design').val(cakeData.designId);
+  $('.feature-modal').removeClass('active');
 });
 // CAKE CONSTRUCTOR END

@@ -251,6 +251,7 @@ h2 {
   transition: 0.3s all;
   text-align: center;
   padding: 13px 32px 11px;
+  border-radius: 4px;
 
   &--default {
     background: $white-c;
@@ -284,7 +285,6 @@ h2 {
   min-height: 600px;
   text-align: center;
   justify-content: center;
-  background: url("./../static/img/hero-bg.jpg") no-repeat center center / cover;
 
   &__slider,
   &__slide,
@@ -293,6 +293,21 @@ h2 {
   .slick-slide,
   .slick-slide > div {
     min-height: 600px;
+  }
+
+  &__slider {
+    max-width: 80vw;
+    margin: 0 auto;
+
+    .slick-list {
+      overflow: visible;
+    }
+    .slick-slide > div {
+      margin: 0 7px;
+    }
+  }
+  &__slide {
+    border-radius: 10px;
   }
 
   .slider__buttons {
