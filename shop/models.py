@@ -338,3 +338,27 @@ class CakeTopping(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class CakeDecor(models.Model):
+    title = models.CharField("Название", max_length=100)
+    image = models.ImageField("Картинка", upload_to="image/cake/")
+
+    class Meta:
+        verbose_name = "Торт на заказ декор"
+        verbose_name_plural = "Торт на заказ (декор)"
+
+    def __str__(self):
+        return self.title
+
+
+class CakePostcard(models.Model):
+    title = models.CharField("Название", max_length=100)
+    image = models.ImageField("Картинка", upload_to="image/cake/")
+
+    class Meta:
+        verbose_name = "Торт на заказ открытка"
+        verbose_name_plural = "Торт на заказ (открытка)"
+
+    def __str__(self):
+        return self.title

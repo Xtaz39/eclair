@@ -10,10 +10,19 @@
             <div class="row">
                 <div class="col-lg-9 col-md-7">
                     <form action="{% url 'shop:cake-constructor' %}" method="POST">
+
                         <input type="hidden" id="design" name="cake_design" value="">
                         <input type="hidden"
-                               id="toppings"
+                               id="feature-fill"
                                name="cake_toppings"
+                               value="">
+                        <input type="hidden"
+                               id="feature-decor"
+                               name="cake_decors"
+                               value="">
+                        <input type="hidden"
+                               id="feature-postcard"
+                               name="cake_postcards"
                                value="">
 
                         <div class="row mt-5">
@@ -34,12 +43,35 @@
                                     Начинка торта
                                 </div>
                                 {{ form.cake_toppings.errors }}
-                                <div class="images cake-order-images">
+                                <div class="images feature-fill-images">
 
                                 </div>
                                 <a href="#"
                                    class="btn btn--default"
                                    data-feature-select="filling">Выбрать начинку</a>
+                            </div>
+                            <div class="col-lg-6 mt-4">
+                                <div class="title">
+                                    Декор торта
+                                </div>
+                                <div class="images feature-decor-images">
+
+                                </div>
+                                <a href="#"
+                                   class="btn btn--default"
+                                   data-feature-select="decor">Выбрать декор</a>
+                            </div>
+                            <div class="col-lg-6 mt-4">
+                                <div class="title">
+                                    Открытка торта
+                                </div>
+                                <div class="images feature-postcard-images">
+
+                                </div>
+                                <a href="#"
+                                   class="btn btn--default"
+                                   data-feature-select="postcard">Выбрать
+                                    открытку</a>
                             </div>
                         </div>
                         <div class="fields">
@@ -172,6 +204,48 @@
                                     данных.</a>
                             </div>
                         </div>
+                        <div class="feature-modal feature-postcard">
+                            <div class="feature-filling__wrap row">
+                                {% for postcard in cake_postcards %}
+                                    <div class="col-lg-4 col-sm-6 mb-4">
+                                        <div data-feature-postcard="{{ postcard.id }}"
+                                             class="feature-filling__item">
+                                            <img src="{{ postcard.image.url }}" alt="">
+                                            <h4 class="feature-filling__item-title">
+                                                {{ postcard.title }}
+                                            </h4>
+                                            <a href="#"
+                                               data-feature-postcard="{{ postcard.id }}"
+                                               class="feature-filling__item-btn btn btn--default">
+                                                <span class="not-selected">выбрать</span>
+                                                <span class="selected">выбрано</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="feature-modal feature-decor">
+                            <div class="feature-filling__wrap row">
+                                {% for decor in cake_decors %}
+                                    <div class="col-lg-4 col-sm-6 mb-4">
+                                        <div data-feature-decor="{{ decor.id }}"
+                                             class="feature-filling__item">
+                                            <img src="{{ decor.image.url }}" alt="">
+                                            <h4 class="feature-filling__item-title">
+                                                {{ decor.title }}
+                                            </h4>
+                                            <a href="#"
+                                               data-feature-decor="{{ decor.id }}"
+                                               class="feature-filling__item-btn btn btn--default">
+                                                <span class="not-selected">выбрать</span>
+                                                <span class="selected">выбрано</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
                         <div class="feature-modal feature-filling">
                             <div class="feature-filling__wrap row">
                                 {% for cake_topping in cake_toppings %}
@@ -230,8 +304,26 @@
                         <span>от 3 кг</span>
                     </div>
                     <div class="cake-order-info__terms">
+                        Дизайн
+                        <div class="images cake-design-images">
+
+                        </div>
+                    </div>
+                    <div class="cake-order-info__terms">
                         Начинка
-                        <div class="images cake-order-images">
+                        <div class="images feature-fill-images">
+
+                        </div>
+                    </div>
+                    <div class="cake-order-info__terms">
+                        Декор
+                        <div class="images feature-decor-images">
+
+                        </div>
+                    </div>
+                    <div class="cake-order-info__terms">
+                        Открытки
+                        <div class="images feature-postcard-images">
 
                         </div>
                     </div>
