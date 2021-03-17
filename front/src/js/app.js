@@ -82,10 +82,16 @@ $(window).on('load', () => {
     }
   });
 
-  $('.input button').on('click', function () {
+  $('#login-modal button#change-phone').on('click', function (e) {
+    e.preventDefault();
     $('.login-stage-2').removeClass('active');
     $(this).siblings('input').prop('disabled', false);
     $(this).hide();
+  });
+
+  $('#login-modal button#send-code').on('click', function (e) {
+    e.preventDefault();
+    alert("your new code is: 1234")
   });
 
   $("#sign-in").on("click", (e) => {
