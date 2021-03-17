@@ -45,6 +45,9 @@ class Product(models.Model):
         "Category", verbose_name="Категория", on_delete=models.SET_NULL, null=True
     )
     recommendations = models.ManyToManyField("self", blank=True, symmetrical=False)
+    iiko_id = models.CharField(
+        "ID IIKO", max_length=50, unique=True, null=True, blank=True
+    )
 
     def __str__(self):
         return f"{self.title} ({self.article})"
