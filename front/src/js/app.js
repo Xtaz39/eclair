@@ -87,4 +87,9 @@ $(window).on('load', () => {
     $(this).siblings('input').prop('disabled', false);
     $(this).hide();
   });
+
+  $("#sign-in").on("click", (e) => {
+    e.preventDefault()
+    $('#login-modal').addClass('active')
+  })
 });

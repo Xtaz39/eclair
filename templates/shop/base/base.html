@@ -11,7 +11,7 @@
     <link href="{% static 'main.css' %}" rel="stylesheet">
     <link href="{% static 'animation.css' %}" rel="stylesheet">
     <link href="{% static 'extra.css' %}" rel="stylesheet">
-{#    <script src="https://unpkg.com/vue@next"></script>#}
+    {#    <script src="https://unpkg.com/vue@next"></script>#}
     <script src="https://unpkg.com/vue@3.0.5/dist/vue.global.prod.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     {% block js_extra %}{% endblock %}
@@ -19,6 +19,9 @@
 <body>
 <div id="app">
     {% include "shop/base/header.html" %}
+    {% if not user.is_authenticated %}
+        {% include "shop/base/_login_modal.html" %}
+    {% endif %}
 
     {% block content %}{% endblock %}
 
