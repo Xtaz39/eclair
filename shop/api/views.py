@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import http
 import json
+import uuid
 
 from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import F
@@ -43,3 +44,23 @@ class Cart(BaseFormView):
                 cart_product.save()
 
         return HttpResponse(status=http.HTTPStatus.CREATED)
+
+
+class AuthRequestCode(BaseFormView):
+    def post(self, request, *args, **kwargs):
+        phone = request.POST.get("phone")
+        data = {"request_id": uuid.uuid4().hex}
+        return JsonResponse(data=data, safe=True)
+
+
+class AuthLogin(BaseFormView):
+    def post(self, request: WSGIRequest, *args, **kwargs):
+        if not request.session.session_key:
+            return JsonResponse(data=[], safe=False)
+
+        cart_product = CartProduct.objects.filter(
+            session_id=request.session.session_key
+        ).all()
+
+        products = [{"title": p.product_id, "amount": p.amount} for p in cart_product]
+        return JsonResponse(data=products, safe=False)

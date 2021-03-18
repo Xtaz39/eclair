@@ -15,6 +15,13 @@ class User(AbstractUser):
     phone = PhoneField("Номер телефона", null=True, blank=True)
 
 
+class AuthCode(models.Model):
+    id = models.TextField("ID", primary_key=True)
+    phone = PhoneField("Номер телефона")
+    code = models.TextField("Код проверки", max_length=50)
+    created_at = models.DateTimeField("Время создания", auto_now=True)
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date = models.DateField("Дата рождения", null=True, blank=True)

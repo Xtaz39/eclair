@@ -13,32 +13,31 @@
             </svg>
         </a>
         <h2 class="mb-4">Вход на сайт</h2>
-        <form action="">
-            <label class="form__input mb-4 login-stage-1 active">
-                <span>Номер телефона</span>
-                <span class="input">
+        <input type="hidden" name="request-id">
+        <label class="form__input mb-4 login-stage-1 active">
+            <span>Номер телефона</span>
+            <span class="input">
                      <input type="tel" name="phone">
                     <button id="change-phone">Изменить</button>
                 </span>
-            </label>
-            <label class="form__input mb-4 login-stage-2">
-                <span>Код из СМС</span>
-                <span class="input">
+        </label>
+        <label class="form__input mb-4 login-stage-2">
+            <span>Код из СМС</span>
+            <span class="input">
                      <input type="text" name="code">
-                    <button id="send-code">Выслать новый код</button>
+                    <button id="resend-code">Выслать новый код</button>
                 </span>
-            </label>
-            <div class="row">
-                <div class="col-md-4">
-                    <a href="#" class="btn btn--warning login-btn">Продолжить</a>
-                </div>
-                <div class="col-md-8 d-flex align-center">
+        </label>
+        <div class="row">
+            <div class="col-md-4">
+                <a href="#" class="btn btn--warning login-btn">Продолжить</a>
+            </div>
+            <div class="col-md-8 d-flex align-center">
                     <span class="personal-data">
                         Продолжая, вы соглашаетесь
                         <a href="#">со сбором и обработкой персональных данных и пользовательским соглашением</a>
                     </span>
                 </div>
             </div>
-        </form>
     </div>
 </div>

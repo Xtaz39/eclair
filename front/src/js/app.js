@@ -68,13 +68,37 @@ $(window).on('load', () => {
     e.preventDefault();
     $(this).parent().parent('.modal').removeClass('active');
   });
+
   $('.login-btn').on('click', (e) => {
     e.preventDefault();
+
     const stage1Input = $('.login-stage-1');
     const stage2Input = $('.login-stage-2');
+    const reqInput = $('input[name=request-id]');
+    const phoneInput = $('input[name=phone]');
+
     if (stage2Input.hasClass('active')) {
-      // submit form
+      $.post("/api/auth/login", {
+            "phone": phoneInput.val(),
+            "code": $('input[name=code]').val(),
+            "request_id": reqInput.val(),
+          }
+      )
+          .done((data) => {
+            reqInput.val(data.request_id);
+          })
+          .fail((data) => {
+            console.error(data);
+          });
     } else {
+      $.post("/api/auth/request-code", {"phone": phoneInput.val()})
+          .done((data) => {
+            reqInput.val(data.request_id);
+          })
+          .fail((data) => {
+            console.error(data);
+          });
+
       stage1Input.removeClass('active');
       stage2Input.addClass('active');
       stage1Input.find('input').prop('disabled', true);
@@ -89,7 +113,7 @@ $(window).on('load', () => {
     $(this).hide();
   });
 
-  $('#login-modal button#send-code').on('click', function (e) {
+  $('#login-modal button#resend-code').on('click', function (e) {
     e.preventDefault();
     alert("your new code is: 1234")
   });
