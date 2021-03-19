@@ -85,10 +85,11 @@ $(window).on('load', () => {
           }
       )
           .done((data) => {
-            reqInput.val(data.request_id);
+            alert(data.success);
+            location.reload();
           })
           .fail((data) => {
-            console.error(data);
+            alert(data.success);
           });
     } else {
       $.post("/api/auth/request-code", {"phone": phoneInput.val()})
@@ -115,7 +116,13 @@ $(window).on('load', () => {
 
   $('#login-modal button#resend-code').on('click', function (e) {
     e.preventDefault();
-    alert("your new code is: 1234")
+    $.post("/api/auth/request-code", {"phone": $('input[name=phone]').val()})
+        .done((data) => {
+          $('input[name=request-id]').val(data.request_id);
+        })
+        .fail((data) => {
+          console.error(data);
+        });
   });
 
   $("#sign-in").on("click", (e) => {

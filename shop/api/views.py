@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import http
 import json
+import secrets
 import uuid
 
 from django.core.handlers.wsgi import WSGIRequest
@@ -9,6 +10,7 @@ from django.db.models import F
 from django.http import HttpResponse, JsonResponse
 from django.views.generic.edit import BaseFormView
 
+from shop import models
 from shop.models import CartProduct
 
 
@@ -49,18 +51,42 @@ class Cart(BaseFormView):
 class AuthRequestCode(BaseFormView):
     def post(self, request, *args, **kwargs):
         phone = request.POST.get("phone")
-        data = {"request_id": uuid.uuid4().hex}
+        # todo: validate
+
+        req_id = secrets.token_urlsafe(16)
+        code = "".join(str(secrets.randbelow(9)) for _ in range(4))
+        models.AuthCode.objects.create(
+            id=req_id,
+            code=code,
+            phone=phone,
+        )
+        data = {"request_id": req_id}
+
+        print(f"Login code is: {code}")
+        # todo: send sms code
         return JsonResponse(data=data, safe=True)
 
 
 class AuthLogin(BaseFormView):
     def post(self, request: WSGIRequest, *args, **kwargs):
-        if not request.session.session_key:
-            return JsonResponse(data=[], safe=False)
+        phone = request.POST.get("phone")
+        code = request.POST.get("code")
+        req_id = request.POST.get("request_id")
+        # todo: validate
 
-        cart_product = CartProduct.objects.filter(
-            session_id=request.session.session_key
-        ).all()
+        # todo: clear old records here?
 
-        products = [{"title": p.product_id, "amount": p.amount} for p in cart_product]
-        return JsonResponse(data=products, safe=False)
+        deleted, _ = models.AuthCode.objects.filter(
+            id=req_id,
+            phone=phone,
+            code=code,
+        ).delete()
+
+        if not deleted:
+            # todo: return err
+            return JsonResponse(
+                data={"success": False}, safe=False, status=http.HTTPStatus.BAD_REQUEST
+            )
+
+        # todo: login user
+        return JsonResponse(data={"success": True}, safe=False)
