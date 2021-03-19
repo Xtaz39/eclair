@@ -5,6 +5,7 @@ import json
 import secrets
 import uuid
 
+from django.contrib.auth import login
 from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import F
 from django.http import HttpResponse, JsonResponse
@@ -88,5 +89,6 @@ class AuthLogin(BaseFormView):
                 data={"success": False}, safe=False, status=http.HTTPStatus.BAD_REQUEST
             )
 
-        # todo: login user
+        user, _ = models.User.objects.get_or_create(phone=phone)
+        login(request, user)
         return JsonResponse(data={"success": True}, safe=False)
