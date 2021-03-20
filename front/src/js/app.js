@@ -84,26 +84,25 @@ $(window).on('load', () => {
             "request_id": reqInput.val(),
           }
       )
-          .done((data) => {
-            alert(data.success);
+          .done(() => {
             location.reload();
           })
-          .fail((data) => {
-            alert(data.success);
+          .fail((xhr, textStatus, error) => {
+            console.log(xhr.responseJSON.errors)
           });
     } else {
       $.post("/api/auth/request-code", {"phone": phoneInput.val()})
           .done((data) => {
             reqInput.val(data.request_id);
-          })
-          .fail((data) => {
-            console.error(data);
-          });
 
-      stage1Input.removeClass('active');
-      stage2Input.addClass('active');
-      stage1Input.find('input').prop('disabled', true);
-      stage1Input.find('button').show();
+            stage1Input.removeClass('active');
+            stage2Input.addClass('active');
+            stage1Input.find('input').prop('disabled', true);
+            stage1Input.find('button').show();
+          })
+          .fail((xhr, textStatus, error) => {
+            console.log(xhr.responseJSON.errors)
+          });
     }
   });
 
@@ -120,8 +119,8 @@ $(window).on('load', () => {
         .done((data) => {
           $('input[name=request-id]').val(data.request_id);
         })
-        .fail((data) => {
-          console.error(data);
+        .fail((xhr, textStatus, error) => {
+          console.log(xhr.responseJSON.errors)
         });
   });
 
