@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from django import forms
+from django.contrib.auth import logout
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import transaction
 from django.db.models import Sum
@@ -477,3 +478,13 @@ def error_404(request, exception=None):
 
 def error_500(request, exception=None):
     return NotFound.as_view()(request, code=500)
+
+
+def logout_user(request):
+    logout(request)
+
+    ref = request.META.get("HTTP_REFERER", "")
+    if not ref:
+        return redirect("/")
+
+    return redirect(ref)

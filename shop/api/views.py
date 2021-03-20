@@ -77,6 +77,7 @@ class AuthLogin(BaseFormView):
 
         # todo: clear old records here?
 
+        # todo: check that code is not expired
         deleted, _ = models.AuthCode.objects.filter(
             id=req_id,
             phone=phone,
@@ -89,6 +90,8 @@ class AuthLogin(BaseFormView):
                 data={"success": False}, safe=False, status=http.HTTPStatus.BAD_REQUEST
             )
 
-        user, _ = models.User.objects.get_or_create(phone=phone)
+        user, _ = models.User.objects.get_or_create(
+            phone=phone, defaults={"username": phone}
+        )
         login(request, user)
         return JsonResponse(data={"success": True}, safe=False)
