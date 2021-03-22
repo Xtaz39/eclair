@@ -16,8 +16,11 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.TextField(
-                        primary_key=True, serialize=False, verbose_name="ID"
+                    models.CharField(
+                        max_length=50,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
                     ),
                 ),
                 (
