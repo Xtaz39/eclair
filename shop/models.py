@@ -207,14 +207,19 @@ class FooterSocial(models.Model):
 
 
 class Banner(models.Model):
-    title = models.CharField("Заголовок", max_length=100)
-    text = models.TextField("Текст")
+    title = models.CharField("Заголовок", max_length=100, null=True, blank=True)
+    text = models.TextField("Текст", null=True, blank=True)
     image = models.ImageField("Картинка", upload_to="image/product/")
-    button_text = models.CharField("Текст кнопки", max_length=50)
-    button_url = models.CharField("Ссылка на кноке", max_length=255)
+    button_text = models.CharField("Текст кнопки", max_length=50, null=True, blank=True)
+    button_url = models.CharField(
+        "Ссылка на кноке", max_length=255, null=True, blank=True
+    )
     priority = models.SmallIntegerField("Приоритет", unique=True)
 
     def __str__(self):
+        if not self.title:
+            return f"Баннер ({self.priority})"
+
         return f"{self.title} ({self.priority})"
 
     class Meta:
