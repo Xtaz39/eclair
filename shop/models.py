@@ -13,6 +13,7 @@ from shop import validators
 
 class User(AbstractUser):
     phone = PhoneField("Номер телефона", null=True, blank=True)
+    birthday = models.DateField("День рождения", null=True, blank=True)
 
 
 class AuthCode(models.Model):
