@@ -27,7 +27,7 @@ SITE_ADDR = os.getenv("SITE_ADDR", "http://localhost:8080")
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.getenv("DJANGO_DEBUG", False))
+DEBUG = bool(os.getenv("DJANGO_DEBUG", True))
 
 # Application definition
 
@@ -168,3 +168,6 @@ IIKO_LOGIN = os.getenv("IIKO_LOGIN")
 IIKO_URL = os.getenv("IIKO_URL")
 IIKO_REDIRECT_URL = os.getenv("IIKO_LOGIN")
 IIKO_PASSWORD = os.getenv("IIKO_PASSWORD")
+
+# SMS.ru
+SMS_API_KEY = os.getenv("SMS_API_KEY")

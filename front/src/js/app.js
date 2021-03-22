@@ -70,38 +70,58 @@ $(window).on('load', () => {
   });
 
   $('.login-btn').on('click', (e) => {
-    e.preventDefault();
+      e.preventDefault();
 
-    const stage1Input = $('.login-stage-1');
-    const stage2Input = $('.login-stage-2');
-    const reqInput = $('input[name=request-id]');
-    const phoneInput = $('input[name=phone]');
+      const stage1Input = $('.login-stage-1');
+      const stage2Input = $('.login-stage-2');
+      const reqInput = $('input[name=request-id]');
+      const phoneInput = $('input[name=phone]');
+      const resendBtn = $('#resend-code');
+      const errsList = $('#login-modal .errorlist')
 
-    if (stage2Input.hasClass('active')) {
-      $.post("/api/auth/login", {
-            "phone": phoneInput.val(),
-            "code": $('input[name=code]').val(),
-            "request_id": reqInput.val(),
-          }
-      )
-          .done(() => {
-            location.reload();
+      errsList.empty();
+
+      if (stage2Input.hasClass('active')) {
+          $.post("/api/auth/login", {
+                  "phone": phoneInput.val(),
+                  "code": $('input[name=code]').val(),
+                  "request_id": reqInput.val(),
+              }
+          )
+              .done(() => {
+                  location.reload();
           })
           .fail((xhr, textStatus, error) => {
-            console.log(xhr.responseJSON.errors)
+            const errors = xhr.responseJSON.errors
+              Object.keys(errors).forEach((key) => {
+                  errors[key].forEach((v) => {
+                      $("#err-" + key).append("<li>" + v + "</li>");
+                  })
+              });
           });
     } else {
       $.post("/api/auth/request-code", {"phone": phoneInput.val()})
           .done((data) => {
-            reqInput.val(data.request_id);
+              reqInput.val(data.request_id);
 
-            stage1Input.removeClass('active');
-            stage2Input.addClass('active');
-            stage1Input.find('input').prop('disabled', true);
-            stage1Input.find('button').show();
+              stage1Input.removeClass('active');
+              stage2Input.addClass('active');
+              stage1Input.find('input').prop('disabled', true);
+              stage1Input.find('button').show();
+
+              resendBtn.prop('disabled', true);
+              setInterval(() => {
+                  resendBtn.prop('disabled', false);
+              }, 60000)
+
           })
           .fail((xhr, textStatus, error) => {
-            console.log(xhr.responseJSON.errors)
+              const errors = xhr.responseJSON.errors
+              Object.keys(errors).forEach((key) => {
+                  errors[key].forEach((v) => {
+                      $("#err-" + key).append("<li>" + v + "</li>");
+                  })
+              });
           });
     }
   });
@@ -114,14 +134,28 @@ $(window).on('load', () => {
   });
 
   $('#login-modal button#resend-code').on('click', function (e) {
-    e.preventDefault();
-    $.post("/api/auth/request-code", {"phone": $('input[name=phone]').val()})
-        .done((data) => {
-          $('input[name=request-id]').val(data.request_id);
-        })
-        .fail((xhr, textStatus, error) => {
-          console.log(xhr.responseJSON.errors)
-        });
+      e.preventDefault();
+      const resendBtn = $('#resend-code');
+      resendBtn.prop('disabled', true);
+      const errsList = $('#login-modal .errorlist')
+      errsList.empty();
+
+      $.post("/api/auth/request-code", {"phone": $('input[name=phone]').val()})
+          .done((data) => {
+              $('input[name=request-id]').val(data.request_id);
+              setInterval(() => {
+                  resendBtn.prop('disabled', false);
+              }, 60000)
+          })
+          .fail((xhr, textStatus, error) => {
+              resendBtn.prop('disabled', false);
+              const errors = xhr.responseJSON.errors
+              Object.keys(errors).forEach((key) => {
+                  errors[key].forEach((v) => {
+                      $("#err-" + key).append("<li>" + v + "</li>");
+                  })
+              });
+          });
   });
 
   $("#sign-in").on("click", (e) => {

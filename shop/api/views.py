@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import http
 import json
+import logging
 import secrets
 from collections import defaultdict
 
 import pendulum
 from django import forms
+from django.conf import settings
 from django.contrib.auth import login
 from django.core.exceptions import ValidationError
 from django.core.handlers.wsgi import WSGIRequest
@@ -15,7 +17,10 @@ from django.http import HttpResponse, JsonResponse
 from django.views.generic.edit import BaseFormView
 
 from shop import models
+from shop.client import sms
 from shop.models import CartProduct
+
+logger = logging.getLogger(__name__)
 
 
 class Cart(BaseFormView):
@@ -53,13 +58,15 @@ class Cart(BaseFormView):
 
 
 def normalize_phone(phone: str) -> str:
-    had_plus = phone.startswith("+")
     phone = "".join(l for l in phone if l.isdigit())
     if not phone:
         return ""
 
-    if had_plus:
-        phone = str(int(phone[0]) + 1) + phone[1:]
+    if len(phone) == 11:
+        phone = "7" + phone[1:]
+
+    if len(phone) == 10:
+        phone = "7" + phone
 
     return phone
 
@@ -88,7 +95,7 @@ class AuthRequestCode(BaseFormView):
             errors = {
                 "phone": (
                     "Код был запрошен менее минуты назад. "
-                    "Пожалуйста, повторите запрос спустя время"
+                    "Пожалуйста, повторите запрос спустя время."
                 )
             }
             return JsonResponse(
@@ -105,8 +112,20 @@ class AuthRequestCode(BaseFormView):
             phone=phone,
         )
 
-        print(f"Login code is: {code}")
-        # todo: send sms code
+        if settings.DEBUG:
+            print(f"Login code is: {code}")
+        try:
+            sms.client.send_sms(
+                f"Eclair. Ваш код: {code}", phone, get_client_ip(self.request)
+            )
+        except sms.ClientError as err:
+            logger.error("failed to send sms: %s", err)
+            return JsonResponse(
+                data={"errors": {"phone": ["Не удалось отправить смс"]}},
+                safe=False,
+                status=http.HTTPStatus.BAD_REQUEST,
+            )
+
         return JsonResponse(data={"request_id": req_id}, safe=True)
 
     def form_invalid(self, form):
@@ -170,3 +189,12 @@ class AuthLogin(BaseFormView):
         return JsonResponse(
             data={"errors": errors}, safe=False, status=http.HTTPStatus.BAD_REQUEST
         )
+
+
+def get_client_ip(request: WSGIRequest):
+    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR", "")
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(",")[-1].strip()
+    else:
+        ip = request.META.get("REMOTE_ADDR", "")
+    return ip
