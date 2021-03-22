@@ -130,6 +130,12 @@ class Product(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView)
 class Cabinet(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/cabinet.html"
 
+    def get(self, request: WSGIRequest, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(to="/")
+
+        return super(Cabinet, self).get(request, *args, **kwargs)
+
 
 class About(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/about.html"
