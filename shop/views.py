@@ -130,6 +130,16 @@ class Product(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView)
 class Cabinet(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/cabinet.html"
 
+    def get_context_data(self, **kwargs):
+        data = super(Cabinet, self).get_context_data(**kwargs)
+        data["user_account"] = {
+            "first_name": self.request.user.first_name,
+            "phone": self.request.user.phone,
+            "email": self.request.user.email,
+            "birthday": self.request.user.birthday.strftime("%Y-%m-%d"),
+        }
+        return data
+
     def get(self, request: WSGIRequest, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect(to="/")

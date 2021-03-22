@@ -4,10 +4,10 @@
 
 {% block content %}
 
-    <section class="collected-score text-center">
-        <h2>Накопительный бонус </h2>
-        <h2 class="score">1 234 бонусных баллов</h2>
-    </section>
+    {#    <section class="collected-score text-center">#}
+    {#        <h2>Накопительный бонус </h2>#}
+    {#        <h2 class="score">1 234 бонусных баллов</h2>#}
+    {#    </section>#}
 
     <section class="form-wrapper">
         <h2 class="text-center mb-5">Личные данные</h2>
@@ -15,19 +15,19 @@
             <div class="fields">
                 <label class="form__input">
                     <span>Ваше имя</span>
-                    <input type="text">
+                    <input type="text" value="{{ user_account.first_name }}">
                 </label>
                 <label class="form__input">
                     <span>Номер телефона</span>
-                    <input type="tel">
+                    <input type="tel" value="{{ user_account.phone }}">
                 </label>
                 <label class="form__input">
                     <span>Электронная почта</span>
-                    <input type="email">
+                    <input type="email" value="{{ user_account.email }}">
                 </label>
                 <label class="form__input">
                     <span>Дата рождения</span>
-                    <input type="date">
+                    <input type="date" value="{{ user_account.birthday }}">
                 </label>
                 <label class="form__input address-field">
                     <span>Адрес для доставки</span>
