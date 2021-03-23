@@ -36,4 +36,11 @@ class Migration(migrations.Migration):
                 blank=True, max_length=100, null=True, verbose_name="Заголовок"
             ),
         ),
+        migrations.AlterField(
+            model_name="authcode",
+            name="id",
+            field=models.CharField(
+                max_length=50, primary_key=True, serialize=False, verbose_name="ID"
+            ),
+        ),
     ]
