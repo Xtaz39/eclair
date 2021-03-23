@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="modal" id="login-modal">
     <div class="modal__wrap order-form">
         <a href="#" class="modal__close">
@@ -43,7 +45,8 @@
             <div class="col-md-8 d-flex align-center">
                     <span class="personal-data">
                         Продолжая, вы соглашаетесь
-                        <a href="#">со сбором и обработкой персональных данных и пользовательским соглашением</a>
+                        <a href="{% static 'docs/privacy_eclair.pdf' %}"
+                           target="_blank">со сбором и обработкой персональных данных и пользовательским соглашением</a>
                     </span>
             </div>
         </div>
