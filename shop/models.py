@@ -48,8 +48,8 @@ class Product(models.Model):
     )
     amount = models.PositiveIntegerField("Доступное количество")
     description = models.TextField("Описание")
-    filling = models.TextField("Начинка")
-    topping = models.TextField("Декор")
+    filling = models.TextField("Начинка", null=True, blank=True)
+    topping = models.TextField("Декор", null=True, blank=True)
     category = models.ForeignKey(
         "Category", verbose_name="Категория", on_delete=models.SET_NULL, null=True
     )
