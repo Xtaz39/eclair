@@ -4,6 +4,7 @@
 
 {% block content %}
 
+    {% include "shop/cabinet/_change_phone.html" %}
     {#    <section class="collected-score text-center">#}
     {#        <h2>Накопительный бонус </h2>#}
     {#        <h2 class="score">1 234 бонусных баллов</h2>#}
@@ -11,15 +12,25 @@
 
     <section class="form-wrapper">
         <h2 class="text-center mb-5">Личные данные</h2>
-        <form action="{% url 'shop:cabinet' %}" method="POST" class="form form--default">
+        <form action="{% url 'shop:cabinet' %}"
+              method="POST"
+              class="form form--default">
             <div class="fields">
                 <label class="form__input">
                     <span>Ваше имя</span>
-                    <input type="text" value="{{ form.first_name.value }}" name="first_name">
+                    <input type="text"
+                           value="{{ form.first_name.value }}"
+                           name="first_name">
                 </label>
                 <label class="form__input">
                     <span>Номер телефона</span>
-                    <input type="tel" value="{{ form.phone.value }}" name="phone">
+                    <span class="input">
+                        <input type="tel"
+                               value="{{ form.phone.value }}"
+                               name="phone"
+                               readonly>
+                    <button id="sign-in">Изменить</button>
+                </span>
                 </label>
                 <label class="form__input">
                     <span>Электронная почта</span>
@@ -27,11 +38,13 @@
                 </label>
                 <label class="form__input">
                     <span>Дата рождения</span>
-                    <input type="date" value="{{ form.birthday.value }}" name="birthday">
+                    <input type="date"
+                           value="{{ form.birthday.value }}"
+                           name="birthday">
                 </label>
                 <label class="form__input address-field">
                     <span>Адрес для доставки</span>
-                    <input type="text" name="addresses">
+                    <input type="text" name="address">
                 </label>
             </div>
             <a href="#" class="btn btn--default add-address">Добавить адрес</a>

@@ -16,10 +16,11 @@ class User(AbstractUser):
     birthday = models.DateField("День рождения", null=True, blank=True)
 
 
-class AuthCode(models.Model):
+class ConfirmCode(models.Model):
     id = models.CharField("ID", max_length=50, primary_key=True)
     phone = PhoneField("Номер телефона")
     code = models.TextField("Код проверки", max_length=50)
+    action = models.CharField("Действие", max_length=50)
     created_at = models.DateTimeField("Время создания", auto_now=True)
 
 

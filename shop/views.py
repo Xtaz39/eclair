@@ -134,7 +134,7 @@ class Cabinet(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         email = forms.EmailField(required=False)
         birthday = forms.DateField(required=False)
 
-    template_name = "shop/cabinet.html"
+    template_name = "shop/cabinet/cabinet.html"
     form_class = Form
 
     def get_form_kwargs(self):
