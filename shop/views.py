@@ -181,8 +181,8 @@ class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormV
     class Form(forms.Form):
         cake_design = forms.CharField(required=True)
         cake_toppings = forms.CharField(required=True)
-        cake_postcards = forms.CharField(required=True)
-        cake_decors = forms.CharField(required=True)
+        # cake_postcards = forms.CharField(required=True)
+        # cake_decors = forms.CharField(required=True)
         weight = forms.CharField(required=True)
         name = forms.CharField(required=True)
         phone = forms.CharField(required=True, validators=[validators.is_phone])
@@ -211,12 +211,12 @@ class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormV
         toppings = models.CakeTopping.objects.filter(
             pk__in=[int(id_) for id_ in data["cake_toppings"].split(",")]
         )
-        decors = models.CakeDecor.objects.filter(
-            pk__in=[int(id_) for id_ in data["cake_decors"].split(",")]
-        )
-        postcards = models.CakePostcard.objects.filter(
-            pk__in=[int(id_) for id_ in data["cake_postcards"].split(",")]
-        )
+        # decors = models.CakeDecor.objects.filter(
+        #     pk__in=[int(id_) for id_ in data["cake_decors"].split(",")]
+        # )
+        # postcards = models.CakePostcard.objects.filter(
+        #     pk__in=[int(id_) for id_ in data["cake_postcards"].split(",")]
+        # )
 
         contact_id = amocrm.client.create_contact(
             name=data["name"],
@@ -226,14 +226,14 @@ class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormV
         )
 
         toppings_names = ", ".join(topping.title for topping in toppings)
-        decor_names = ", ".join(decor.title for decor in decors)
-        postcard_names = ", ".join(postcard.title for postcard in postcards)
+        # decor_names = ", ".join(decor.title for decor in decors)
+        # postcard_names = ", ".join(postcard.title for postcard in postcards)
 
         content = (
             f"Торт {design.title}\n"
             f"Начинки: {toppings_names}.\n"
-            f"Открытки: {postcard_names}.\n"
-            f"Декор: {decor_names}."
+            # f"Открытки: {postcard_names}.\n"
+            # f"Декор: {decor_names}."
         )
         order_id = amocrm.client.order_custom_cake(
             contact_id,
