@@ -82,7 +82,7 @@ $(window).on('load', () => {
       errsList.empty();
 
       if (stage2Input.hasClass('active')) {
-          $.post("/api/auth/login", {
+          $.post("/api/confirm-action", {
                   "phone": phoneInput.val(),
                   "code": $('input[name=code]').val(),
                   "request_id": reqInput.val(),
@@ -100,7 +100,10 @@ $(window).on('load', () => {
               });
           });
     } else {
-      $.post("/api/auth/request-code", {"phone": phoneInput.val()})
+          $.post("/api/request-code", {
+              "phone": phoneInput.val(),
+              "action": $('input[name=action]').val(),
+          })
           .done((data) => {
               reqInput.val(data.request_id);
 
@@ -140,7 +143,7 @@ $(window).on('load', () => {
       const errsList = $('#login-modal .errorlist')
       errsList.empty();
 
-      $.post("/api/auth/request-code", {"phone": $('input[name=phone]').val()})
+      $.post("/api/request-code", {"phone": $('input[name=phone]').val()})
           .done((data) => {
               $('input[name=request-id]').val(data.request_id);
               setInterval(() => {

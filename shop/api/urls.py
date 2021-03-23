@@ -1,9 +1,9 @@
 from django.urls import path
 
-from .views import Cart, AuthRequestCode, AuthLogin
+from .views import Cart, AuthRequestCode, ConfirmCode
 
 urlpatterns = [
     path("cart", Cart.as_view(), name="cart"),
-    path("auth/login", AuthLogin.as_view(), name="auth_request_code"),
-    path("auth/request-code", AuthRequestCode.as_view(), name="auth_request_code"),
+    path("confirm-action", ConfirmCode.as_view(), name="confirm_action"),
+    path("request-code", AuthRequestCode.as_view(), name="request_code"),
 ]

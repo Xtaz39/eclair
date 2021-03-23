@@ -38,12 +38,18 @@
         {% for banner in banners %}
             <div class="hero__slide"
                  style="background-image: url({{ banner.image.url }});">
-                <h2 class="h1">{{ banner.title }}</h2>
-                <p>
-                    {{ banner.text }}
-                </p>
-                <a href="{{ banner.button_url }}"
-                   class="btn btn--warning">{{ banner.button_text }}</a>
+                {% if banner.title %}
+                    <h2 class="h1">{{ banner.title }}</h2>
+                {% endif %}
+                {% if banner.text %}
+                    <p>
+                        {{ banner.text }}
+                    </p>
+                {% endif %}
+                {% if banner.button_url and banner.button_text %}
+                    <a href="{{ banner.button_url }}"
+                       class="btn btn--warning">{{ banner.button_text }}</a>
+                {% endif %}
             </div>
         {% endfor %}
     </div>

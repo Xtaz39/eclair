@@ -13,12 +13,14 @@ from shop import validators
 
 class User(AbstractUser):
     phone = PhoneField("Номер телефона", null=True, blank=True)
+    birthday = models.DateField("День рождения", null=True, blank=True)
 
 
-class AuthCode(models.Model):
+class ConfirmCode(models.Model):
     id = models.CharField("ID", max_length=50, primary_key=True)
     phone = PhoneField("Номер телефона")
     code = models.TextField("Код проверки", max_length=50)
+    action = models.CharField("Действие", max_length=50)
     created_at = models.DateTimeField("Время создания", auto_now=True)
 
 
@@ -207,14 +209,19 @@ class FooterSocial(models.Model):
 
 
 class Banner(models.Model):
-    title = models.CharField("Заголовок", max_length=100)
-    text = models.TextField("Текст")
+    title = models.CharField("Заголовок", max_length=100, null=True, blank=True)
+    text = models.TextField("Текст", null=True, blank=True)
     image = models.ImageField("Картинка", upload_to="image/product/")
-    button_text = models.CharField("Текст кнопки", max_length=50)
-    button_url = models.CharField("Ссылка на кноке", max_length=255)
+    button_text = models.CharField("Текст кнопки", max_length=50, null=True, blank=True)
+    button_url = models.CharField(
+        "Ссылка на кноке", max_length=255, null=True, blank=True
+    )
     priority = models.SmallIntegerField("Приоритет", unique=True)
 
     def __str__(self):
+        if not self.title:
+            return f"Баннер ({self.priority})"
+
         return f"{self.title} ({self.priority})"
 
     class Meta:

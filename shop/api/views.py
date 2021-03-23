@@ -74,6 +74,7 @@ def normalize_phone(phone: str) -> str:
 class AuthRequestCode(BaseFormView):
     class Form(forms.Form):
         phone = forms.CharField(required=True)
+        action = forms.CharField(required=True)
 
         def clean_phone(self):
             phone = normalize_phone(self.data["phone"])
@@ -88,7 +89,7 @@ class AuthRequestCode(BaseFormView):
         phone = form.cleaned_data["phone"]
 
         # todo: check why not works on sqlite
-        if models.AuthCode.objects.filter(
+        if models.ConfirmCode.objects.filter(
             phone=phone,
             created_at__gte=pendulum.now().subtract(minutes=1),
         ).first():
@@ -106,14 +107,15 @@ class AuthRequestCode(BaseFormView):
 
         req_id = secrets.token_urlsafe(16)
         code = "".join(str(secrets.randbelow(9)) for _ in range(4))
-        models.AuthCode.objects.create(
+        models.ConfirmCode.objects.create(
             id=req_id,
             code=code,
             phone=phone,
+            action=form.cleaned_data["action"],
         )
 
         if settings.DEBUG:
-            print(f"Login code is: {code}")
+            print(f"Verification code is: {code}")
         try:
             sms.client.send_sms(
                 f"Eclair. Ваш код: {code}", phone, get_client_ip(self.request)
@@ -139,7 +141,7 @@ class AuthRequestCode(BaseFormView):
         )
 
 
-class AuthLogin(BaseFormView):
+class ConfirmCode(BaseFormView):
     class Form(forms.Form):
         phone = forms.CharField(required=True)
         code = forms.CharField(required=True)
@@ -161,23 +163,28 @@ class AuthLogin(BaseFormView):
 
         # todo: clear old records here?
 
-        deleted, _ = models.AuthCode.objects.filter(
-            id=req_id,
-            phone=phone,
-            code=code,
-        ).delete()
-
-        if not deleted:
+        try:
+            confirmation = models.ConfirmCode.objects.get(
+                id=req_id,
+                phone=phone,
+                code=code,
+            )
+        except models.ConfirmCode.DoesNotExist:
             return JsonResponse(
                 data={"errors": {"code": ["Неверный код"]}},
                 safe=False,
                 status=http.HTTPStatus.BAD_REQUEST,
             )
 
-        user, _ = models.User.objects.get_or_create(
-            phone=phone, defaults={"username": phone}
-        )
-        login(self.request, user)
+        if confirmation.action == "login":
+            user, _ = models.User.objects.get_or_create(
+                phone=phone, defaults={"username": phone}
+            )
+            login(self.request, user)
+        elif confirmation.action == "phone_change":
+            self.request.user.phone = phone
+            self.request.user.save()
+
         return JsonResponse(data={"success": True}, safe=False)
 
     def form_invalid(self, form):
