@@ -127,18 +127,40 @@ class Product(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView)
         return data
 
 
-class Cabinet(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
-    template_name = "shop/cabinet.html"
+class Cabinet(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
+    class Form(forms.Form):
+        first_name = forms.CharField(max_length=50, required=False)
+        phone = forms.CharField(max_length=20, required=True)
+        email = forms.EmailField(required=False)
+        birthday = forms.DateField(required=False)
 
-    def get_context_data(self, **kwargs):
-        data = super(Cabinet, self).get_context_data(**kwargs)
-        data["user_account"] = {
-            "first_name": self.request.user.first_name,
-            "phone": self.request.user.phone,
-            "email": self.request.user.email,
-            "birthday": self.request.user.birthday.strftime("%Y-%m-%d"),
-        }
-        return data
+    template_name = "shop/cabinet.html"
+    form_class = Form
+
+    def get_form_kwargs(self):
+        kwargs = super(Cabinet, self).get_form_kwargs()
+        kwargs["initial"]["first_name"] = self.request.user.first_name
+        kwargs["initial"]["phone"] = self.request.user.phone
+        kwargs["initial"]["email"] = self.request.user.email
+
+        birthday = ""
+        if self.request.user.birthday:
+            birthday = self.request.user.birthday.strftime("%Y-%m-%d")
+        kwargs["initial"]["birthday"] = birthday
+
+        return kwargs
+
+    def form_valid(self, form):
+        user = self.request.user
+        for f_name in form.changed_data:
+            if f_name == "phone":
+                continue
+
+            setattr(user, f_name, form.cleaned_data[f_name])
+
+        user.save()
+
+        return redirect("/cabinet")
 
     def get(self, request: WSGIRequest, *args, **kwargs):
         if not request.user.is_authenticated:

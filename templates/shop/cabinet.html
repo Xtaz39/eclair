@@ -11,27 +11,27 @@
 
     <section class="form-wrapper">
         <h2 class="text-center mb-5">Личные данные</h2>
-        <form action="#" class="form form--default">
+        <form action="{% url 'shop:cabinet' %}" method="POST" class="form form--default">
             <div class="fields">
                 <label class="form__input">
                     <span>Ваше имя</span>
-                    <input type="text" value="{{ user_account.first_name }}">
+                    <input type="text" value="{{ form.first_name.value }}" name="first_name">
                 </label>
                 <label class="form__input">
                     <span>Номер телефона</span>
-                    <input type="tel" value="{{ user_account.phone }}">
+                    <input type="tel" value="{{ form.phone.value }}" name="phone">
                 </label>
                 <label class="form__input">
                     <span>Электронная почта</span>
-                    <input type="email" value="{{ user_account.email }}">
+                    <input type="email" value="{{ form.email.value }}" name="email">
                 </label>
                 <label class="form__input">
                     <span>Дата рождения</span>
-                    <input type="date" value="{{ user_account.birthday }}">
+                    <input type="date" value="{{ form.birthday.value }}" name="birthday">
                 </label>
                 <label class="form__input address-field">
                     <span>Адрес для доставки</span>
-                    <input type="text">
+                    <input type="text" name="addresses">
                 </label>
             </div>
             <a href="#" class="btn btn--default add-address">Добавить адрес</a>
