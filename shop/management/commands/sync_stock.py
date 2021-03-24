@@ -17,13 +17,15 @@ class Command(BaseCommand):
 
         for stop_list in stop_lists:
             for item in stop_list.items:
-                article = product_id_to_article[item.productId]
+                iiko_article = product_id_to_article[item.productId]
                 amount_new = item.balance
 
-                models.Product.objects.filter(article=article).update(amount=amount_new)
+                models.Product.objects.filter(iiko_id=iiko_article).update(
+                    amount=amount_new
+                )
 
                 self.stdout.write(
-                    self.style.SUCCESS(f"Updated {article} stock to {amount_new}")
+                    self.style.SUCCESS(f"Updated {iiko_article} stock to {amount_new}")
                 )
 
         self.stdout.write(self.style.SUCCESS("Sync stock done"))
