@@ -352,18 +352,19 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["initial"]["name"] = self.request.user.first_name
-        kwargs["initial"]["phone"] = self.request.user.phone
+        if self.request.user.is_authenticated:
+            kwargs["initial"]["name"] = self.request.user.first_name
+            kwargs["initial"]["phone"] = self.request.user.phone
 
-        address = (
-            models.UserAddress.objects.filter(user=self.request.user)
-            .order_by("created_at")
-            .reverse()
-            .values("address")
-            .first()
-        )
-        if address:
-            kwargs["initial"]["address"] = address["address"]
+            address = (
+                models.UserAddress.objects.filter(user=self.request.user)
+                .order_by("created_at")
+                .reverse()
+                .values("address")
+                .first()
+            )
+            if address:
+                kwargs["initial"]["address"] = address["address"]
 
         return kwargs
 
