@@ -145,6 +145,7 @@ class Cabinet(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
 
     template_name = "shop/cabinet/cabinet.html"
     form_class = Form
+    addresses_limit = 5
 
     def get_form_kwargs(self):
         kwargs = super(Cabinet, self).get_form_kwargs()
@@ -172,7 +173,7 @@ class Cabinet(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
                 models.UserAddress.objects.filter(user=self.request.user).delete()
                 addresses = [
                     models.UserAddress(address=a, user=self.request.user)
-                    for a in form.cleaned_data[f_name]
+                    for a in form.cleaned_data[f_name][: self.addresses_limit]
                     if a
                 ]
                 models.UserAddress.objects.bulk_create(addresses)

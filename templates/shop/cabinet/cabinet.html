@@ -24,13 +24,17 @@
                 </label>
                 <label class="form__input">
                     <span>Номер телефона</span>
-                    <span class="input">
+                    <div class="input-group mb-3">
                         <input type="tel"
-                               value="{{ form.phone.value }}"
+                               class="form-control"
                                name="phone"
-                               readonly>
-                    <button id="sign-in">Изменить</button>
-                </span>
+                               value="{{ form.phone.value }}"
+                               readonly
+                        >
+                        <div class="input-group-append">
+                            <button id="sign-in" class="btn btn-outline-secondary" style="font-size: 1.3rem;">Изменить</button>
+                        </div>
+                    </div>
                 </label>
                 <label class="form__input">
                     <span>Электронная почта</span>
@@ -49,7 +53,10 @@
                     </label>
                 {% endfor %}
             </div>
-            <a href="#" class="btn btn--default add-address">Добавить адрес</a>
+
+            {% if form.addresses.value|length < 5 %}
+                <a href="#" class="btn btn--default add-address">Добавить адрес</a>
+            {% endif %}
             <div class="form__submit mt-5">
                 <button type="submit" class="submit btn btn--warning">Сохранить</button>
             </div>
