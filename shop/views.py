@@ -354,13 +354,17 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         kwargs = super().get_form_kwargs()
         kwargs["initial"]["name"] = self.request.user.first_name
         kwargs["initial"]["phone"] = self.request.user.phone
-        kwargs["initial"]["address"] = (
+
+        address = (
             models.UserAddress.objects.filter(user=self.request.user)
             .order_by("created_at")
             .reverse()
             .values("address")
             .first()
-        )["address"]
+        )
+        if address:
+            kwargs["initial"]["address"] = address["address"]
+
         return kwargs
 
     def get_context_data(self, **kwargs):
