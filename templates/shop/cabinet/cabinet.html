@@ -42,10 +42,12 @@
                            value="{{ form.birthday.value }}"
                            name="birthday">
                 </label>
-                <label class="form__input address-field">
-                    <span>Адрес для доставки</span>
-                    <input type="text" name="address">
-                </label>
+                {% for val in form.addresses.value %}
+                    <label class="form__input address-field">
+                        <span>Адрес для доставки</span>
+                        <input type="text" name="addresses" value="{{ val }}">
+                    </label>
+                {% endfor %}
             </div>
             <a href="#" class="btn btn--default add-address">Добавить адрес</a>
             <div class="form__submit mt-5">

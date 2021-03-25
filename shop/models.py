@@ -16,21 +16,17 @@ class User(AbstractUser):
     birthday = models.DateField("День рождения", null=True, blank=True)
 
 
+class UserAddress(models.Model):
+    address = models.CharField("Адрес", max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses")
+
+
 class ConfirmCode(models.Model):
     id = models.CharField("ID", max_length=50, primary_key=True)
     phone = PhoneField("Номер телефона")
     code = models.TextField("Код проверки", max_length=50)
     action = models.CharField("Действие", max_length=50)
     created_at = models.DateTimeField("Время создания", auto_now=True)
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    birth_date = models.DateField("Дата рождения", null=True, blank=True)
-
-    class Meta:
-        verbose_name = "Профиль"
-        verbose_name_plural = "Профили"
 
 
 class Product(models.Model):

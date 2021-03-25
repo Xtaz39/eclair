@@ -13,6 +13,7 @@ from django.views.generic.edit import BaseFormView, FormView
 
 from . import models, validators
 from .client import amocrm, sberbank
+from .fields import MultiTextField, MultiTextInput
 
 
 class CategoriesDataMixin:
@@ -133,6 +134,14 @@ class Cabinet(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         phone = forms.CharField(max_length=20, required=True)
         email = forms.EmailField(required=False)
         birthday = forms.DateField(required=False)
+        addresses = MultiTextField(
+            widget=MultiTextInput(),
+            fields=tuple(
+                forms.CharField(max_length=50, required=False) for _ in range(5)
+            ),
+            require_all_fields=False,
+            required=False,
+        )
 
     template_name = "shop/cabinet/cabinet.html"
     form_class = Form
@@ -142,6 +151,12 @@ class Cabinet(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         kwargs["initial"]["first_name"] = self.request.user.first_name
         kwargs["initial"]["phone"] = self.request.user.phone
         kwargs["initial"]["email"] = self.request.user.email
+        user_addrs = (
+            models.UserAddress.objects.filter(user=self.request.user)
+            .values("address")
+            .all()
+        )
+        kwargs["initial"]["addresses"] = [val["address"] for val in user_addrs] or [""]
 
         birthday = ""
         if self.request.user.birthday:
@@ -153,7 +168,17 @@ class Cabinet(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
     def form_valid(self, form):
         user = self.request.user
         for f_name in form.changed_data:
-            if f_name == "phone":
+            if f_name == "addresses":
+                models.UserAddress.objects.filter(user=self.request.user).delete()
+                addresses = [
+                    models.UserAddress(address=a, user=self.request.user)
+                    for a in form.cleaned_data[f_name]
+                    if a
+                ]
+                models.UserAddress.objects.bulk_create(addresses)
+                continue
+
+            if f_name == "phone" or not hasattr(user, f_name):
                 continue
 
             setattr(user, f_name, form.cleaned_data[f_name])
