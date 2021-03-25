@@ -19,6 +19,7 @@ class User(AbstractUser):
 class UserAddress(models.Model):
     address = models.CharField("Адрес", max_length=255)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses")
+    created_at = models.DateTimeField("Время создания", auto_now=True)
 
 
 class ConfirmCode(models.Model):

@@ -154,8 +154,9 @@ class Cabinet(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         kwargs["initial"]["email"] = self.request.user.email
         user_addrs = (
             models.UserAddress.objects.filter(user=self.request.user)
+            .order_by("created_at")
             .values("address")
-            .all()
+            .all()[: self.addresses_limit]
         )
         kwargs["initial"]["addresses"] = [val["address"] for val in user_addrs] or [""]
 
@@ -349,6 +350,19 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
     form_class = Form
     template_name = "shop/checkout.html"
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["initial"]["name"] = self.request.user.first_name
+        kwargs["initial"]["phone"] = self.request.user.phone
+        kwargs["initial"]["address"] = (
+            models.UserAddress.objects.filter(user=self.request.user)
+            .order_by("created_at")
+            .reverse()
+            .values("address")
+            .first()
+        )["address"]
+        return kwargs
+
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         req: WSGIRequest = self.request
@@ -407,6 +421,11 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         models.CartProduct.objects.filter(
             session_id=request.session.session_key
         ).delete()
+
+        # remember address
+        models.UserAddress.objects.create(
+            user=request.user, address=customer["address"]
+        )
 
         client_card_id = amocrm.client.create_contact(
             customer["name"], customer["phone"]

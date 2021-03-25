@@ -37,7 +37,7 @@
                 {#                    Новости#}
                 {#                </a>#}
                 {% if user.is_authenticated %}
-                    <a href="cabinet" class="bucket__item personal-cabinet">
+                    <a href="{% url 'shop:cabinet' %}" class="bucket__item personal-cabinet">
                         <i class="bucket__img">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
