@@ -2,6 +2,7 @@ import $ from 'jquery';
 import 'ion-rangeslider';
 import './sliders';
 import './cake-constructor';
+import 'bootstrap/js/dist/dropdown';
 
 if (module.hot) {
   module.hot.accept();
@@ -42,22 +43,6 @@ $(window).on('load', () => {
     $('.header__wrap').toggleClass('active');
   });
 
-  $('.item__actions').on('click', function actionItemsClickHandler(e) {
-    const num = +$(this).find('.item__quantity-text').text();
-
-    if ($(e.target).hasClass('item__btn--minus') && num > 1) {
-      $(this).find('.item__quantity-text').text(num - 1);
-    }
-
-    if ($(e.target).hasClass('item__btn--plus')) {
-      $(this).find('.item__quantity-text').text(num + 1);
-    }
-
-    if ($(e.target).hasClass('btn')) {
-      e.preventDefault();
-      $(this).find('.item__quantity-text').text(1);
-    }
-  });
 
   $('.add-address').on('click', (e) => {
     e.preventDefault();
@@ -170,5 +155,12 @@ $(window).on('load', () => {
   $("#sign-in").on("click", (e) => {
     e.preventDefault()
     $('#login-modal').addClass('active')
+  })
+
+  $(".order-form .dropdown-menu a").on("click", (e) => {
+      e.preventDefault();
+      const value = e.target.innerHTML;
+      const fieldName = e.target.attributes['data-input-field'].value;
+      $('input[name=' + fieldName + ']').val(value);
   })
 });

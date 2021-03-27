@@ -385,6 +385,15 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         data["cart_total_amount"] = sum(
             item.amount * item.product.price for item in items
         )
+        data["user_addresses"] = [
+            v["address"]
+            for v in (
+                models.UserAddress.objects.filter(user=self.request.user)
+                .order_by("created_at")
+                .reverse()
+                .values("address")
+            )
+        ]
 
         return data
 
@@ -428,9 +437,10 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         ).delete()
 
         # remember address
-        models.UserAddress.objects.create(
-            user=request.user, address=customer["address"]
-        )
+        if not models.UserAddress.objects.filter(address=customer["address"]).exists():
+            models.UserAddress.objects.create(
+                user=request.user, address=customer["address"]
+            )
 
         client_card_id = amocrm.client.create_contact(
             customer["name"], customer["phone"]

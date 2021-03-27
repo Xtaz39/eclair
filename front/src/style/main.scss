@@ -302,10 +302,12 @@ h2 {
     .slick-list {
       overflow: visible;
     }
+
     .slick-slide > div {
       margin: 0 7px;
     }
   }
+
   &__slide {
     border-radius: 10px;
   }
@@ -1007,16 +1009,17 @@ h2 {
       font-weight: 300;
       position: relative;
       line-height: 40px;
-      border-bottom: 1px solid rgba(44,39,36,0.25);
+      border-bottom: 1px solid rgba(44, 39, 36, 0.25);
       display: inline-block;
     }
+
     &-price {
       color: #2c2724;
       font-size: 2rem;
       line-height: 1.67;
       font-weight: 300;
       padding: 3px 9px;
-      background-color: rgba(44,39,36,0.1);
+      background-color: rgba(44, 39, 36, 0.1);
       border-radius: 4px;
       display: inline-block;
       margin-top: 16px;
@@ -1150,7 +1153,21 @@ h2 {
       background: none;
       box-shadow: none;
       border: none;
-      color: #d5a203;
+      outline: none;
+      height: 100%;
+      border-radius: 1px;
+    }
+
+    button:focus {
+      box-shadow: 0 0 0 .2rem rgba(0, 0, 0, .5)
+    }
+
+    .dropdown-menu {
+      font-size: 1.6rem;
+
+      a {
+        text-decoration: none;
+      }
     }
 
     button:disabled {
@@ -1466,6 +1483,7 @@ h2 {
   z-index: 5;
 
   display: none;
+
   &.active {
     display: flex;
   }
@@ -1501,14 +1519,17 @@ h2 {
         display: none;
       }
     }
+
     &.login-stage-2 {
       display: none;
+
       &.active {
         display: flex;
       }
     }
 
     width: 100%;
+
     .input {
       margin-left: 20px;
     }

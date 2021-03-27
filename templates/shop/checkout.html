@@ -17,20 +17,44 @@
                             <label class="form__input" for="phone">
                                 <span>Номер телефона</span>
                                 <span class="input">
-{#                                 <input type="tel" value="+7 999 156-07-77">#}
-                                 <input type="tel" id="phone" name="phone" value="{{ form.phone.value|default:"" }}" required>
+                                 <input type="tel"
+                                        id="phone"
+                                        name="phone"
+                                        value="{{ form.phone.value|default:"" }}"
+                                        required>
                                     {{ form.phone.errors }}
-{#                                <button>Изменить</button>#}
                             </span>
                             </label>
                             <label class="form__input" for="address">
                                 <span>Адрес доставки</span>
                                 <span class="input">
-                                <input type="text" id="address" name="address" value="{{ form.address.value|default:"" }}" required>
+                                <input type="text"
+                                       id="address"
+                                       name="address"
+                                       class="form-control"
+                                       value="{{ form.address.value|default:"" }}"
+                                       required>
                                     {{ form.address.errors }}
-{#                                <button>Изменить</button>#}
+                                    {% if user_addresses %}
+                                        <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary dropdown-toggle"
+                                                type="button"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true"
+                                                aria-expanded="false">Мои адреса
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            {% for addr in  user_addresses %}
+                                                <a class="dropdown-item"
+                                                   data-input-field="address"
+                                                   href="">{{ addr }}</a>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    {% endif %}
                             </span>
                             </label>
+
                         </div>
                         {#                        <h2 class="my-5">Заказ на доставку</h2>#}
                         {#                        <div class="fields">#}
@@ -53,7 +77,10 @@
                         <div class="fields">
                             <label class="form__input form__input--radio">
                                 <span>Наличными</span>
-                                <input type="radio" name="pay_method" value="cash" checked>
+                                <input type="radio"
+                                       name="pay_method"
+                                       value="cash"
+                                       checked>
                                 <span class="fake-input"></span>
                             </label>
                             <label class="form__input form__input--radio">
@@ -66,7 +93,8 @@
                             <a href="/cart" class="btn btn--default">Вернуться в
                                 корзину</a>
                             <button type="submit" class="submit btn btn--warning">
-                                Оформить заказ на <span>{{ cart_total_amount }} руб.</span></button>
+                                Оформить заказ на
+                                <span>{{ cart_total_amount }} руб.</span></button>
                         </div>
                     </form>
                 </div>
