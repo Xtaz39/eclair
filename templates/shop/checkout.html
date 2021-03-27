@@ -39,21 +39,23 @@
                                        name="address"
                                        class="form-control"
                                        value="{{ form.address.value|default:"" }}"
+                                       {% if user_addresses %}style="width: 80%;"{% endif %}
                                        required>
                                     {{ form.address.errors }}
                                     {% if user_addresses %}
                                         <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary dropdown-toggle"
+                                        <button class="btn btn-outline-secondary dropdown-toggle inline"
                                                 type="button"
                                                 data-toggle="dropdown"
                                                 aria-haspopup="true"
-                                                aria-expanded="false">Мои адреса
+                                                style="width: 20%; padding-left: 0; padding-right: 0;"
+                                                aria-expanded="false">Выбор
                                         </button>
                                         <div class="dropdown-menu">
                                             {% for addr in  user_addresses %}
                                                 <a class="dropdown-item"
                                                    data-input-field="address"
-                                                   href="">{{ addr }}</a>
+                                                >{{ addr }}</a>
                                             {% endfor %}
                                         </div>
                                     </div>
