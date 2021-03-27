@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-
 import enum
 import logging
 from dataclasses import dataclass
@@ -8,6 +7,7 @@ from datetime import datetime
 from typing import Any, Optional
 from urllib.parse import urljoin
 
+import filelock
 import requests
 from django.conf import settings
 
@@ -40,76 +40,76 @@ class Client:
         self._secret_key = options["secret_key"]
         self._integration_id = options["integration_id"]
         self._auth_code = options["auth_code"]
-        self._http_client = requests.Session()
-        self._access_token = ""
-        self._refresh_token = ""
         self._redirect_url = options["redirect_url"]
+        self._http_client = requests.Session()
+        self._lock = filelock.FileLock(settings.BASE_DIR / ".amocrm_tokens.lock")
+        self._tokens_file = settings.BASE_DIR / ".amocrm_tokens"
 
-    def init_token(self):
-        try:
-            self._obtain_access_token_local()
-        except FileNotFoundError:
-            self._obtain_access_token_external()
-
-    def _obtain_access_token_external(self):
+    def _request_access_token(self):
         """https://www.amocrm.ru/developers/content/oauth/step-by-step#get_access_token"""
-        url = urljoin(self._url, "/oauth2/access_token")
-        resp = self._http_client.post(
-            url,
-            data={
-                "client_id": self._integration_id,
-                "client_secret": self._secret_key,
-                "grant_type": "authorization_code",
-                "code": self._auth_code,
-                "redirect_uri": self._redirect_url,
-            },
-        )
-        if not resp.ok:
-            raise ClientError(resp.text)
+        with self._lock:
+            url = urljoin(self._url, "/oauth2/access_token")
+            resp = self._http_client.post(
+                url,
+                data={
+                    "client_id": self._integration_id,
+                    "client_secret": self._secret_key,
+                    "grant_type": "authorization_code",
+                    "code": self._auth_code,
+                    "redirect_uri": self._redirect_url,
+                },
+            )
+            if not resp.ok:
+                raise ClientError(resp.text)
 
-        data = resp.json()
-        self._access_token = data["access_token"]
-        self._refresh_token = data["refresh_token"]
-        self._write_tokens(self._access_token, self._refresh_token)
-        return
+            data = resp.json()
+            return data["access_token"], data["refresh_token"]
+
+    def _tokens_read(self) -> tuple[str, str]:
+        with self._lock:
+            if not self._tokens_file.exists():
+                access_token, refresh_token = self._request_access_token()
+                self._tokens_write(access_token, refresh_token)
+                return access_token, refresh_token
+
+            with self._tokens_file.open("r") as fh:
+                access_token = fh.readline().rstrip("\n")
+                refresh_token = fh.readline()
+        return access_token, refresh_token
+
+    def _tokens_write(self, access_token: str, refresh_token: str):
+        with self._lock:
+            with self._tokens_file.open("w") as fh:
+                fh.writelines((access_token, f"\n{refresh_token}"))
 
     def _refresh_access_token(self):
         """https://www.amocrm.ru/developers/content/oauth/step-by-step#easy_auth"""
-        url = urljoin(self._url, "/oauth2/access_token")
-        resp = self._http_client.post(
-            url,
-            data={
-                "client_id": self._integration_id,
-                "client_secret": self._secret_key,
-                "grant_type": "refresh_token",
-                "refresh_token": self._refresh_token,
-                "redirect_uri": "https://dmssk.github.io/",
-            },
-        )
-        if not resp.ok:
-            raise ClientError(resp.text)
+        with self._lock:
+            url = urljoin(self._url, "/oauth2/access_token")
+            resp = self._http_client.post(
+                url,
+                data={
+                    "client_id": self._integration_id,
+                    "client_secret": self._secret_key,
+                    "grant_type": "refresh_token",
+                    "refresh_token": self._tokens_read()[1],
+                    "redirect_uri": "https://dmssk.github.io/",
+                },
+            )
+            if not resp.ok:
+                raise ClientError(resp.text)
 
-        data = resp.json()
-        self._access_token = data["access_token"]
-        self._refresh_token = data["refresh_token"]
-        self._write_tokens(self._access_token, self._refresh_token)
+            data = resp.json()
+            self._tokens_write(data["access_token"], data["refresh_token"])
         return
-
-    def _obtain_access_token_local(self):
-        with open(settings.BASE_DIR / ".amocrm_tokens", "r") as fh:
-            self._access_token = fh.readline().rstrip("\n")
-            self._refresh_token = fh.readline()
-
-    def _write_tokens(self, access_token: str, refresh_token: str):
-        with open(settings.BASE_DIR / ".amocrm_tokens", "w") as fh:
-            fh.writelines((access_token, f"\n{refresh_token}"))
 
     def _send_get(self, endpoint: str) -> dict[Any, Any]:
         url = urljoin(self._url, endpoint)
 
+        access_token = self._tokens_read()[0]
         for _ in range(2):
             resp = self._http_client.get(
-                url, headers={"Authorization": f"Bearer {self._access_token}"}
+                url, headers={"Authorization": f"Bearer {access_token}"}
             )
             if not resp.ok:
                 # refresh token and retry
@@ -126,10 +126,11 @@ class Client:
     def _send_post(self, endpoint: str, data: Optional[Any]) -> dict[Any, Any]:
         url = urljoin(self._url, endpoint)
 
+        access_token = self._tokens_read()[0]
         for _ in range(2):
             resp = self._http_client.post(
                 url,
-                headers={"Authorization": f"Bearer {self._access_token}"},
+                headers={"Authorization": f"Bearer {access_token}"},
                 json=data,
             )
             if not resp.ok:
@@ -322,8 +323,3 @@ client = Client(
         "redirect_url": settings.AMOCRM_REDIRECT_URL,
     }
 )
-
-try:
-    client.init_token()
-except Exception as ex:
-    logger.error("Failed to init amocrm client. Order creation will not work: %s", ex)
