@@ -94,10 +94,10 @@ class AuthRequestCode(BaseFormView):
             created_at__gte=pendulum.now().subtract(minutes=1),
         ).first():
             errors = {
-                "phone": (
+                "phone": [
                     "Код был запрошен менее минуты назад. "
-                    "Пожалуйста, повторите запрос спустя время."
-                )
+                    "Пожалуйста, повторите запрос спустя минуту."
+                ]
             }
             return JsonResponse(
                 data={"errors": errors},
