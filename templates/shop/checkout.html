@@ -16,6 +16,7 @@
                                 <input type="text"
                                        id="name"
                                        name="name"
+                                       placeholder="Евгения"
                                        value="{{ form.name.value|default:"" }}"
                                        required>
                                 {{ form.name.errors }}
@@ -25,6 +26,7 @@
                                 <span class="input">
                                  <input type="tel"
                                         id="phone"
+                                        placeholder="+7 (888) 888-88-88"
                                         name="phone"
                                         value="{{ form.phone.value|default:"" }}"
                                         required>
@@ -38,6 +40,7 @@
                                        id="address"
                                        name="address"
                                        class="form-control"
+                                       placeholder="Улица, дом, квартира/офис, подъезд, этаж, домофон"
                                        value="{{ form.address.value|default:"" }}"
                                        {% if user_addresses %}style="width: 80%;"{% endif %}
                                        required>
