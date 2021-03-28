@@ -1188,6 +1188,63 @@ h2 {
   }
 }
 
+.login-form {
+  .fields {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form__input {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+
+    span.input {
+      display: block;
+      position: relative;
+      flex-basis: 70%;
+    }
+
+    span {
+      flex-basis: 30%;
+      margin: 0;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    input {
+      flex-basis: 70%;
+    }
+
+    button {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translate(0, -50%);
+      font-size: 1.6rem;
+      background: none;
+      box-shadow: none;
+      border: none;
+      color: #d5a203;
+    }
+
+    button:disabled {
+      color: rgba(0, 0, 0, 0.4);
+    }
+
+    &.score {
+      span.input {
+        display: inline-block;
+        flex-basis: 30%;
+      }
+
+      input {
+        flex-basis: 30%;
+      }
+    }
+  }
+}
+
 .order-total {
   margin-left: 40px;
   padding: 40px;
