@@ -161,7 +161,9 @@ class ConfirmCode(BaseFormView):
         code = form.cleaned_data["code"]
         req_id = form.cleaned_data["request_id"]
 
-        # todo: clear old records here?
+        models.ConfirmCode.objects.filter(
+            created_at__lte=pendulum.now().subtract(days=1)
+        ).delete()
 
         try:
             confirmation = models.ConfirmCode.objects.get(
