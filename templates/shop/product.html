@@ -53,9 +53,13 @@
                     <p class="description">
                         {{ product.description }}
                     </p>
-                    <p class="description"><b>Начинка:</b> {{ product.filling }}
+                    {% if product.filling %}
+                        <p class="description"><b>Начинка:</b> {{ product.filling }}
+                    {% endif %}
                     </p>
-                    <p class="description"><b>Декор:</b> {{ product.topping }}</p>
+                    {% if product.topping %}
+                        <p class="description"><b>Декор:</b> {{ product.topping }}</p>
+                    {% endif %}
                     <a href="" class="mt-5 btn btn--warning"
                        @click.prevent="incrementCartAmount('{{ product.article }}', 1)">Добавить
                         в корзину</a>
