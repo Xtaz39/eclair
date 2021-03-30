@@ -209,6 +209,17 @@
 
   .hero {
     min-height: 375px;
+    height: calc(100vh - 120px);
+
+    &__slider,
+    &__slide,
+    .slick-list,
+    .slick-track,
+    .slick-slide,
+    .slick-slide > div {
+      min-height: 375px;
+      height: calc(100vh - 120px);
+    }
 
     &__slide {
       padding: 56px 0;
