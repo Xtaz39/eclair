@@ -208,29 +208,6 @@
   }
 
   .hero {
-    min-height: 375px;
-    height: calc(100vh - 120px);
-
-    &__slider,
-    &__slide,
-    .slick-list,
-    .slick-track,
-    .slick-slide,
-    .slick-slide > div {
-      min-height: 375px;
-      height: calc(100vh - 120px);
-    }
-
-    &__slide {
-      padding: 56px 0;
-    }
-
-    .slider__buttons {
-      top: initial;
-      bottom: 50px;
-      transform: none;
-      padding: 0 10px;
-    }
 
     &--small {
       background-image: url('./../static/img/hero-bg-small-mobile.png');
