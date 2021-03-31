@@ -282,19 +282,9 @@ h2 {
 //section
 .hero {
   position: relative;
-  min-height: 600px;
   text-align: center;
   justify-content: center;
   overflow: hidden;
-
-  &__slider,
-  &__slide,
-  .slick-list,
-  .slick-track,
-  .slick-slide,
-  .slick-slide > div {
-    min-height: 600px;
-  }
 
   &__slider {
     max-width: 80vw;
@@ -338,16 +328,6 @@ h2 {
       padding: 0;
       line-height: 1;
     }
-  }
-
-  &__slide {
-    height: 100%;
-    display: flex !important;
-    text-align: center;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: url("./../static/img/hero-bg.jpg") no-repeat center center / cover;
   }
 
   .h1, h1 {
