@@ -1,5 +1,6 @@
 // CAKE CONSTRUCTOR
 import $ from 'jquery';
+import Dropzone from 'dropzone/dist/dropzone';
 
 // eslint-disable-next-line no-undef
 $(window).on('load', () => {
@@ -132,4 +133,23 @@ $(window).on('load', () => {
       $('#selected-design').empty();
     });
   });
+  $('a[data-tab]').on('click', function (e) {
+    e.preventDefault();
+    const id = $(this).data('tab');
+    $('a[data-tab]').removeClass('active');
+    $(this).addClass('active');
+    $('div[data-tab]').removeClass('active');
+    $(`div[data-tab=${id}]`).addClass('active');
+  });
+
+  // Dropzone.autoDiscover = false;
+  console.log(Dropzone.options);
+  Dropzone.options.dropzone = {
+    maxFilesize: 1,
+    maxFiles: 1,
+    acceptedFiles: '.jpeg,.jpg,.png,.gif',
+    accept(e, w) {
+      console.log('accept', e, w);
+    },
+  };
 });

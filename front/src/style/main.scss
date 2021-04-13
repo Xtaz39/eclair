@@ -279,6 +279,65 @@ h2 {
   }
 }
 
+.tab-group {
+
+  &__button {
+    display: inline-block;
+    font-size: 1.6rem;
+    text-decoration: none;
+    border-bottom: 1px solid $default-c;
+    color: $default-c;
+    transition: 0.3s all;
+    text-align: center;
+    padding: 5px 8px;
+    margin: 0 5px;
+
+    &:hover,
+    &.active {
+      background: $default-c;
+      color: $white-c;
+      border-radius: 4px;
+    }
+  }
+}
+
+div[data-tab] {
+  display: none;
+
+  &.active {
+    display: flex;
+  }
+}
+
+.dropzone {
+  font-size: 1.8rem;
+}
+
+.dropzone-wrap .icon-dropzone {
+  display: block;
+  margin: 0 auto 23px;
+  background: url(data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2250%22%20height%3D%2250%22%20viewBox%3D%220%200%2050%2050%22%3E%3Cpath%20fill%3D%22none%22%20d%3D%22M5%200h40v50H5z%22%2F%3E%3Cpath%20fill%3D%22%23ff894a%22%20d%3D%22M23%205L8%2019.5V17L25%200l17%2017v2.5L27%205l-1.5-2%20.5%202.45V50h-2V5.45L24.5%203z%22%2F%3E%3C%2Fsvg%3E) no-repeat 0 0;
+  background-size: 50px 50px;
+  width: 50px;
+  height: 50px;
+}
+
+dropzone-wrap__info {
+  display: block;
+  width: 200px;
+  height: 40px;
+  margin: 0 auto 10px;
+  padding: 0;
+  border-radius: 6px;
+  border: 1px solid #E9E6E4;
+  font-size: 1.125rem;
+  font-family: 'Gill Sans', sans-serif;
+  font-weight: 400;
+  line-height: 40px;
+  color: #2c2724;
+  text-align: center;
+}
+
 //section
 .hero {
   position: relative;
