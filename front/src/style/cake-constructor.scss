@@ -312,7 +312,13 @@
   }
 
   &__item {
-    box-shadow: 0 0 5px 0 rgba(0,0,0,0.3);
+    box-shadow: 0 3px 5px 0 rgba(0,0,0,0.3);
+
+    &[data-feature-standard-design] {
+      img {
+        height: 200px;
+      }
+    }
 
     img {
       height: 400px;
