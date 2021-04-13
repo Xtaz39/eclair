@@ -142,9 +142,9 @@ $(window).on('load', () => {
     $(`div[data-tab=${id}]`).addClass('active');
   });
 
-  // Dropzone.autoDiscover = false;
-  console.log(Dropzone.options);
-  Dropzone.options.dropzone = {
+  Dropzone.autoDiscover = false;
+  var myDropzone = new Dropzone("form#dropzone", { url: "/file/post"});
+  myDropzone.options.dropzone = {
     maxFilesize: 1,
     maxFiles: 1,
     acceptedFiles: '.jpeg,.jpg,.png,.gif',

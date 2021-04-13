@@ -51,7 +51,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class BannerAdmin(admin.ModelAdmin):
-    pass
+    fields = ("image",)
 
 
 class PromotedProductsSettingsAdmin(admin.ModelAdmin):
