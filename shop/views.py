@@ -204,6 +204,10 @@ class CakeOrder(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateVie
     template_name = "shop/cake-order.html"
 
 
+class CakeStandard(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
+    template_name = "shop/cake-standard-constructor.html"
+
+
 class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
     class Form(forms.Form):
         cake_design = forms.CharField(required=True)

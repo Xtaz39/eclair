@@ -1,0 +1,196 @@
+{% extends "shop/base/base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+    <section class="cake-constructor">
+        <div class="container">
+            <h2 class="mb-4">Заказать стандартный торт</h2>
+
+            <div class="row">
+                <div class="col-lg-9 col-md-7">
+                    <div class="feature-filling__wrap row">
+                        <div class="col-lg-4 col-sm-6 mb-4">
+                            <div data-feature-standard-design="0"
+                                 class="feature-filling__item">
+                                <img src="{% static 'img/about-img-2.jpg' %}" alt="">
+                                <h4 class="feature-filling__item-title">
+                                    Декор 1
+                                </h4>
+                                <p class="feature-filling__item-description">
+                                    лимонный бисквит в сочетании с трио кремов:
+                                    земляничный, мандариновый и сливочно-сырный с белым
+                                    шоколадом
+                                </p>
+                                <a href="#"
+                                   data-feature-standard-design="0"
+                                   class="standard-design-select btn btn--default">
+                                    <span class="not-selected">выбрать</span>
+                                    <span class="selected">выбрать другой</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 mb-4">
+                            <div data-feature-standard-design="1"
+                                 class="feature-filling__item">
+                                <img src="{% static 'img/about-img-3.jpg' %}" alt="">
+                                <h4 class="feature-filling__item-title">
+                                    декор 2
+                                </h4>
+                                <p class="feature-filling__item-description">
+                                    лимонный бисквит в сочетании с трио кремов:
+                                    земляничный, мандариновый и сливочно-сырный с белым
+                                    шоколадом
+                                </p>
+                                <a href="#"
+                                   data-feature-standard-design="1"
+                                   class="standard-design-select btn btn--default">
+                                    <span class="not-selected">выбрать</span>
+                                    <span class="selected">выбрать другой</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 mb-4">
+                            <div data-feature-standard-design="test-string"
+                                 class="feature-filling__item">
+                                <img src="{% static 'img/about-img-4.jpg' %}" alt="">
+                                <h4 class="feature-filling__item-title">
+                                    Лимон и земляника 3
+                                </h4>
+                                <p class="feature-filling__item-description">
+                                    лимонный бисквит в сочетании с трио кремов:
+                                    земляничный, мандариновый и сливочно-сырный с белым
+                                    шоколадом
+                                </p>
+                                <a href="#"
+                                   data-feature-standard-design="test-string"
+                                   class="standard-design-select btn btn--default">
+                                    <span class="not-selected">выбрать</span>
+                                    <span class="selected">выбрать другой</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 mb-4">
+                            <div data-feature-standard-design="99"
+                                 class="feature-filling__item">
+                                <img src="{% static 'img/about-img.jpg' %}" alt="">
+                                <h4 class="feature-filling__item-title">
+                                    Лимон и земляника 4
+                                </h4>
+                                <p class="feature-filling__item-description">
+                                    лимонный бисквит в сочетании с трио кремов:
+                                    земляничный, мандариновый и сливочно-сырный с белым
+                                    шоколадом
+                                </p>
+                                <a href="#"
+                                   data-feature-standard-design="99"
+                                   class="standard-design-select btn btn--default">
+                                    <span class="not-selected">выбрать</span>
+                                    <span class="selected">выбрать другой</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="feature-modal form-modal">
+                            <div class="title">Контактные данные</div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label class="form__input">
+                                        <span>Ваше имя</span>
+                                        <input type="text">
+                                    </label>
+                                </div>
+                                <div class="col-lg-4">
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label class="form__input">
+                                        <span>Номер телефона</span>
+                                        <input type="tel">
+                                    </label>
+                                </div>
+                                <div class="col-lg-4">
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label class="form__input">
+                                        <span>Электронная почта</span>
+                                        <input type="email">
+                                    </label>
+                                </div>
+                                <div class="col-lg-4">
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label class="form__input">
+                                        <span>Дата рождения</span>
+                                        <input type="date">
+                                    </label>
+                                </div>
+                                <div class="col-lg-4">
+
+                                </div>
+                            </div>
+                            <div class="title">Доставка</div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label class="form__input address-field">
+                                        <span>Адрес для доставки</span>
+                                        <input type="text">
+                                    </label>
+                                </div>
+                                <div class="col-lg-4">
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label class="form__input">
+                                        <span>Дата доставки</span>
+                                        <input type="date">
+                                    </label>
+                                </div>
+                                <div class="col-lg-4 d-flex align-center">
+              <span class="form__tip">Забрать торт вы сможете
+              в любом нашем ресторане
+              с 10:00 до 23:00.</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="weight" value="">
+                            <input type="hidden" id="feature-fill" value="">
+                            <input type="hidden" id="feature-decor" value="">
+                            <input type="hidden" id="feature-postcard" value="">
+                            <input type="hidden" id="design" value="">
+                            <button class="form-submit-btn btn btn--warning">Заказать
+                            </button>
+                            <div class="privacy-policy">
+                                Нажимая на кнопку, вы даете согласие <br>
+                                <a href="{% static 'docs/privacy_eclair.pdf' %}" target="_blank"
+                                   class="privacy-policy__link">на обработку своих
+                                    персональных
+                                    данных.</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <aside class="col-lg-3 col-md-4 offset-md-1 offset-lg-0 pt-4 mt-4 mt-xl-0">
+                    <span class="cake-order-info__title">Стандартные торты – коллекция классических вариантов тортов Кофемании.</span>
+                    <div class="cake-order-info__terms">
+                        Срок изготовления
+                        <span>1 день</span>
+                    </div>
+                    <div id="selected-design">
+
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
