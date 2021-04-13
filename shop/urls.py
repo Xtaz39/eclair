@@ -9,7 +9,7 @@ urlpatterns = [
     path("cake-constructor", views.CakeConstructor.as_view(), name="cake-constructor"),
     path(
         "cake-standard-constructor",
-        views.CakeConstructor.as_view(),
+        views.CakeStandard.as_view(),
         name="cake-standard-constructor",
     ),
     path("about", views.About.as_view(), name="about"),
