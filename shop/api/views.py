@@ -200,6 +200,11 @@ class ConfirmCode(BaseFormView):
         )
 
 
+def empty(request):
+    """This does nothing"""
+    return HttpResponse(status=http.HTTPStatus.OK)
+
+
 def get_client_ip(request: WSGIRequest):
     x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR", "")
     if x_forwarded_for:

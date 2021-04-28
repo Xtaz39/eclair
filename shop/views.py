@@ -204,7 +204,7 @@ class CakeOrder(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateVie
     template_name = "shop/cake-order.html"
 
 
-class CakeStandard(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
+class CakeStandard(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
     template_name = "shop/cake-standard-constructor.html"
 
 
