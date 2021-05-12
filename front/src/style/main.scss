@@ -356,6 +356,15 @@ dropzone-wrap__info {
     .slick-slide > div {
       margin: 0 7px;
     }
+
+    img {
+      display: none;
+    }
+    &.images-loaded {
+      img {
+        display: block;
+      }
+    }
   }
 
   &__slide {

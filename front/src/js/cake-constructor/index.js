@@ -1,6 +1,6 @@
 // CAKE CONSTRUCTOR
 import $ from 'jquery';
-import Dropzone from 'dropzone/dist/dropzone';
+import 'dropzone/dist/dropzone';
 
 // eslint-disable-next-line no-undef
 $(window).on('load', () => {
@@ -141,15 +141,4 @@ $(window).on('load', () => {
     $('div[data-tab]').removeClass('active');
     $(`div[data-tab=${id}]`).addClass('active');
   });
-
-  Dropzone.autoDiscover = false;
-  var myDropzone = new Dropzone("form#dropzone", { url: "/file/post"});
-  myDropzone.options.dropzone = {
-    maxFilesize: 1,
-    maxFiles: 1,
-    acceptedFiles: '.jpeg,.jpg,.png,.gif',
-    accept(e, w) {
-      console.log('accept', e, w);
-    },
-  };
 });
