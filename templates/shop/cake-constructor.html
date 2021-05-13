@@ -9,7 +9,15 @@
 
             <div class="row">
                 <div class="col-lg-9 col-md-7">
-                    <form action="{% url 'shop:cake-constructor' %}" method="POST">
+                    <form action="{% url 'shop:cake-constructor' %}"
+                          id="cake-submit-form"
+                          method="POST">
+                        <script>
+                            function onSubmit(token) {
+                                document.getElementById("cake-submit-form").submit();
+                            }
+                        </script>
+
 
                         <input type="hidden" id="design" name="cake_design" value="">
                         <input type="hidden"
@@ -194,7 +202,10 @@
                                     </label>
                                 </div>
                             </div>
-                            <button class="form-submit-btn btn btn--warning">Заказать
+                            <button class="g-recaptcha form-submit-btn btn btn--warning"
+                                    data-sitekey="6LcAvdMaAAAAAOQQTZfIcXPCvZQ7-tzfdXkwH2jU"
+                                    data-callback='onSubmit'
+                                    data-action='submit'>Заказать
                             </button>
                             <div class="privacy-policy">
                                 Нажимая на кнопку, вы даете согласие <br>
@@ -400,9 +411,9 @@
                                         <div class="dropzone-wrap">
                                             <div class="dropzone-previews"></div>
                                             <div action="/api/empty"
-                                                  class="dropzone dz-clickable"
-                                                  id="dropzone"
-                                                  style="">
+                                                 class="dropzone dz-clickable"
+                                                 id="dropzone"
+                                                 style="">
                                                 <div class="dz-default dz-message"><span><div
                                                         class="dropzone-wrap__placeholder"><i
                                                         class="icon-dropzone"></i><div

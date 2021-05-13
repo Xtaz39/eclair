@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from django import forms
 from django.contrib.auth import logout
+from django.core.exceptions import PermissionDenied
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import transaction
 from django.db.models import Sum
@@ -12,7 +13,7 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import BaseFormView, FormView
 
 from . import models, validators
-from .client import amocrm, sberbank
+from .client import amocrm, sberbank, recaptcha
 from .fields import MultiTextField, MultiTextInput
 
 
@@ -224,6 +225,10 @@ class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormV
         delivery_time = forms.TimeField(required=True)
         comment = forms.CharField(required=False)
 
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields["g-recaptcha-response"] = forms.CharField(required=True)
+
     form_class = Form
     template_name = "shop/cake-constructor.html"
 
@@ -237,6 +242,12 @@ class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormV
 
     def form_valid(self, form):
         data = form.cleaned_data
+
+        if not self.request.user.is_authenticated:
+            captcha = data["g-recaptcha-response"]
+            user_passed_captcha = recaptcha.client.check(captcha)
+            if not user_passed_captcha:
+                raise PermissionDenied
 
         design = models.CakeDesign.objects.get(pk=int(data["cake_design"]))
         toppings = models.CakeTopping.objects.filter(
@@ -266,15 +277,16 @@ class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormV
             # f"Открытки: {postcard_names}.\n"
             # f"Декор: {decor_names}."
         )
-        order_id = amocrm.client.order_custom_cake(
-            contact_id,
-            content=content,
-            delivery_date=data["delivery_date"],
-            delivery_time=data["delivery_time"],
-            address=data["address"],
-            weight=f"{data['weight']} кг",
-            comment=data["comment"],
-        )
+        # order_id = amocrm.client.order_custom_cake(
+        #     contact_id,
+        #     content=content,
+        #     delivery_date=data["delivery_date"],
+        #     delivery_time=data["delivery_time"],
+        #     address=data["address"],
+        #     weight=f"{data['weight']} кг",
+        #     comment=data["comment"],
+        # )
+        order_id = 123
 
         return render(
             self.request,

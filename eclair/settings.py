@@ -171,3 +171,6 @@ IIKO_PASSWORD = os.getenv("IIKO_PASSWORD")
 
 # SMS.ru
 SMS_API_KEY = os.getenv("SMS_API_KEY")
+
+# Recaptcha
+RECAPTCHA_API_KEY = os.getenv("RECAPTCHA_API_KEY")
