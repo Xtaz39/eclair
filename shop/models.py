@@ -88,9 +88,7 @@ class Category(models.Model):
     """Категория продукта"""
 
     name = models.CharField("Имя", max_length=100)
-    menu_position = models.PositiveIntegerField(
-        "Позиция в меню",
-    )
+    position = models.PositiveIntegerField("Позиция в меню")
 
     def __str__(self):
         return self.name
@@ -331,6 +329,20 @@ class Address(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.location})"
+
+
+class CakeStandard(models.Model):
+    title = models.CharField("Название", max_length=100)
+    description = models.TextField("Описание")
+    image = models.ImageField("Картинка", upload_to="image/cake_standard/")
+    position = models.PositiveIntegerField("Позиция", unique=True)
+
+    class Meta:
+        verbose_name = "Торт стандартный"
+        verbose_name_plural = "Торты стандартные"
+
+    def __str__(self):
+        return self.title
 
 
 class CakeDesign(models.Model):

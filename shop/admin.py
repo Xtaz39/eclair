@@ -49,7 +49,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(models.Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("__str__", "menu_position")
+    list_display = ("__str__", "position")
 
 
 @admin.register(models.Banner)
@@ -63,6 +63,16 @@ class PromotedProductsSettingsAdmin(admin.ModelAdmin):
     inlines = [PromotedProductsAdmin]
 
 
+@admin.register(models.CakeStandard)
+class CakeStandardAdmin(admin.ModelAdmin):
+    list_display = ("__str__", "position")
+
+
+@admin.register(models.User)
+class UserAdmin(auth_admin.UserAdmin):
+    pass
+
+
 @admin.register(
     models.FooterSocial,
     models.ContactNumber,
@@ -73,9 +83,4 @@ class PromotedProductsSettingsAdmin(admin.ModelAdmin):
     models.CakePostcard,
 )
 class SimpleAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(models.User)
-class UserAdmin(auth_admin.UserAdmin):
     pass

@@ -21,9 +21,7 @@ class CategoriesDataMixin:
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         data["categories"] = (
-            models.Category.objects.exclude(product=None)
-            .order_by("menu_position")
-            .all()
+            models.Category.objects.exclude(product=None).order_by("position").all()
         )
         return data
 
@@ -109,7 +107,7 @@ class Index(CartDataMixin, FooterDataMixin, TemplateView):
                 "product_set", "product_set__productimage_set"
             )
             .exclude(product=None)
-            .order_by("menu_position")
+            .order_by("position")
             .all()
         )
         data["categories"] = categories
@@ -210,8 +208,85 @@ class CakeOrder(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateVie
     template_name = "shop/cake-order.html"
 
 
-class CakeStandard(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
+class CakeStandard(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
     template_name = "shop/cake-standard-constructor.html"
+
+    class Form(forms.Form):
+        cake_design = forms.CharField(required=True)
+        name = forms.CharField(required=True)
+        phone = forms.CharField(required=True, validators=[validators.is_phone])
+        email = forms.CharField(required=True)
+        birthdate = forms.DateField(required=False)
+        address = forms.CharField(required=True)
+        delivery_date = forms.DateField(required=True)
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            # self.fields["g-recaptcha-response"] = forms.CharField(required=True)
+
+    form_class = Form
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data["cake_designs"] = models.CakeStandard.objects.all()
+        return data
+
+    def form_valid(self, form):
+        data = form.cleaned_data
+
+        # if not self.request.user.is_authenticated:
+        #     captcha = data["g-recaptcha-response"]
+        #     user_passed_captcha = recaptcha.client.check(captcha)
+        #     if not user_passed_captcha:
+        #         raise PermissionDenied
+
+        design = models.CakeDesign.objects.get(pk=int(data["cake_design"]))
+        toppings = models.CakeTopping.objects.filter(
+            pk__in=[int(id_) for id_ in data["cake_toppings"].split(",")]
+        )
+        # decors = models.CakeDecor.objects.filter(
+        #     pk__in=[int(id_) for id_ in data["cake_decors"].split(",")]
+        # )
+        # postcards = models.CakePostcard.objects.filter(
+        #     pk__in=[int(id_) for id_ in data["cake_postcards"].split(",")]
+        # )
+
+        contact_id = amocrm.client.create_contact(
+            name=data["name"],
+            phone=data["phone"],
+            email=data["email"],
+            birthday=data["birthdate"],
+        )
+
+        toppings_names = ", ".join(topping.title for topping in toppings)
+        # decor_names = ", ".join(decor.title for decor in decors)
+        # postcard_names = ", ".join(postcard.title for postcard in postcards)
+
+        content = (
+            f"Торт {design.title}\n"
+            f"Начинки: {toppings_names}.\n"
+            # f"Открытки: {postcard_names}.\n"
+            # f"Декор: {decor_names}."
+        )
+        # order_id = amocrm.client.order_custom_cake(
+        #     contact_id,
+        #     content=content,
+        #     delivery_date=data["delivery_date"],
+        #     delivery_time=data["delivery_time"],
+        #     address=data["address"],
+        #     weight=f"{data['weight']} кг",
+        #     comment=data["comment"],
+        # )
+        order_id = 123
+
+        return render(
+            self.request,
+            "shop/order_status.html",
+            {
+                "order_number": order_id,
+                "message": "Ваш заказ принят. Наш менеджер свяжется с вами в ближайшее время.",
+            },
+        )
 
 
 class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
