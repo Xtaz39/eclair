@@ -88,6 +88,9 @@ class Category(models.Model):
     """Категория продукта"""
 
     name = models.CharField("Имя", max_length=100)
+    menu_position = models.PositiveIntegerField(
+        "Позиция в меню",
+    )
 
     def __str__(self):
         return self.name
@@ -219,7 +222,7 @@ class Banner(models.Model):
         if not self.title:
             return f"Баннер ({self.priority})"
 
-        return f"{self.title} ({self.priority})"
+        return f"{self.title}"
 
     class Meta:
         verbose_name = "Баннер"

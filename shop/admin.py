@@ -47,11 +47,12 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("__str__", "menu_position")
 
 
 class BannerAdmin(admin.ModelAdmin):
     fields = ("image",)
+    list_display = ("__str__", "priority")
 
 
 class PromotedProductsSettingsAdmin(admin.ModelAdmin):

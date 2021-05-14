@@ -20,7 +20,11 @@ from .fields import MultiTextField, MultiTextInput
 class CategoriesDataMixin:
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        data["categories"] = models.Category.objects.exclude(product=None).all()
+        data["categories"] = (
+            models.Category.objects.exclude(product=None)
+            .order_by("menu_position")
+            .all()
+        )
         return data
 
 
@@ -105,6 +109,7 @@ class Index(CartDataMixin, FooterDataMixin, TemplateView):
                 "product_set", "product_set__productimage_set"
             )
             .exclude(product=None)
+            .order_by("menu_position")
             .all()
         )
         data["categories"] = categories
