@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth import admin as auth_admin
 from django.core.exceptions import ValidationError
 
 from . import models
@@ -23,6 +23,7 @@ class ProductForm(forms.ModelForm):
         return data
 
 
+@admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductImageAdmin]
     form = ProductForm
@@ -46,57 +47,35 @@ class ProductAdmin(admin.ModelAdmin):
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
+@admin.register(models.Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ("__str__", "menu_position")
 
 
+@admin.register(models.Banner)
 class BannerAdmin(admin.ModelAdmin):
     fields = ("image",)
     list_display = ("__str__", "priority")
 
 
+@admin.register(models.PromotedProductsSettings)
 class PromotedProductsSettingsAdmin(admin.ModelAdmin):
     inlines = [PromotedProductsAdmin]
+
+
+@admin.register(
+    models.FooterSocial,
+    models.ContactNumber,
+    models.Address,
+    models.CakeDesign,
+    models.CakeTopping,
+    models.CakeDecor,
+    models.CakePostcard,
+)
+class SimpleAdmin(admin.ModelAdmin):
     pass
 
 
-class FooterSocialAdmin(admin.ModelAdmin):
-    model = models.FooterSocial
-
-
-class ContactsAdmin(admin.ModelAdmin):
-    model = models.ContactNumber
-
-
-class AddressAdmin(admin.ModelAdmin):
-    model = models.Address
-
-
-class CakeDesignAdmin(admin.ModelAdmin):
-    model = models.CakeDesign
-
-
-class CakeToppingAdmin(admin.ModelAdmin):
-    model = models.CakeTopping
-
-
-class CakeDecorAdmin(admin.ModelAdmin):
-    model = models.CakeDecor
-
-
-class CakePostcardAdmin(admin.ModelAdmin):
-    model = models.CakePostcard
-
-
-admin.site.register(models.Product, ProductAdmin)
-admin.site.register(models.Category, CategoryAdmin)
-admin.site.register(models.Banner, BannerAdmin)
-admin.site.register(models.PromotedProductsSettings, PromotedProductsSettingsAdmin)
-admin.site.register(models.User, UserAdmin)
-admin.site.register(models.FooterSocial, FooterSocialAdmin)
-admin.site.register(models.ContactNumber, ContactsAdmin)
-admin.site.register(models.Address, AddressAdmin)
-admin.site.register(models.CakeDesign, CakeDesignAdmin)
-admin.site.register(models.CakeTopping, CakeToppingAdmin)
-admin.site.register(models.CakePostcard, CakePostcardAdmin)
-admin.site.register(models.CakeDecor, CakeDecorAdmin)
+@admin.register(models.User)
+class UserAdmin(auth_admin.UserAdmin):
+    pass
