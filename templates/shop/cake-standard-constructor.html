@@ -13,6 +13,8 @@
                           id="cake-submit-form"
                           method="POST">
 
+                        <input type="hidden" id="design" name="design" value="">
+
                         <div class="feature-filling__wrap row">
                             {% for cake in cake_designs %}
                                 <div class="col-lg-4 col-sm-6 mb-4">
@@ -41,7 +43,8 @@
                                     <div class="col-lg-6">
                                         <label class="form__input">
                                             <span>Ваше имя</span>
-                                            <input type="text">
+                                            <input name="name" type="text">
+                                            {{ form.name.errors }}
                                         </label>
                                     </div>
                                     <div class="col-lg-4"></div>
@@ -50,7 +53,7 @@
                                     <div class="col-lg-6">
                                         <label class="form__input">
                                             <span>Номер телефона</span>
-                                            <input type="tel">
+                                            <input name="phone" type="tel">
                                         </label>
                                     </div>
                                     <div class="col-lg-4">
@@ -61,7 +64,8 @@
                                     <div class="col-lg-6">
                                         <label class="form__input">
                                             <span>Электронная почта</span>
-                                            <input type="email">
+                                            <input type="email" name="email">
+                                            {{ form.name.errors }}
                                         </label>
                                     </div>
                                     <div class="col-lg-4">
@@ -72,7 +76,8 @@
                                     <div class="col-lg-6">
                                         <label class="form__input">
                                             <span>Дата рождения</span>
-                                            <input type="date">
+                                            <input type="date" name="birthdate">
+                                            {{ form.birthdate.errors }}
                                         </label>
                                     </div>
                                     <div class="col-lg-4">
@@ -84,7 +89,8 @@
                                     <div class="col-lg-6">
                                         <label class="form__input address-field">
                                             <span>Адрес для доставки</span>
-                                            <input type="text">
+                                            <input type="text" name="address">
+                                            {{ form.address.errors }}
                                         </label>
                                     </div>
                                     <div class="col-lg-4">
@@ -95,7 +101,8 @@
                                     <div class="col-lg-6">
                                         <label class="form__input">
                                             <span>Дата доставки</span>
-                                            <input type="date">
+                                            <input type="date" name="delivery_date">
+                                            {{ form.delivery_date.errors }}
                                         </label>
                                     </div>
                                     <div class="col-lg-4 d-flex align-center">
@@ -104,11 +111,6 @@
               с 10:00 до 23:00.</span>
                                     </div>
                                 </div>
-                                <input type="hidden" id="weight" value="">
-                                <input type="hidden" id="feature-fill" value="">
-                                <input type="hidden" id="feature-decor" value="">
-                                <input type="hidden" id="feature-postcard" value="">
-                                <input type="hidden" id="design" value="">
                                 <button class="form-submit-btn btn btn--warning">
                                     Заказать
                                 </button>

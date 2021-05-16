@@ -212,7 +212,7 @@ class CakeStandard(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView
     template_name = "shop/cake-standard-constructor.html"
 
     class Form(forms.Form):
-        cake_design = forms.CharField(required=True)
+        design = forms.CharField(required=True)
         name = forms.CharField(required=True)
         phone = forms.CharField(required=True, validators=[validators.is_phone])
         email = forms.CharField(required=True)
@@ -228,7 +228,7 @@ class CakeStandard(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        data["cake_designs"] = models.CakeStandard.objects.all()
+        data["cake_designs"] = models.CakeStandard.objects.order_by("position").all()
         return data
 
     def form_valid(self, form):
@@ -240,42 +240,21 @@ class CakeStandard(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView
         #     if not user_passed_captcha:
         #         raise PermissionDenied
 
-        design = models.CakeDesign.objects.get(pk=int(data["cake_design"]))
-        toppings = models.CakeTopping.objects.filter(
-            pk__in=[int(id_) for id_ in data["cake_toppings"].split(",")]
-        )
-        # decors = models.CakeDecor.objects.filter(
-        #     pk__in=[int(id_) for id_ in data["cake_decors"].split(",")]
+        design = models.CakeStandard.objects.get(pk=int(data["design"]))
+
+        # contact_id = amocrm.client.create_contact(
+        #     name=data["name"],
+        #     phone=data["phone"],
+        #     email=data["email"],
+        #     birthday=data["birthdate"],
         # )
-        # postcards = models.CakePostcard.objects.filter(
-        #     pk__in=[int(id_) for id_ in data["cake_postcards"].split(",")]
-        # )
-
-        contact_id = amocrm.client.create_contact(
-            name=data["name"],
-            phone=data["phone"],
-            email=data["email"],
-            birthday=data["birthdate"],
-        )
-
-        toppings_names = ", ".join(topping.title for topping in toppings)
-        # decor_names = ", ".join(decor.title for decor in decors)
-        # postcard_names = ", ".join(postcard.title for postcard in postcards)
-
-        content = (
-            f"Торт {design.title}\n"
-            f"Начинки: {toppings_names}.\n"
-            # f"Открытки: {postcard_names}.\n"
-            # f"Декор: {decor_names}."
-        )
-        # order_id = amocrm.client.order_custom_cake(
-        #     contact_id,
+        #
+        # content = f"Торт {design.title}\n"
+        # order_id = amocrm.client.order_cake(
+        #     contact_id=contact_id,
+        #     address=data["address"],
         #     content=content,
         #     delivery_date=data["delivery_date"],
-        #     delivery_time=data["delivery_time"],
-        #     address=data["address"],
-        #     weight=f"{data['weight']} кг",
-        #     comment=data["comment"],
         # )
         order_id = 123
 

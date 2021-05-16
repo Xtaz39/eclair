@@ -127,6 +127,9 @@ $(window).on('load', () => {
     const parent = $(this).parent('.feature-filling__item').clone().addClass('selected');
     $('.form-modal').addClass('active');
     $('#selected-design').empty().append(parent);
+
+    $('input#design').val(parent.data('feature-standard-design'));
+
     $('#selected-design .standard-design-select').on('click', (e) => {
       e.preventDefault();
       $('.form-modal').removeClass('active');
