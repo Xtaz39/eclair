@@ -12,6 +12,11 @@
                     <form action="{% url 'shop:cake-standard-constructor' %}"
                           id="cake-submit-form"
                           method="POST">
+                    <script>
+                            function onSubmit(token) {
+                                document.getElementById("cake-submit-form").submit();
+                            }
+                        </script>
 
                         <input type="hidden" id="design" name="design" value="">
 

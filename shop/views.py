@@ -234,11 +234,11 @@ class CakeStandard(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView
     def form_valid(self, form):
         data = form.cleaned_data
 
-        # if not self.request.user.is_authenticated:
-        #     captcha = data["g-recaptcha-response"]
-        #     user_passed_captcha = recaptcha.client.check(captcha)
-        #     if not user_passed_captcha:
-        #         raise PermissionDenied
+        if not self.request.user.is_authenticated:
+            captcha = data["g-recaptcha-response"]
+            user_passed_captcha = recaptcha.client.check(captcha)
+            if not user_passed_captcha:
+                raise PermissionDenied
 
         design = models.CakeStandard.objects.get(pk=int(data["design"]))
 
