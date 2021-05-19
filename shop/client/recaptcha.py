@@ -39,7 +39,7 @@ class Client:
             raise ClientError(f"{resp.status_code}: {resp.text}")
 
         data: CheckResponse = resp.json()
-        return data["score"] > 0.5
+        return data["score"] > 0.3
 
 
 client = Client(settings.RECAPTCHA_API_KEY)
