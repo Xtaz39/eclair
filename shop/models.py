@@ -348,6 +348,7 @@ class CakeStandard(models.Model):
 class CakeDesign(models.Model):
     title = models.CharField("Название", max_length=100)
     image = models.ImageField("Картинка", upload_to="image/cake/")
+    category = models.CharField("Категория", max_length=100)
 
     class Meta:
         verbose_name = "Торт на заказ дизайн"

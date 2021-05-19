@@ -293,7 +293,15 @@ class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormV
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        data["cake_designs"] = models.CakeDesign.objects.all()
+
+        designs_by_category = {}
+        for cake in models.CakeDesign.objects.all():
+            if cake.category in designs_by_category:
+                designs_by_category[cake.category].append(cake)
+            else:
+                designs_by_category[cake.category] = [cake]
+
+        data["cake_designs_by_category"] = designs_by_category
         data["cake_toppings"] = models.CakeTopping.objects.all()
         data["cake_decors"] = models.CakeDecor.objects.all()
         data["cake_postcards"] = models.CakePostcard.objects.all()
