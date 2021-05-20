@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import datetime
 from urllib.parse import urljoin
 
 from django import forms
@@ -163,10 +162,9 @@ class Cabinet(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         user_addrs = (
             models.UserAddress.objects.filter(user=self.request.user)
             .order_by("created_at")
-            .values("address")
             .all()[: self.addresses_limit]
         )
-        kwargs["initial"]["addresses"] = [val["address"] for val in user_addrs] or [""]
+        kwargs["initial"]["addresses"] = [val.full_address for val in user_addrs]
 
         birthday = ""
         if self.request.user.birthday:
@@ -178,15 +176,6 @@ class Cabinet(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
     def form_valid(self, form):
         user = self.request.user
         for f_name in form.changed_data:
-            if f_name == "addresses":
-                models.UserAddress.objects.filter(user=self.request.user).delete()
-                addresses = [
-                    models.UserAddress(address=a, user=self.request.user)
-                    for a in form.cleaned_data[f_name][: self.addresses_limit]
-                    if a
-                ]
-                models.UserAddress.objects.bulk_create(addresses)
-                continue
 
             if f_name == "phone" or not hasattr(user, f_name):
                 continue
@@ -446,7 +435,13 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
     class Form(forms.Form):
         name = forms.CharField(required=True)
         phone = forms.CharField(required=True, validators=[validators.is_phone])
-        address = forms.CharField(required=True)
+        street = forms.CharField(required=True)
+        house = forms.CharField(required=True)
+        room = forms.CharField()
+        entrance = forms.CharField()
+        floor = forms.CharField()
+        doorphone = forms.CharField()
+        comment = forms.Textarea()
         pay_method = forms.CharField(required=True)
 
     form_class = Form
@@ -462,11 +457,10 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
                 models.UserAddress.objects.filter(user=self.request.user)
                 .order_by("created_at")
                 .reverse()
-                .values("address")
                 .first()
             )
             if address:
-                kwargs["initial"]["address"] = address["address"]
+                kwargs["initial"]["street"] = address.street
 
         return kwargs
 
@@ -489,12 +483,11 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         )
         if self.request.user.is_authenticated:
             data["user_addresses"] = [
-                v["address"]
+                v.street
                 for v in (
                     models.UserAddress.objects.filter(user=self.request.user)
                     .order_by("created_at")
                     .reverse()
-                    .values("address")
                 )
             ]
 
@@ -560,6 +553,15 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         if customer["pay_method"] == "card":
             payment_type = amocrm.PaymentType.CARD.value
 
+        addr_parts = [
+            customer["street"],
+            customer["house"],
+            customer["room"],
+            customer["entrance"],
+            customer["floor"],
+            customer["doorphone"],
+        ]
+        address = ",".join(part for part in addr_parts if part)
         amocrm.client.create_order(
             client_card_id,
             amocrm.Order(
@@ -567,7 +569,8 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
                 total_amount=int(total_amount),
                 payment_type=payment_type,
                 content=order_content,
-                address=customer["address"],
+                address=address,
+                comment=customer["comment"],
             ),
         )
 

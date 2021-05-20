@@ -30,6 +30,7 @@ class Order:
     payment_type: PaymentType
     content: str
     address: str
+    comment: str
 
 
 class Client:

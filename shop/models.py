@@ -17,9 +17,27 @@ class User(AbstractUser):
 
 
 class UserAddress(models.Model):
-    address = models.CharField("Адрес", max_length=255)
+    street = models.CharField("Улица", max_length=255)
+    house = models.CharField("Дом", max_length=255)
+    room = models.CharField("Квартира/офис", max_length=255, null=True, blank=True)
+    entrance = models.CharField("Подъезд", max_length=255, null=True, blank=True)
+    floor = models.CharField("Этаж", max_length=255, null=True, blank=True)
+    doorphone = models.CharField("Домофон", max_length=255, null=True, blank=True)
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses")
     created_at = models.DateTimeField("Время создания", auto_now=True)
+
+    @property
+    def full_address(self):
+        address_parts = (
+            self.street,
+            self.house,
+            self.room,
+            self.entrance,
+            self.floor,
+            self.doorphone,
+        )
+        return ",".join((part for part in address_parts if part))
 
 
 class ConfirmCode(models.Model):

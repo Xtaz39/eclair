@@ -28,11 +28,14 @@
                         <input type="tel"
                                class="form-control"
                                name="phone"
-                               value="{{ form.phone.value }}"
+                               value="{{ form.phone.value|default:"" }}"
                                readonly
                         >
                         <div class="input-group-append">
-                            <button id="sign-in" class="btn btn-outline-secondary" style="font-size: 1.3rem;">Изменить</button>
+                            <button id="sign-in"
+                                    class="btn btn-outline-secondary"
+                                    style="font-size: 1.3rem;">Изменить
+                            </button>
                         </div>
                     </div>
                 </label>
@@ -49,14 +52,11 @@
                 {% for val in form.addresses.value %}
                     <label class="form__input address-field">
                         <span>Адрес для доставки</span>
-                        <input type="text" name="addresses" value="{{ val }}">
+                        <input type="text" name="addresses" value="{{ val }}" disabled>
                     </label>
                 {% endfor %}
             </div>
 
-            {% if form.addresses.value|length < 5 %}
-                <a href="#" class="btn btn--default add-address">Добавить адрес</a>
-            {% endif %}
             <div class="form__submit mt-5">
                 <button type="submit" class="submit btn btn--warning">Сохранить</button>
             </div>
