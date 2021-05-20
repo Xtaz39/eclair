@@ -392,3 +392,11 @@ class CakePostcard(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class CustomCakeDesignUploads(models.Model):
+    image = models.ImageField(
+        "Картинка", upload_to="image/cake_design_custom/%Y/%m/%d/"
+    )
+    name = models.CharField("название файла", max_length=100, db_index=True)
+    created_at = models.DateTimeField("Время загрузки", auto_now=True)

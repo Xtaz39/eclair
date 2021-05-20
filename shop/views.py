@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime
+from urllib.parse import urljoin
 
 from django import forms
 from django.conf import settings
@@ -328,7 +329,10 @@ class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormV
                 raise PermissionDenied
 
         if not data["cake_design"]:
-            design_title = f"{settings.SITE_ADDR}/{datetime.datetime.now().strftime('%d/%m/%Y')}/{data['cake_design_link']}"
+            uploaded_img = models.CustomCakeDesignUploads.objects.order_by(
+                "created_at"
+            ).get(name=data["cake_design_link"])
+            design_title = urljoin(settings.SITE_ADDR, uploaded_img.image.url)
         else:
             design = models.CakeDesign.objects.get(pk=int(data["cake_design"])).title
             design_title = design.title
@@ -360,16 +364,15 @@ class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormV
             # f"Открытки: {postcard_names}.\n"
             # f"Декор: {decor_names}."
         )
-        # order_id = amocrm.client.order_custom_cake(
-        #     contact_id,
-        #     content=content,
-        #     delivery_date=data["delivery_date"],
-        #     delivery_time=data["delivery_time"],
-        #     address=data["address"],
-        #     weight=f"{data['weight']} кг",
-        #     comment=data["comment"],
-        # )
-        order_id = 123
+        order_id = amocrm.client.order_custom_cake(
+            contact_id,
+            content=content,
+            delivery_date=data["delivery_date"],
+            delivery_time=data["delivery_time"],
+            address=data["address"],
+            weight=f"{data['weight']} кг",
+            comment=data["comment"],
+        )
 
         return render(
             self.request,

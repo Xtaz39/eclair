@@ -200,9 +200,12 @@ class ConfirmCode(BaseFormView):
         )
 
 
-def empty(request):
+def design_upload(request):
     """This does nothing"""
-    return HttpResponse(status=http.HTTPStatus.OK)
+    image = request.FILES["file"]
+    image_upload = models.CustomCakeDesignUploads(image=image, name=image.name)
+    image_upload.save()
+    return HttpResponse(content=image_upload.image, status=http.HTTPStatus.OK)
 
 
 def get_client_ip(request: WSGIRequest):
