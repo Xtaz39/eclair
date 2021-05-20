@@ -313,7 +313,18 @@
   }
 
   &__item {
+    position: relative;
     box-shadow: 0 3px 5px 0 rgba(0,0,0,0.3);
+    height: 100%;
+    padding-bottom: 60px;
+
+    .btn {
+      position: absolute;
+      display: block;
+      width: 100%;
+      bottom: 0;
+      left: 0;
+    }
 
     &[data-feature-standard-design] {
       img {
