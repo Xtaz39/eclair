@@ -44,17 +44,6 @@ $(window).on('load', () => {
   });
 
 
-  $('.add-address').on('click', (e) => {
-    e.preventDefault();
-    const addresField = $('.address-field').first().clone();
-    addresField.find("input").val("");
-    addresField.appendTo('.fields');
-
-    if ($("input[name=addresses]").length >= 5) {
-        $(e.target).remove();
-    }
-  });
-
   $('.modal__close').on('click', function (e) {
     e.preventDefault();
     $(this).parent().parent('.modal').removeClass('active');

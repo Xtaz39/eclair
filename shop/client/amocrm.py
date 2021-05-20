@@ -30,6 +30,7 @@ class Order:
     payment_type: PaymentType
     content: str
     address: str
+    comment: str
 
 
 class Client:
@@ -190,6 +191,54 @@ class Client:
             ],
         )
         return data
+
+    def order_cake(
+        self,
+        contact_id: int,
+        address: str,
+        delivery_date: datetime.date,
+        content: str,
+    ) -> int:
+        """https://www.amocrm.ru/developers/content/crm_platform/leads-api"""
+        product_field_id = 608539
+        address_field_id = 608543
+        order_date_field_id = 472649
+
+        data = self._send_post(
+            "api/v4/leads",
+            [
+                {
+                    "pipeline_id": 3428428,
+                    "created_by": self.ROBOT_ID,
+                    "custom_fields_values": [
+                        {
+                            "field_id": product_field_id,
+                            "values": [{"value": content}],
+                        },
+                        {
+                            "field_id": address_field_id,
+                            "values": [{"value": address}],
+                        },
+                        {
+                            "field_id": order_date_field_id,
+                            "values": [
+                                # send as unix timestamp
+                                {"value": int(delivery_date.strftime("%s"))}
+                            ],
+                        },
+                    ],
+                    "_embedded": {
+                        "contacts": [
+                            {
+                                "id": contact_id,
+                            }
+                        ]
+                    },
+                }
+            ],
+        )
+        order_id = data["_embedded"]["leads"][0]["id"]
+        return order_id
 
     def order_custom_cake(
         self,

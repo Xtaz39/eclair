@@ -17,9 +17,27 @@ class User(AbstractUser):
 
 
 class UserAddress(models.Model):
-    address = models.CharField("Адрес", max_length=255)
+    street = models.CharField("Улица", max_length=255)
+    house = models.CharField("Дом", max_length=255)
+    room = models.CharField("Квартира/офис", max_length=255, null=True, blank=True)
+    entrance = models.CharField("Подъезд", max_length=255, null=True, blank=True)
+    floor = models.CharField("Этаж", max_length=255, null=True, blank=True)
+    doorphone = models.CharField("Домофон", max_length=255, null=True, blank=True)
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses")
     created_at = models.DateTimeField("Время создания", auto_now=True)
+
+    @property
+    def full_address(self):
+        address_parts = (
+            self.street,
+            self.house,
+            self.room,
+            self.entrance,
+            self.floor,
+            self.doorphone,
+        )
+        return ",".join((part for part in address_parts if part))
 
 
 class ConfirmCode(models.Model):
@@ -88,6 +106,7 @@ class Category(models.Model):
     """Категория продукта"""
 
     name = models.CharField("Имя", max_length=100)
+    position = models.PositiveIntegerField("Позиция в меню")
 
     def __str__(self):
         return self.name
@@ -219,7 +238,7 @@ class Banner(models.Model):
         if not self.title:
             return f"Баннер ({self.priority})"
 
-        return f"{self.title} ({self.priority})"
+        return f"{self.title}"
 
     class Meta:
         verbose_name = "Баннер"
@@ -330,9 +349,24 @@ class Address(models.Model):
         return f"{self.name} ({self.location})"
 
 
+class CakeStandard(models.Model):
+    title = models.CharField("Название", max_length=100)
+    description = models.TextField("Описание")
+    image = models.ImageField("Картинка", upload_to="image/cake_standard/")
+    position = models.PositiveIntegerField("Позиция", unique=True)
+
+    class Meta:
+        verbose_name = "Торт стандартный"
+        verbose_name_plural = "Торты стандартные"
+
+    def __str__(self):
+        return self.title
+
+
 class CakeDesign(models.Model):
     title = models.CharField("Название", max_length=100)
     image = models.ImageField("Картинка", upload_to="image/cake/")
+    category = models.CharField("Категория", max_length=100)
 
     class Meta:
         verbose_name = "Торт на заказ дизайн"
@@ -376,3 +410,11 @@ class CakePostcard(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class CustomCakeDesignUploads(models.Model):
+    image = models.ImageField(
+        "Картинка", upload_to="image/cake_design_custom/%Y/%m/%d/"
+    )
+    name = models.CharField("название файла", max_length=100, db_index=True)
+    created_at = models.DateTimeField("Время загрузки", auto_now=True)

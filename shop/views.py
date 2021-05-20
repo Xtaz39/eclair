@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+from urllib.parse import urljoin
+
 from django import forms
+from django.conf import settings
 from django.contrib.auth import logout
+from django.core.exceptions import PermissionDenied
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import transaction
 from django.db.models import Sum
@@ -12,14 +16,16 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import BaseFormView, FormView
 
 from . import models, validators
-from .client import amocrm, sberbank
+from .client import amocrm, sberbank, recaptcha
 from .fields import MultiTextField, MultiTextInput
 
 
 class CategoriesDataMixin:
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        data["categories"] = models.Category.objects.exclude(product=None).all()
+        data["categories"] = (
+            models.Category.objects.exclude(product=None).order_by("position").all()
+        )
         return data
 
 
@@ -104,6 +110,7 @@ class Index(CartDataMixin, FooterDataMixin, TemplateView):
                 "product_set", "product_set__productimage_set"
             )
             .exclude(product=None)
+            .order_by("position")
             .all()
         )
         data["categories"] = categories
@@ -155,10 +162,9 @@ class Cabinet(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         user_addrs = (
             models.UserAddress.objects.filter(user=self.request.user)
             .order_by("created_at")
-            .values("address")
             .all()[: self.addresses_limit]
         )
-        kwargs["initial"]["addresses"] = [val["address"] for val in user_addrs] or [""]
+        kwargs["initial"]["addresses"] = [val.full_address for val in user_addrs]
 
         birthday = ""
         if self.request.user.birthday:
@@ -170,15 +176,6 @@ class Cabinet(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
     def form_valid(self, form):
         user = self.request.user
         for f_name in form.changed_data:
-            if f_name == "addresses":
-                models.UserAddress.objects.filter(user=self.request.user).delete()
-                addresses = [
-                    models.UserAddress(address=a, user=self.request.user)
-                    for a in form.cleaned_data[f_name][: self.addresses_limit]
-                    if a
-                ]
-                models.UserAddress.objects.bulk_create(addresses)
-                continue
 
             if f_name == "phone" or not hasattr(user, f_name):
                 continue
@@ -204,13 +201,70 @@ class CakeOrder(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateVie
     template_name = "shop/cake-order.html"
 
 
-class CakeStandard(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
+class CakeStandard(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
     template_name = "shop/cake-standard-constructor.html"
+
+    class Form(forms.Form):
+        design = forms.CharField(required=True)
+        name = forms.CharField(required=True)
+        phone = forms.CharField(required=True, validators=[validators.is_phone])
+        email = forms.CharField(required=True)
+        birthdate = forms.DateField(required=False)
+        address = forms.CharField(required=True)
+        delivery_date = forms.DateField(required=True)
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            # self.fields["g-recaptcha-response"] = forms.CharField(required=True)
+
+    form_class = Form
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data["cake_designs"] = models.CakeStandard.objects.order_by("position").all()
+        return data
+
+    def form_valid(self, form):
+        data = form.cleaned_data
+
+        if not self.request.user.is_authenticated:
+            captcha = data["g-recaptcha-response"]
+            user_passed_captcha = recaptcha.client.check(captcha)
+            if not user_passed_captcha:
+                raise PermissionDenied
+
+        design = models.CakeStandard.objects.get(pk=int(data["design"]))
+
+        # contact_id = amocrm.client.create_contact(
+        #     name=data["name"],
+        #     phone=data["phone"],
+        #     email=data["email"],
+        #     birthday=data["birthdate"],
+        # )
+        #
+        # content = f"Торт {design.title}\n"
+        # order_id = amocrm.client.order_cake(
+        #     contact_id=contact_id,
+        #     address=data["address"],
+        #     content=content,
+        #     delivery_date=data["delivery_date"],
+        # )
+        order_id = 123
+
+        return render(
+            self.request,
+            "shop/order_status.html",
+            {
+                "order_number": order_id,
+                "message": "Ваш заказ принят. Наш менеджер свяжется с вами в ближайшее время.",
+            },
+        )
 
 
 class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
     class Form(forms.Form):
-        cake_design = forms.CharField(required=True)
+        cake_design = forms.CharField(required=False)
+        cake_design_link = forms.CharField(required=False)
         cake_toppings = forms.CharField(required=True)
         # cake_postcards = forms.CharField(required=True)
         # cake_decors = forms.CharField(required=True)
@@ -224,12 +278,31 @@ class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormV
         delivery_time = forms.TimeField(required=True)
         comment = forms.CharField(required=False)
 
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields["g-recaptcha-response"] = forms.CharField(required=True)
+
+        def clean(self):
+            cleaned_data = super().clean()
+            if not cleaned_data["cake_design"] and not cleaned_data["cake_design_link"]:
+                raise forms.ValidationError("Нужно выбрать дизайн")
+
+            return cleaned_data
+
     form_class = Form
     template_name = "shop/cake-constructor.html"
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        data["cake_designs"] = models.CakeDesign.objects.all()
+
+        designs_by_category = {}
+        for cake in models.CakeDesign.objects.all():
+            if cake.category in designs_by_category:
+                designs_by_category[cake.category].append(cake)
+            else:
+                designs_by_category[cake.category] = [cake]
+
+        data["cake_designs_by_category"] = designs_by_category
         data["cake_toppings"] = models.CakeTopping.objects.all()
         data["cake_decors"] = models.CakeDecor.objects.all()
         data["cake_postcards"] = models.CakePostcard.objects.all()
@@ -238,7 +311,21 @@ class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormV
     def form_valid(self, form):
         data = form.cleaned_data
 
-        design = models.CakeDesign.objects.get(pk=int(data["cake_design"]))
+        if not self.request.user.is_authenticated:
+            captcha = data["g-recaptcha-response"]
+            user_passed_captcha = recaptcha.client.check(captcha)
+            if not user_passed_captcha:
+                raise PermissionDenied
+
+        if not data["cake_design"]:
+            uploaded_img = models.CustomCakeDesignUploads.objects.order_by(
+                "created_at"
+            ).get(name=data["cake_design_link"])
+            design_title = urljoin(settings.SITE_ADDR, uploaded_img.image.url)
+        else:
+            design = models.CakeDesign.objects.get(pk=int(data["cake_design"])).title
+            design_title = design.title
+
         toppings = models.CakeTopping.objects.filter(
             pk__in=[int(id_) for id_ in data["cake_toppings"].split(",")]
         )
@@ -261,7 +348,7 @@ class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormV
         # postcard_names = ", ".join(postcard.title for postcard in postcards)
 
         content = (
-            f"Торт {design.title}\n"
+            f"Торт {design_title}\n"
             f"Начинки: {toppings_names}.\n"
             # f"Открытки: {postcard_names}.\n"
             # f"Декор: {decor_names}."
@@ -348,7 +435,13 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
     class Form(forms.Form):
         name = forms.CharField(required=True)
         phone = forms.CharField(required=True, validators=[validators.is_phone])
-        address = forms.CharField(required=True)
+        street = forms.CharField(required=True)
+        house = forms.CharField(required=True)
+        room = forms.CharField()
+        entrance = forms.CharField()
+        floor = forms.CharField()
+        doorphone = forms.CharField()
+        comment = forms.Textarea()
         pay_method = forms.CharField(required=True)
 
     form_class = Form
@@ -364,11 +457,10 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
                 models.UserAddress.objects.filter(user=self.request.user)
                 .order_by("created_at")
                 .reverse()
-                .values("address")
                 .first()
             )
             if address:
-                kwargs["initial"]["address"] = address["address"]
+                kwargs["initial"]["street"] = address.street
 
         return kwargs
 
@@ -391,12 +483,11 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         )
         if self.request.user.is_authenticated:
             data["user_addresses"] = [
-                v["address"]
+                v.street
                 for v in (
                     models.UserAddress.objects.filter(user=self.request.user)
                     .order_by("created_at")
                     .reverse()
-                    .values("address")
                 )
             ]
 
@@ -462,6 +553,15 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         if customer["pay_method"] == "card":
             payment_type = amocrm.PaymentType.CARD.value
 
+        addr_parts = [
+            customer["street"],
+            customer["house"],
+            customer["room"],
+            customer["entrance"],
+            customer["floor"],
+            customer["doorphone"],
+        ]
+        address = ",".join(part for part in addr_parts if part)
         amocrm.client.create_order(
             client_card_id,
             amocrm.Order(
@@ -469,7 +569,8 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
                 total_amount=int(total_amount),
                 payment_type=payment_type,
                 content=order_content,
-                address=customer["address"],
+                address=address,
+                comment=customer["comment"],
             ),
         )
 

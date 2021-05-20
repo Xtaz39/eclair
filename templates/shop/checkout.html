@@ -33,18 +33,18 @@
                                     {{ form.phone.errors }}
                             </span>
                             </label>
-                            <label class="form__input" for="address">
-                                <span>Адрес доставки</span>
+                            <label class="form__input" for="street">
+                                <span>Улица</span>
                                 <span class="input">
                                 <input type="text"
-                                       id="address"
-                                       name="address"
+                                       id="street"
+                                       name="street"
                                        class="form-control"
-                                       placeholder="Улица, дом, квартира/офис, подъезд, этаж, домофон"
-                                       value="{{ form.address.value|default:"" }}"
+                                       placeholder="Ленина"
+                                       value="{{ form.street.value|default:"" }}"
                                        {% if user_addresses %}style="width: 80%;"{% endif %}
                                        required>
-                                    {{ form.address.errors }}
+                                    {{ form.street.errors }}
                                     {% if user_addresses %}
                                         <div class="input-group-append">
                                         <button class="btn btn-outline-secondary dropdown-toggle inline"
@@ -63,6 +63,82 @@
                                         </div>
                                     </div>
                                     {% endif %}
+                            </span>
+                            </label>
+                            <label class="form__input" for="house">
+                                <span>Дом</span>
+                                <span class="input">
+                                <input type="text"
+                                       id="house"
+                                       name="house"
+                                       class="form-control"
+                                       placeholder="12"
+                                       value="{{ form.house.value|default:"" }}"
+                                       required>
+                                    {{ form.house.errors }}
+                            </span>
+                            </label>
+                            <label class="form__input" for="room">
+                                <span>Квартира/офис</span>
+                                <span class="input">
+                                <input type="text"
+                                       id="room"
+                                       name="room"
+                                       class="form-control"
+                                       placeholder="15"
+                                       value="{{ form.room.value|default:"" }}"
+                                       required>
+                                    {{ form.room.errors }}
+                            </span>
+                            </label>
+                            <label class="form__input" for="entrance">
+                                <span>Подъезд</span>
+                                <span class="input">
+                                <input type="text"
+                                       id="entrance"
+                                       name="entrance"
+                                       class="form-control"
+                                       placeholder="2"
+                                       value="{{ form.entrance.value|default:"" }}"
+                                       required>
+                                    {{ form.entrance.errors }}
+                            </span>
+                            </label>
+                            <label class="form__input" for="floor">
+                                <span>Этаж</span>
+                                <span class="input">
+                                <input type="text"
+                                       id="floor"
+                                       name="floor"
+                                       class="form-control"
+                                       placeholder="10"
+                                       value="{{ form.floor.value|default:"" }}"
+                                       required>
+                                    {{ form.floor.errors }}
+                            </span>
+                            </label>
+                            <label class="form__input" for="doorphone">
+                                <span>Код домофона</span>
+                                <span class="input">
+                                <input type="text"
+                                       id="doorphone"
+                                       name="doorphone"
+                                       class="form-control"
+                                       placeholder="5812"
+                                       value="{{ form.doorphone.value|default:"" }}"
+                                       required>
+                                    {{ form.doorphone.errors }}
+                            </span>
+                            </label>
+                            <label class="form__input" for="comment">
+                                <span>Комментарий</span>
+                                <span class="input">
+                                    <textarea name=""
+                                              id="comment"
+                                              class="form-control"
+                                              cols="30"
+                                              rows="5"></textarea>
+                                    {{ form.comment.errors }}
                             </span>
                             </label>
                         </div>

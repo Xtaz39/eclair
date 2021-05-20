@@ -7,7 +7,7 @@ class ClientError(Exception):
 
 
 class Client:
-    def __init__(self, api_key=str, debug_mode=True):
+    def __init__(self, api_key: str, debug_mode=True):
         self._http_client = requests.Session()
         self._api_id = api_key
         self._debug_mode = debug_mode

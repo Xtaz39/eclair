@@ -9,27 +9,34 @@
 
             <div class="row">
                 <div class="col-lg-9 col-md-7">
-                    <form action="{% url 'shop:cake-constructor' %}" method="POST">
+                    <form action="{% url 'shop:cake-constructor' %}"
+                          id="cake-submit-form"
+                          method="POST">
+                        <script>
+                            function onSubmit(token) {
+                                document.getElementById("cake-submit-form").submit();
+                            }
+                        </script>
 
-                        <input type="hidden" id="design" name="cake_design" value="">
+
+                        <input type="hidden" id="design" name="cake_design">
+                        <input type="hidden" name="cake_design_link" id="design_link"/>
                         <input type="hidden"
                                id="feature-fill"
-                               name="cake_toppings"
-                               value="">
+                               name="cake_toppings">
                         <input type="hidden"
                                id="feature-decor"
-                               name="cake_decors"
-                               value="">
+                               name="cake_decors">
                         <input type="hidden"
                                id="feature-postcard"
-                               name="cake_postcards"
-                               value="">
+                               name="cake_postcards">
 
                         <div class="row mt-5">
                             <div class="col-lg-6">
                                 <div class="title">
                                     Дизайн торта
                                 </div>
+                                {{ form.non_field_errors }}
                                 {{ form.cake_design.errors }}
                                 <div class="images cake-design-images">
 
@@ -194,7 +201,10 @@
                                     </label>
                                 </div>
                             </div>
-                            <button class="form-submit-btn btn btn--warning">Заказать
+                            <button class="g-recaptcha form-submit-btn btn btn--warning"
+                                    data-sitekey="6LcAvdMaAAAAAOQQTZfIcXPCvZQ7-tzfdXkwH2jU"
+                                    data-callback='onSubmit'
+                                    data-action='submit'>Заказать
                             </button>
                             <div class="privacy-policy">
                                 Нажимая на кнопку, вы даете согласие <br>
@@ -273,136 +283,46 @@
                         <div class="feature-modal feature-design">
                             <div class="feature-filling__wrap">
                                 <div class="tab-group my-4">
+                                    {% for category in cake_designs_by_category %}
+                                        <a href="#"
+                                           class="tab-group__button {% if forloop.first %}active{% endif %}"
+                                           data-tab="{{ forloop.counter }}">{{ category }}</a>
+                                    {% endfor %}
                                     <a href="#"
-                                       class="tab-group__button active"
-                                       data-tab="0">Свадебные</a>
-                                    <a href="#" class="tab-group__button" data-tab="1">Особый
-                                        повод</a>
-                                    <a href="#" class="tab-group__button" data-tab="2">Детские</a>
-                                    <a href="#" class="tab-group__button" data-tab="3">Загрузить
+                                       class="tab-group__button"
+                                       data-tab="upload-tab">Загрузить
                                         ваш вариант</a>
                                 </div>
-                                <div class="row active" data-tab="0">
-                                    {% for cake_design in cake_designs %}
-                                        <div class="col-lg-4 col-sm-6 mb-4">
-                                            <div data-feature-design="{{ cake_design.id }}"
-                                                 class="feature-filling__item">
-                                                <img src="{{ cake_design.image.url }}"
-                                                     alt="">
-                                                <h4 class="feature-filling__item-title">
-                                                    {{ cake_design.title }}
-                                                </h4>
-                                                <a href="#"
-                                                   data-feature-design="{{ cake_design.id }}"
-                                                   class="feature-filling__item-btn btn btn--default">
-                                                    <span class="not-selected">выбрать</span>
-                                                    <span class="selected">выбрано</span>
-                                                </a>
+                                {% for designs in cake_designs_by_category.values %}
+                                    <div class="row {% if forloop.first %}active{% endif %}" data-tab="{{ forloop.counter }}">
+                                        {% for design in designs %}
+                                            <div class="col-lg-4 col-sm-6 mb-4">
+                                                <div data-feature-design="{{ design.id }}"
+                                                     class="feature-filling__item">
+                                                    <img src="{{ design.image.url }}"
+                                                         alt="">
+                                                    <h4 class="feature-filling__item-title">
+                                                        {{ design.title }}
+                                                    </h4>
+                                                    <a href="#"
+                                                       data-feature-design="{{ design.id }}"
+                                                       class="feature-filling__item-btn btn btn--default">
+                                                        <span class="not-selected">выбрать</span>
+                                                        <span class="selected">выбрано</span>
+                                                    </a>
+                                                </div>
                                             </div>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                                <div class="row" data-tab="1">
-                                    <div class="col-lg-4 col-sm-6 mb-4">
-                                        <div data-feature-design="0"
-                                             class="feature-filling__item">
-                                            <img src="{% static 'img/about-img-2.jpg' %}"
-                                                 alt="">
-                                            <h4 class="feature-filling__item-title">
-                                                Лимон и земляника design 1 TAB 2
-                                            </h4>
-                                            <p class="feature-filling__item-description">
-                                                лимонный бисквит в сочетании с трио
-                                                кремов: земляничный, мандариновый и
-                                                сливочно-сырный с белым
-                                                шоколадом
-                                            </p>
-                                            <a href="#"
-                                               data-feature-design="0"
-                                               class="feature-filling__item-btn btn btn--default">
-                                                <span class="not-selected">выбрать</span>
-                                                <span class="selected">выбрано</span>
-                                            </a>
-                                        </div>
+                                        {% endfor %}
                                     </div>
-                                    <div class="col-lg-4 col-sm-6 mb-4">
-                                        <div data-feature-design="2"
-                                             class="feature-filling__item">
-                                            <img src="{% static 'img/about-img-3.jpg' %}"
-                                                 alt="">
-                                            <h4 class="feature-filling__item-title">
-                                                Лимон и земляника design 1
-                                            </h4>
-                                            <p class="feature-filling__item-description">
-                                                лимонный бисквит в сочетании с трио
-                                                кремов: земляничный, мандариновый и
-                                                сливочно-сырный с белым
-                                                шоколадом
-                                            </p>
-                                            <a href="#"
-                                               data-feature-design="2"
-                                               class="feature-filling__item-btn btn btn--default">
-                                                <span class="not-selected">выбрать</span>
-                                                <span class="selected">выбрано</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row" data-tab="2">
-                                    <div class="col-lg-4 col-sm-6 mb-4">
-                                        <div data-feature-design="0"
-                                             class="feature-filling__item">
-                                            <img src="{% static 'img/about-img-2.jpg' %}"
-                                                 alt="">
-                                            <h4 class="feature-filling__item-title">
-                                                Лимон и земляника design 1 TAB 3
-                                            </h4>
-                                            <p class="feature-filling__item-description">
-                                                лимонный бисквит в сочетании с трио
-                                                кремов: земляничный, мандариновый и
-                                                сливочно-сырный с белым
-                                                шоколадом
-                                            </p>
-                                            <a href="#"
-                                               data-feature-design="0"
-                                               class="feature-filling__item-btn btn btn--default">
-                                                <span class="not-selected">выбрать</span>
-                                                <span class="selected">выбрано</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6 mb-4">
-                                        <div data-feature-design="2"
-                                             class="feature-filling__item">
-                                            <img src="{% static 'img/about-img-3.jpg' %}"
-                                                 alt="">
-                                            <h4 class="feature-filling__item-title">
-                                                Лимон и земляника design 1
-                                            </h4>
-                                            <p class="feature-filling__item-description">
-                                                лимонный бисквит в сочетании с трио
-                                                кремов: земляничный, мандариновый и
-                                                сливочно-сырный с белым
-                                                шоколадом
-                                            </p>
-                                            <a href="#"
-                                               data-feature-design="2"
-                                               class="feature-filling__item-btn btn btn--default">
-                                                <span class="not-selected">выбрать</span>
-                                                <span class="selected">выбрано</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row" data-tab="3">
+                                {% endfor %}
+                                <div class="row" data-tab="upload-tab">
                                     <div class="col-12">
                                         <h2 class="mb-4">Загрузите ваш вариант</h2>
                                         <div class="dropzone-wrap">
                                             <div class="dropzone-previews"></div>
-                                            <div action="/api/empty"
-                                                  class="dropzone dz-clickable"
-                                                  id="dropzone"
-                                                  style="">
+                                            <div action="/api/design_upload"
+                                                 class="dropzone dz-clickable"
+                                                 id="dropzone">
                                                 <div class="dz-default dz-message"><span><div
                                                         class="dropzone-wrap__placeholder"><i
                                                         class="icon-dropzone"></i><div
