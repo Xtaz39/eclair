@@ -19,25 +19,24 @@
                         </script>
 
 
-                        <input type="hidden" id="design" name="cake_design" value="">
+                        <input type="hidden" id="design" name="cake_design">
+                        <input type="hidden" name="cake_design_link" id="design_link"/>
                         <input type="hidden"
                                id="feature-fill"
-                               name="cake_toppings"
-                               value="">
+                               name="cake_toppings">
                         <input type="hidden"
                                id="feature-decor"
-                               name="cake_decors"
-                               value="">
+                               name="cake_decors">
                         <input type="hidden"
                                id="feature-postcard"
-                               name="cake_postcards"
-                               value="">
+                               name="cake_postcards">
 
                         <div class="row mt-5">
                             <div class="col-lg-6">
                                 <div class="title">
                                     Дизайн торта
                                 </div>
+                                {{ form.non_field_errors }}
                                 {{ form.cake_design.errors }}
                                 <div class="images cake-design-images">
 
@@ -323,8 +322,7 @@
                                             <div class="dropzone-previews"></div>
                                             <div action="/api/empty"
                                                  class="dropzone dz-clickable"
-                                                 id="dropzone"
-                                                 style="">
+                                                 id="dropzone">
                                                 <div class="dz-default dz-message"><span><div
                                                         class="dropzone-wrap__placeholder"><i
                                                         class="icon-dropzone"></i><div

@@ -145,3 +145,27 @@ $(window).on('load', () => {
     $(`div[data-tab=${id}]`).addClass('active');
   });
 });
+
+Dropzone.options.dropzone = {
+  maxFilesize: 2,
+  maxFiles: 1,
+  acceptedFiles: '.jpeg,.jpg,.png,.gif',
+  init() {
+    this.on('complete', function (file) {
+      if (!file.accepted) {
+        return
+      }
+
+      $('.feature-design .feature-filling__item').removeClass('selected');
+
+      const img = $('.dz-image > img');
+      const image = `<div class="image" style="background-image: url(${img.attr('src')})"></div>`;
+
+      $('.cake-design-images').empty();
+      $('.cake-design-images').append(image);
+      $('.feature-modal').removeClass('active');
+
+      $('input#design_link').val(file.name);
+    });
+  }
+};

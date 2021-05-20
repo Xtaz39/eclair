@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import datetime
+
 from django import forms
+from django.conf import settings
 from django.contrib.auth import logout
 from django.core.exceptions import PermissionDenied
 from django.core.handlers.wsgi import WSGIRequest
@@ -270,7 +273,8 @@ class CakeStandard(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView
 
 class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
     class Form(forms.Form):
-        cake_design = forms.CharField(required=True)
+        cake_design = forms.CharField(required=False)
+        cake_design_link = forms.CharField(required=False)
         cake_toppings = forms.CharField(required=True)
         # cake_postcards = forms.CharField(required=True)
         # cake_decors = forms.CharField(required=True)
@@ -287,6 +291,13 @@ class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormV
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.fields["g-recaptcha-response"] = forms.CharField(required=True)
+
+        def clean(self):
+            cleaned_data = super().clean()
+            if not cleaned_data["cake_design"] and not cleaned_data["cake_design_link"]:
+                raise forms.ValidationError("Нужно выбрать дизайн")
+
+            return cleaned_data
 
     form_class = Form
     template_name = "shop/cake-constructor.html"
@@ -316,7 +327,12 @@ class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormV
             if not user_passed_captcha:
                 raise PermissionDenied
 
-        design = models.CakeDesign.objects.get(pk=int(data["cake_design"]))
+        if not data["cake_design"]:
+            design_title = f"{settings.SITE_ADDR}/{datetime.datetime.now().strftime('%d/%m/%Y')}/{data['cake_design_link']}"
+        else:
+            design = models.CakeDesign.objects.get(pk=int(data["cake_design"])).title
+            design_title = design.title
+
         toppings = models.CakeTopping.objects.filter(
             pk__in=[int(id_) for id_ in data["cake_toppings"].split(",")]
         )
@@ -339,7 +355,7 @@ class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormV
         # postcard_names = ", ".join(postcard.title for postcard in postcards)
 
         content = (
-            f"Торт {design.title}\n"
+            f"Торт {design_title}\n"
             f"Начинки: {toppings_names}.\n"
             # f"Открытки: {postcard_names}.\n"
             # f"Декор: {decor_names}."
