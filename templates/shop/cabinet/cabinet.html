@@ -49,10 +49,20 @@
                            value="{{ form.birthday.value }}"
                            name="birthday">
                 </label>
-                {% for val in form.addresses.value %}
+                {% for addr in form.addresses.value %}
                     <label class="form__input address-field">
                         <span>Адрес для доставки</span>
-                        <input type="text" name="addresses" value="{{ val }}" disabled>
+                        <div class="input-group mb-3">
+                            <input type="text"
+                                   name="addresses"
+                                   class="form-control"
+                                   value="{{ addr.full_address }}"
+                                   disabled>
+                            <div class="input-group-append">
+                                <a href="" class="delete-address" data-addr-id="{{ addr.id }}" style="padding-left: 10px;"><img src="{% static 'img/close_black.svg' %}"
+                                                alt="close"></a>
+                            </div>
+                        </div>
                     </label>
                 {% endfor %}
             </div>

@@ -200,8 +200,35 @@ class ConfirmCode(BaseFormView):
         )
 
 
+class DeleteAddress(BaseFormView):
+    class Form(forms.Form):
+        address_id = forms.IntegerField(required=True)
+
+    form_class = Form
+
+    def form_valid(self, form):
+        request: WSGIRequest = self.request
+        if not request.user.is_authenticated:
+            return JsonResponse(status=http.HTTPStatus.UNAUTHORIZED, data="")
+
+        addr_id = form.cleaned_data["address_id"]
+        addr = models.UserAddress.objects.get(id=addr_id, user_id=request.user.id)
+        addr.delete()
+
+        return JsonResponse(data={"success": True}, safe=False)
+
+    def form_invalid(self, form):
+        errors = defaultdict(list)
+        for field, errs in form.errors.items():
+            for err in errs.data:
+                errors[field].append(err.message)
+
+        return JsonResponse(
+            data={"errors": errors}, safe=False, status=http.HTTPStatus.BAD_REQUEST
+        )
+
+
 def design_upload(request):
-    """This does nothing"""
     image = request.FILES["file"]
     image_upload = models.CustomCakeDesignUploads(image=image, name=image.name)
     image_upload.save()

@@ -1651,4 +1651,18 @@ dropzone-wrap__info {
   }
 }
 
+
+ul.errorlist {
+    padding-top: 5px;
+}
+
+ul.errorlist > li {
+    color: #ac3540;
+    font-size: 1.4rem;
+}
+
+div.eclair-map {
+    height: 400px;
+}
+
 @import "responsive";
