@@ -543,9 +543,9 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
                 user=request.user, address=customer["address"]
             )
 
-        client_card_id = amocrm.client.create_contact(
-            customer["name"], customer["phone"]
-        )
+        # client_card_id = amocrm.client.create_contact(
+        #     customer["name"], customer["phone"]
+        # )
 
         order_content = "\n".join(
             (
@@ -567,17 +567,17 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
             customer["doorphone"],
         ]
         address = ",".join(part for part in addr_parts if part)
-        amocrm.client.create_order(
-            client_card_id,
-            amocrm.Order(
-                order_id=order.order_number,
-                total_amount=int(total_amount),
-                payment_type=payment_type,
-                content=order_content,
-                address=address,
-                comment=customer["comment"],
-            ),
-        )
+        # amocrm.client.create_order(
+        #     client_card_id,
+        #     amocrm.Order(
+        #         order_id=order.order_number,
+        #         total_amount=int(total_amount),
+        #         payment_type=payment_type,
+        #         content=order_content,
+        #         address=address,
+        #         comment=customer["comment"],
+        #     ),
+        # )
 
         if customer["pay_method"] == "card":
             payment_url = sberbank.client.generate_payment(
