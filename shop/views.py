@@ -180,6 +180,9 @@ class Cabinet(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
             if f_name == "phone" or not hasattr(user, f_name):
                 continue
 
+            if f_name == "addresses":
+                continue
+
             setattr(user, f_name, form.cleaned_data[f_name])
 
         user.save()
