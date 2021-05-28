@@ -511,12 +511,22 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
             .all()
         )
 
+        addr_parts = [
+            customer["street"],
+            customer["house"],
+            customer["room"],
+            customer["entrance"],
+            customer["floor"],
+            customer["doorphone"],
+        ]
+        address = ",".join(part for part in addr_parts if part)
+
         total_amount = sum(item.amount * item.product.price for item in order_items)
         order = models.Order.objects.create(
             order_number=models.Order.generate_order_number(),
             customer_name=customer["name"],
             phone=customer["phone"],
-            address=customer["address"],
+            address=address,
             payment_type=customer["pay_method"],
             session_id=request.session.session_key,
         )
@@ -538,14 +548,14 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         ).delete()
 
         # remember address
-        if not models.UserAddress.objects.filter(address=customer["address"]).exists():
-            models.UserAddress.objects.create(
-                user=request.user, address=customer["address"]
-            )
+        # if not models.UserAddress.objects.filter(address=customer["address"]).exists():
+        #     models.UserAddress.objects.create(
+        #         user=request.user, address=customer["address"]
+        #     )
 
-        client_card_id = amocrm.client.create_contact(
-            customer["name"], customer["phone"]
-        )
+        # client_card_id = amocrm.client.create_contact(
+        #     customer["name"], customer["phone"]
+        # )
 
         order_content = "\n".join(
             (
@@ -558,26 +568,17 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         if customer["pay_method"] == "card":
             payment_type = amocrm.PaymentType.CARD.value
 
-        addr_parts = [
-            customer["street"],
-            customer["house"],
-            customer["room"],
-            customer["entrance"],
-            customer["floor"],
-            customer["doorphone"],
-        ]
-        address = ",".join(part for part in addr_parts if part)
-        amocrm.client.create_order(
-            client_card_id,
-            amocrm.Order(
-                order_id=order.order_number,
-                total_amount=int(total_amount),
-                payment_type=payment_type,
-                content=order_content,
-                address=address,
-                comment=customer["comment"],
-            ),
-        )
+        # amocrm.client.create_order(
+        #     client_card_id,
+        #     amocrm.Order(
+        #         order_id=order.order_number,
+        #         total_amount=int(total_amount),
+        #         payment_type=payment_type,
+        #         content=order_content,
+        #         address=address,
+        #         comment=customer["comment"],
+        #     ),
+        # )
 
         if customer["pay_method"] == "card":
             payment_url = sberbank.client.generate_payment(
