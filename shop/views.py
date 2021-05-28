@@ -164,7 +164,7 @@ class Cabinet(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
             .order_by("created_at")
             .all()[: self.addresses_limit]
         )
-        kwargs["initial"]["addresses"] = [val.full_address for val in user_addrs]
+        kwargs["initial"]["addresses"] = [val for val in user_addrs]
 
         birthday = ""
         if self.request.user.birthday:
@@ -178,6 +178,9 @@ class Cabinet(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         for f_name in form.changed_data:
 
             if f_name == "phone" or not hasattr(user, f_name):
+                continue
+
+            if f_name == "addresses":
                 continue
 
             setattr(user, f_name, form.cleaned_data[f_name])
@@ -235,21 +238,20 @@ class CakeStandard(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView
 
         design = models.CakeStandard.objects.get(pk=int(data["design"]))
 
-        # contact_id = amocrm.client.create_contact(
-        #     name=data["name"],
-        #     phone=data["phone"],
-        #     email=data["email"],
-        #     birthday=data["birthdate"],
-        # )
-        #
-        # content = f"Торт {design.title}\n"
-        # order_id = amocrm.client.order_cake(
-        #     contact_id=contact_id,
-        #     address=data["address"],
-        #     content=content,
-        #     delivery_date=data["delivery_date"],
-        # )
-        order_id = 123
+        contact_id = amocrm.client.create_contact(
+            name=data["name"],
+            phone=data["phone"],
+            email=data["email"],
+            birthday=data["birthdate"],
+        )
+
+        content = f"Торт {design.title}\n"
+        order_id = amocrm.client.order_cake(
+            contact_id=contact_id,
+            address=data["address"],
+            content=content,
+            delivery_date=data["delivery_date"],
+        )
 
         return render(
             self.request,
@@ -461,6 +463,11 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
             )
             if address:
                 kwargs["initial"]["street"] = address.street
+                kwargs["initial"]["house"] = address.house
+                kwargs["initial"]["room"] = address.room
+                kwargs["initial"]["entrance"] = address.entrance
+                kwargs["initial"]["floor"] = address.floor
+                kwargs["initial"]["doorphone"] = address.doorphone
 
         return kwargs
 
@@ -482,14 +489,12 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
             item.amount * item.product.price for item in items
         )
         if self.request.user.is_authenticated:
-            data["user_addresses"] = [
-                v.street
-                for v in (
-                    models.UserAddress.objects.filter(user=self.request.user)
-                    .order_by("created_at")
-                    .reverse()
-                )
-            ]
+            data["user_addresses"] = (
+                models.UserAddress.objects.filter(user=self.request.user)
+                .order_by("created_at")
+                .reverse()
+                .all()
+            )
 
         return data
 

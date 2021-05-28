@@ -141,15 +141,38 @@ $(window).on('load', () => {
           });
   });
 
-  $("#sign-in").on("click", (e) => {
-    e.preventDefault()
-    $('#login-modal').addClass('active')
-  })
+    $("#sign-in").on("click", (e) => {
+        e.preventDefault()
+        $('#login-modal').addClass('active')
+    })
 
-  $(".order-form .dropdown-menu a").on("click", (e) => {
-      e.preventDefault();
-      const value = e.target.innerHTML;
-      const fieldName = e.target.attributes['data-input-field'].value;
-      $('input[name=' + fieldName + ']').val(value);
-  })
+    $(".order-form .dropdown-menu a").on("click", (e) => {
+        e.preventDefault();
+        const street = e.target.attributes['data-street'].value;
+        const house = e.target.attributes['data-house'].value;
+        const room = e.target.attributes['data-room'].value;
+        const entrance = e.target.attributes['data-entrance'].value;
+        const floor = e.target.attributes['data-floor'].value;
+        const doorphone = e.target.attributes['data-doorphone'].value;
+
+        $('input[name=street]').val(street);
+        $('input[name=house]').val(house);
+        $('input[name=room]').val(room);
+        $('input[name=entrance]').val(entrance);
+        $('input[name=floor]').val(floor);
+        $('input[name=doorphone]').val(doorphone);
+    })
+
+    $("label.address-field a.delete-address").on("click", (e) => {
+        e.preventDefault();
+
+        const target = $(e.currentTarget)
+        $.post("/api/delete-user-address", {"address_id": target.data('addr-id')})
+            .done((data) => {
+                target.closest(".address-field").hide()
+            })
+            .fail((xhr, textStatus, error) => {
+                console.log(xhr.responseJSON)
+            });
+    })
 });

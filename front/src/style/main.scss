@@ -674,7 +674,7 @@ dropzone-wrap__info {
   .buttons {
     z-index: 2;
     position: absolute;
-    top: 0;
+    top: -10%;
     left: 0;
     width: 100%;
     height: 100%;
@@ -1649,6 +1649,20 @@ dropzone-wrap__info {
     left: calc(100% + 15px);
     padding: 0;
   }
+}
+
+
+ul.errorlist {
+    padding-top: 5px;
+}
+
+ul.errorlist > li {
+    color: #ac3540;
+    font-size: 1.4rem;
+}
+
+div.eclair-map {
+    height: 400px;
 }
 
 @import "responsive";

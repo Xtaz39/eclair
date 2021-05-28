@@ -37,7 +37,7 @@ class UserAddress(models.Model):
             self.floor,
             self.doorphone,
         )
-        return ",".join((part for part in address_parts if part))
+        return ", ".join((part for part in address_parts if part))
 
 
 class ConfirmCode(models.Model):

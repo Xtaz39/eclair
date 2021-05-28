@@ -55,10 +55,15 @@
                                                 aria-expanded="false">Выбор
                                         </button>
                                         <div class="dropdown-menu">
-                                            {% for addr in  user_addresses %}
+                                            {% for addr in user_addresses %}
                                                 <a class="dropdown-item"
-                                                   data-input-field="address"
-                                                >{{ addr }}</a>
+                                                   data-street="{{ addr.street }}"
+                                                   data-house="{{ addr.house }}"
+                                                   data-room="{{ addr.room }}"
+                                                   data-entrance="{{ addr.entrance }}"
+                                                   data-floor="{{ addr.floor }}"
+                                                   data-doorphone="{{ addr.doorphone }}"
+                                                >{{ addr.full_address }}</a>
                                             {% endfor %}
                                         </div>
                                     </div>
