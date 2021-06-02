@@ -192,6 +192,12 @@
       width: 100%;
     }
   }
+  .carousel {
+
+    .slick-slide {
+      margin: 0 15px;
+    }
+  }
 }
 
 @media screen and (max-width: 500px) {
