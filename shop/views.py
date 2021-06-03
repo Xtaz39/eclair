@@ -273,7 +273,6 @@ class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormV
         weight = forms.CharField(required=True)
         name = forms.CharField(required=True)
         phone = forms.CharField(required=True, validators=[validators.is_phone])
-        email = forms.CharField(required=True)
         birthdate = forms.DateField(required=False)
         address = forms.CharField(required=True)
         delivery_date = forms.DateField(required=True)
@@ -341,7 +340,6 @@ class CakeConstructor(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormV
         contact_id = amocrm.client.create_contact(
             name=data["name"],
             phone=data["phone"],
-            email=data["email"],
             birthday=data["birthdate"],
         )
 
