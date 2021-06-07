@@ -1,5 +1,5 @@
 {% for category in categories %}
-    <section class="items-list" id="{{ category.name|lower }}">
+    <section class="items-list" id="{{ category.name|lower|slugify }}">
         <div class="container">
             <h2 class="text-center">{{ category.name }}</h2>
             <div class="row mt-5">
