@@ -47,6 +47,29 @@ $(window).on('load', () => {
     scrollHandler();
   });
 
+  if (window.location.hash) {
+    setTimeout(() => {
+      $('html, body').animate({
+        scrollTop: $(window.location.hash).offset().top
+      }, 800);
+    }, 500)
+  }
+  $("a").on('click', function(event) {
+    if (this.hash !== "") {
+      console.log(this.hash);
+      event.preventDefault();
+      var hash = this.hash;
+      if (document.querySelector(hash)) {
+        $('html, body').animate({
+          scrollTop: $(hash).offset().top
+        }, 800, function(){
+          window.location.hash = hash;
+        });
+      } else {
+        window.location.href = window.location.origin + hash
+      }
+    }
+  });
 
   // eslint-disable-next-line no-undef
   if (!window.localStorage.getItem('cookies_accepted')) {
