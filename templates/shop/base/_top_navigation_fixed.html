@@ -7,7 +7,7 @@
     <nav class="header__nav header__nav--bottom">
         <ul>
             {% for category in categories %}
-                <li><a href="#{{ category.name|lower }}">{{ category.name }}</a>
+                <li><a href="/#{{ category.name|lower }}">{{ category.name }}</a>
                 </li>
             {% endfor %}
         </ul>
