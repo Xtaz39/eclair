@@ -1,3 +1,5 @@
+{% load kebab %}
+
 <div class="header__bottom fixed">
     <div class="logo">
         <a href="/" class="logo__link">
@@ -8,7 +10,7 @@
         <ul>
             {% for category in categories %}
                 <li>
-                    <a href="/#{{ category.name|lower|slugify }}">{{ category.name }}</a>
+                    <a href="/#{{ category.name|lower|kebab }}">{{ category.name }}</a>
                 </li>
             {% endfor %}
         </ul>

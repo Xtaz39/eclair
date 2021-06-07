@@ -1,9 +1,11 @@
+{% load kebab %}
+
 {% if categories %}
     <div class="header__bottom">
         <nav class="header__nav header__nav--bottom">
             <ul>
                 {% for category in categories %}
-                    <li><a href="/#{{ category.name|lower|slugify }}">{{ category.name }}</a>
+                    <li><a href="/#{{ category.name|lower|kebab }}">{{ category.name }}</a>
                     </li>
                 {% endfor %}
             </ul>
