@@ -50,7 +50,7 @@ $(window).on('load', () => {
   if (window.location.hash) {
     setTimeout(() => {
       $('html, body').animate({
-        scrollTop: $(window.location.hash).offset().top
+        scrollTop: $(decodeURIComponent(window.location.hash)).offset().top
       }, 800);
     }, 500)
   }
@@ -58,7 +58,7 @@ $(window).on('load', () => {
     if (this.hash !== "") {
       console.log(this.hash);
       event.preventDefault();
-      var hash = this.hash;
+      let hash = decodeURIComponent(this.hash);
       if (document.querySelector(hash)) {
         $('html, body').animate({
           scrollTop: $(hash).offset().top
