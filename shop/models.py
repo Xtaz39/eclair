@@ -30,12 +30,12 @@ class UserAddress(models.Model):
     @property
     def full_address(self):
         address_parts = (
-            self.street,
-            self.house,
-            self.room,
-            self.entrance,
-            self.floor,
-            self.doorphone,
+            f"ул. {self.street}",
+            f"дом {self.house}",
+            f"кв. {self.room}",
+            f"{self.entrance}",
+            f"этаж {self.floor}",
+            f"домофон {self.doorphone}",
         )
         return ", ".join((part for part in address_parts if part))
 
