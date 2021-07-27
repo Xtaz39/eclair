@@ -7,6 +7,7 @@ import secrets
 from collections import defaultdict
 
 import pendulum
+import requests
 from django import forms
 from django.conf import settings
 from django.contrib.auth import login
@@ -53,7 +54,6 @@ class Cart(BaseFormView):
                 # Todo: check that new amount won't exceed stock or some limit
                 cart_product.amount = F("amount") + amount
                 cart_product.save()
-
         return HttpResponse(status=http.HTTPStatus.CREATED)
 
 
@@ -182,7 +182,18 @@ class ConfirmCode(BaseFormView):
             user, _ = models.User.objects.get_or_create(
                 phone=phone, defaults={"username": phone}
             )
+
+            sid = self.request.session.session_key
+            print("user session before is ", sid)
+            # cart_product = models.CartProduct.objects.filter(session_id=self.request.session.session_key).all()
+            # print("amount = ", cart_product.amount)
+
             login(self.request, user)
+
+            sid1 = self.request.session.session_key
+            print("user session after is ", sid1)
+
+
         elif confirmation.action == "phone_change":
             self.request.user.phone = phone
             self.request.user.save()

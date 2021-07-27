@@ -34,13 +34,13 @@
                             </span>
                             </label>
                             <label class="form__input" for="street">
-                                <span>Улица</span>
+                                <span>Адрес</span>
                                 <span class="input">
                                 <input type="text"
-                                       id="street"
+                                       id="suggest"
                                        name="street"
                                        class="form-control"
-                                       placeholder="Ленина"
+                                       placeholder="Кремлевская д.19"
                                        value="{{ form.street.value|default:"" }}"
                                        {% if user_addresses %}style="width: 80%;"{% endif %}
                                        required>
@@ -58,7 +58,7 @@
                                             {% for addr in user_addresses %}
                                                 <a class="dropdown-item"
                                                    data-street="{{ addr.street }}"
-                                                   data-house="{{ addr.house }}"
+<!--                                                   data-house="{{ addr.house }}"-->
                                                    data-room="{{ addr.room }}"
                                                    data-entrance="{{ addr.entrance }}"
                                                    data-floor="{{ addr.floor }}"
@@ -70,19 +70,19 @@
                                     {% endif %}
                             </span>
                             </label>
-                            <label class="form__input" for="house">
-                                <span>Дом</span>
-                                <span class="input">
-                                <input type="text"
-                                       id="house"
-                                       name="house"
-                                       class="form-control"
-                                       placeholder="12"
-                                       value="{{ form.house.value|default:"" }}"
-                                       required>
-                                    {{ form.house.errors }}
-                            </span>
-                            </label>
+<!--                            <label class="form__input" for="house">-->
+<!--                                <span>Дом</span>-->
+<!--                                <span class="input">-->
+<!--                                <input type="text"-->
+<!--                                       id="house"-->
+<!--                                       name="house"-->
+<!--                                       class="form-control"-->
+<!--                                       placeholder="12"-->
+<!--                                       value="{{ form.house.value|default:"" }}"-->
+<!--                                       required>-->
+<!--                                    {{ form.house.errors }}-->
+<!--                            </span>-->
+<!--                            </label>-->
                             <label class="form__input" for="room">
                                 <span>Квартира/офис</span>
                                 <span class="input">
@@ -90,9 +90,9 @@
                                        id="room"
                                        name="room"
                                        class="form-control"
-                                       placeholder="15"
+                                       placeholder=""
                                        value="{{ form.room.value|default:"" }}"
-                                       required>
+                                       >
                                     {{ form.room.errors }}
                             </span>
                             </label>
@@ -103,9 +103,9 @@
                                        id="entrance"
                                        name="entrance"
                                        class="form-control"
-                                       placeholder="2"
+                                       placeholder=""
                                        value="{{ form.entrance.value|default:"" }}"
-                                       required>
+                                       >
                                     {{ form.entrance.errors }}
                             </span>
                             </label>
@@ -116,9 +116,9 @@
                                        id="floor"
                                        name="floor"
                                        class="form-control"
-                                       placeholder="10"
+                                       placeholder=""
                                        value="{{ form.floor.value|default:"" }}"
-                                       required>
+                                       >
                                     {{ form.floor.errors }}
                             </span>
                             </label>
@@ -129,9 +129,9 @@
                                        id="doorphone"
                                        name="doorphone"
                                        class="form-control"
-                                       placeholder="5812"
+                                       placeholder=""
                                        value="{{ form.doorphone.value|default:"" }}"
-                                       required>
+                                       >
                                     {{ form.doorphone.errors }}
                             </span>
                             </label>

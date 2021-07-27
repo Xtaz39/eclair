@@ -189,6 +189,12 @@ $(window).on('load', () => {
     $('#login-modal').addClass('active');
   });
 
+  $('#sign-in-cart').on('click', (e) => {
+    e.preventDefault();
+    $('#login-modal').addClass('active');
+  });
+
+
   $('.order-form .dropdown-menu a').on('click', (e) => {
     e.preventDefault();
     const street = e.target.attributes['data-street'].value;
@@ -219,3 +225,9 @@ $(window).on('load', () => {
       });
   });
 });
+
+ymaps.ready(init);
+
+function init() {
+    var suggestView1 = new ymaps.SuggestView('suggest');
+}

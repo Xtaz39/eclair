@@ -47,7 +47,13 @@
                                       fill="#D5A203"/>
                             </svg>
                         </i>
-                        <span class="bucket__text">Личный кабинет</span>
+                        <span class="bucket__text">
+                            {% if user.first_name is Null%}
+                            {{ user.phone }}
+                            {% else %}
+                            {{ user.first_name }}
+                            {% endif %}
+                        </span>
                     </a>
                     <a href="/logout" class="bucket__item personal-cabinet">
                         <i class="bucket__img">
@@ -81,6 +87,9 @@
                         <span class="bucket__text">Войти</span>
                     </a>
                 {% endif %}
+                <a href="vacancies" class="bucket__item">
+                                    Вакансии
+                </a>
                 <a href="/cart" class="bucket__item">
                     <i class="bucket__img">
                         <svg width="18" height="20" viewBox="0 0 18 20" fill="none"

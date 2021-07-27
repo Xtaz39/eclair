@@ -100,13 +100,17 @@
         {% endif %}
 
         <transition name="slide-right">
-            <div v-if="cartTotalAmount > 0" class="container container--order">
+            <div v-if="cartTotalAmount > 0" class="container container--order" id="login-modal-cart2468">
                 <p class="total-sum mt-4 mb-5">
                     Сумма заказа: <b>[[ cartTotalAmount ]] руб.</b>
                 </p>
                 <div class="flex-between">
                     <a href="/" class="btn btn--default">Вернуться в меню</a>
-                    <a href="checkout" class="btn btn--warning">Оформить заказ</a>
+                    {%if user.is_authenticated%}
+                    <a href="checkout" class="btn btn--warning" >Оформить заказ</a>
+                    {% else %}
+                    <div class="btn btn--warning" id="sign-in-cart">Оформить заказ</div>
+                    {% endif %}
                 </div>
             </div>
         </transition>
