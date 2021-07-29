@@ -17,6 +17,7 @@ from django.db.models import F
 from django.http import HttpResponse, JsonResponse
 from django.views.generic.edit import BaseFormView
 
+import shop.models
 from shop import models
 from shop.client import sms
 from shop.models import CartProduct
@@ -56,6 +57,16 @@ class Cart(BaseFormView):
                 cart_product.save()
         return HttpResponse(status=http.HTTPStatus.CREATED)
 
+    # def add_on_login(self):
+    #     data = json.loads(self.request.body)
+    #     article = data["article"]
+    #     amount = data["amount"]
+    #
+    #     CartProduct.objects.get_or_create(
+    #         product_id=article, amount=amount
+    #     )
+
+
 
 def normalize_phone(phone: str) -> str:
     phone = "".join(l for l in phone if l.isdigit())
@@ -90,8 +101,8 @@ class AuthRequestCode(BaseFormView):
 
         # todo: check why not works on sqlite
         if models.ConfirmCode.objects.filter(
-            phone=phone,
-            created_at__gte=pendulum.now().subtract(minutes=1),
+                phone=phone,
+                created_at__gte=pendulum.now().subtract(minutes=1),
         ).first():
             errors = {
                 "phone": [
@@ -184,15 +195,12 @@ class ConfirmCode(BaseFormView):
             )
 
             sid = self.request.session.session_key
-            print("user session before is ", sid)
-            # cart_product = models.CartProduct.objects.filter(session_id=self.request.session.session_key).all()
-            # print("amount = ", cart_product.amount)
-
             login(self.request, user)
+            sid_new = self.request.session.session_key
 
-            sid1 = self.request.session.session_key
-            print("user session after is ", sid1)
-
+            CartProduct.objects.filter(
+                session_id=sid
+            ).update(session_id=sid_new)
 
         elif confirmation.action == "phone_change":
             self.request.user.phone = phone
