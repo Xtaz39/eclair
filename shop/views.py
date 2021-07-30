@@ -436,7 +436,7 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         name = forms.CharField(required=True)
         phone = forms.CharField(required=True, validators=[validators.is_phone])
         street = forms.CharField(required=True)
-        # house = forms.CharField(required=True)
+        house = forms.CharField(required=True)
         room = forms.CharField()
         entrance = forms.CharField()
         floor = forms.CharField()
@@ -461,7 +461,7 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
             )
             if address:
                 kwargs["initial"]["street"] = address.street
-                # kwargs["initial"]["house"] = address.house
+                kwargs["initial"]["house"] = address.house
                 kwargs["initial"]["room"] = address.room
                 kwargs["initial"]["entrance"] = address.entrance
                 kwargs["initial"]["floor"] = address.floor
@@ -511,7 +511,7 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
 
         addr_parts = [
             customer["street"],
-            # customer["house"],
+            customer["house"],
             customer["room"],
             customer["entrance"],
             customer["floor"],

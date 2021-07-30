@@ -1691,4 +1691,27 @@ div.eclair-map {
     height: 400px;
 }
 
+label.newinput{
+    display: block;
+    width: 100%;
+    background: #fff;
+    font-size: 1.6rem;
+    color: #000;
+    resize: none;
+
+    input{
+    width: 100%;
+    padding: 10px 12px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: 1px solid #000;
+    margin-bottom: 30px;
+    }
+
+    textarea{
+    width : 100%;
+    padding: 10px 12px;
+    }
+}
+
 @import "responsive";

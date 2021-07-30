@@ -18,7 +18,7 @@ class User(AbstractUser):
 
 class UserAddress(models.Model):
     street = models.CharField("Улица", max_length=255)
-    # house = models.CharField("Дом", max_length=255)
+    house = models.CharField("Дом", max_length=255)
     room = models.CharField("Квартира/офис", max_length=255, null=True, blank=True)
     entrance = models.CharField("Подъезд", max_length=255, null=True, blank=True)
     floor = models.CharField("Этаж", max_length=255, null=True, blank=True)
@@ -31,7 +31,7 @@ class UserAddress(models.Model):
     def full_address(self):
         address_parts = (
             f"ул. {self.street}",
-            # f"дом {self.house}",
+            f"дом {self.house}",
             f"кв. {self.room}",
             f"{self.entrance}",
             f"этаж {self.floor}",
