@@ -33,7 +33,7 @@ class UserAddress(models.Model):
             f"ул. {self.street}",
             f"дом {self.house}",
             f"кв. {self.room}" if self.room else "",
-            f"{self.entrance}" if self.entrance else "",
+            f"подъезд {self.entrance}" if self.entrance else "",
             f"этаж {self.floor}" if self.floor else "",
             f"домофон {self.doorphone}" if self.doorphone else "",
         )

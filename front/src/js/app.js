@@ -194,6 +194,26 @@ $(window).on('load', () => {
     $('#login-modal').addClass('active');
   });
 
+  $('.form-add input').on('change', (e) => {
+    e.preventDefault();
+    if ($('input[name=user-address]:checked', '.form-add').val()=="create-new-address") {
+    $('.hide__new__address').show();
+    $('.hide-order-total').hide();
+    }
+  });
+
+$('.form-add input').on('change', (e) => {
+    e.preventDefault();
+    if ($('input[name=user-address]:checked', '.form-add').val()!="create-new-address") {
+    $('.hide__new__address').hide();
+    $('.hide-order-total').show();
+    }
+  });
+
+$(document).ready(function() {
+ $('.hide__new__address').hide();
+});
+
 
   $('.order-form .dropdown-menu a').on('click', (e) => {
     e.preventDefault();

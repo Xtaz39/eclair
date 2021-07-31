@@ -10,15 +10,13 @@
 {% block content %}
     <section class="order-details">
         <div class="container">
-
-
             {% if user_addresses %}
                 <h2 class="my-5">Выберите адрес</h2>
                 <div class="row">
                     <div class="col-lg-6 order 2 order-lg-1">
-                        <div class="fields">
+                        <div class="fields form-add">
                             {% for addr in user_addresses %}
-                                <label class="form__input form__input--radio">
+                                <label class="form__input form__input--radio form__address">
                                     <span>{{ addr.full_address }}</span>
                                     <input type="radio"
                                            name="user-address"
@@ -33,18 +31,47 @@
                                     <span class="fake-input"></span>
                                 </label>
                             {% endfor %}
-                            <label class="form__input form__input--radio">
+                            <label class="form__input form__input--radio form__address">
                                 <span>Добавить новый адрес</span>
-                                <input type="radio" name="user-address" value="" checked>
+                                <input id="radio-new-address" type="radio" name="user-address" value="create-new-address" checked>
                                 <span class="fake-input"></span>
                             </label>
                     </div>
                 </div>
+
+                    <div class="col-lg-5 order-1 order-lg-2 hide-order-total" style="">
+                    <div class="order-total">
+                        <h2 class="mb-4">Состав заказа</h2>
+                        {% for item in cart_items %}
+                            <div class="order-total__item">
+                                <div class="item__name">
+                                    <span>{{ item.product.title }}</span> <br>
+                                    <small class="item__category">{{ item.product.category.title }}</small>
+                                </div>
+                                <div class="order-total__sum">
+                                    {% if item.amount %}
+                                        <span class="multiplier">{{ item.amount }} x </span>
+                                    {% endif %}
+                                    <span>{{ item.product.price }} руб.</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="order-total__item">
+                            <div class="item__name">
+                                <span>Стоимость заказа</span>
+                            </div>
+                            <div class="order-total__sum">
+                                <span>{{ cart_total_amount }} руб.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             {% endif %}
 
 
-            <h2 class="my-5">Доставка на новый адрес</h2>
+            <h2 class="my-5 hide__new__address">Доставка на новый адрес</h2>
             <div class="row">
                 <div class="col-lg-6 order-2 order-lg-1">
 
@@ -64,7 +91,7 @@
                                         value="{{ form.phone.value|default:"" }}"
                                          style="display: none"
                                         required>
-                                <div class="row">
+                                <div class="row hide__new__address">
                                     <div class="col-sm">
                                         <label class="newinput"
                                                for="street"
@@ -92,7 +119,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row hide__new__address">
                                     <div class="col-sm">
                                     <label class="newinput" for="room">
                                          <input type="text"
@@ -139,7 +166,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row hide__new__address">
                                 <div class="col">
                                 <label class="newinput" for="comment">
                                     <textarea name=""
@@ -152,7 +179,7 @@
                                 </div>
                             </div>
 
-                            <h2 class="my-5">Способы оплаты</h2>
+                        <h2 class="my-5">Способы оплаты</h2>
                         <div class="fields">
                             <label class="form__input form__input--radio">
                                 <span>Наличными</span>
@@ -191,7 +218,7 @@
 
 
 
-                <div class="col-lg-5 order-1 order-lg-2">
+                <div class="col-lg-5 order-1 order-lg-2 hide__new__address">
                     <div class="order-total">
                         <h2 class="mb-4">Состав заказа</h2>
                         {% for item in cart_items %}
