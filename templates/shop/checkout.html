@@ -1,6 +1,12 @@
 {% extends "shop/base/base.html" %}
 {% load static %}
 
+{% block js_extra %}
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=2678ff3c-55ea-4d8a-8326-50b1dabc03b1&lang=ru_RU"
+            type="text/javascript">
+    </script>
+{% endblock %}
+
 {% block content %}
     <section class="order-details">
         <div class="container">
@@ -9,7 +15,9 @@
             <div class="row">
                 <div class="col-lg-6 order-2 order-lg-1">
 
-                        <form action="{% url 'shop:checkout' %}" method="POST" class="order-form">
+                    <form action="{% url 'shop:checkout' %}"
+                          method="POST"
+                          class="order-form">
                             <div class="fields">
                                 <input type="text"
                                        id="name"

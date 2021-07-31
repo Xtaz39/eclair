@@ -9,3 +9,4 @@ node_modules
 front/dist
 ./static/
 front/.DS_Store
+.DS_Store

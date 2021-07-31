@@ -48,10 +48,10 @@
                             </svg>
                         </i>
                         <span class="bucket__text">
-                            {% if user.first_name is Null%}
-                            {{ user.phone }}
+                            {% if user.first_name %}
+                                {{ user.first_name }}
                             {% else %}
-                            {{ user.first_name }}
+                                {{ user.phone }}
                             {% endif %}
                         </span>
                     </a>

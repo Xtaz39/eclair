@@ -57,16 +57,6 @@ class Cart(BaseFormView):
                 cart_product.save()
         return HttpResponse(status=http.HTTPStatus.CREATED)
 
-    # def add_on_login(self):
-    #     data = json.loads(self.request.body)
-    #     article = data["article"]
-    #     amount = data["amount"]
-    #
-    #     CartProduct.objects.get_or_create(
-    #         product_id=article, amount=amount
-    #     )
-
-
 
 def normalize_phone(phone: str) -> str:
     phone = "".join(l for l in phone if l.isdigit())
@@ -101,8 +91,8 @@ class AuthRequestCode(BaseFormView):
 
         # todo: check why not works on sqlite
         if models.ConfirmCode.objects.filter(
-                phone=phone,
-                created_at__gte=pendulum.now().subtract(minutes=1),
+            phone=phone,
+            created_at__gte=pendulum.now().subtract(minutes=1),
         ).first():
             errors = {
                 "phone": [
@@ -194,13 +184,13 @@ class ConfirmCode(BaseFormView):
                 phone=phone, defaults={"username": phone}
             )
 
-            sid = self.request.session.session_key
+            sid_old = self.request.session.session_key
             login(self.request, user)
-            sid_new = self.request.session.session_key
 
-            CartProduct.objects.filter(
-                session_id=sid
-            ).update(session_id=sid_new)
+            if sid_old:
+                CartProduct.objects.filter(session_id=sid_old).update(
+                    session_id=self.request.session.session_key
+                )
 
         elif confirmation.action == "phone_change":
             self.request.user.phone = phone
