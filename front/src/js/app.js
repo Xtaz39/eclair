@@ -229,5 +229,5 @@ $(window).on('load', () => {
 ymaps.ready(init);
 
 function init() {
-    var suggestView1 = new ymaps.SuggestView('suggest');
+    var suggestView1 = new ymaps.SuggestView('street');
 }
