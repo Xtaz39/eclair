@@ -13,23 +13,29 @@
 
 
             {% if user_addresses %}
-             <h2 class="my-5">Выберите адрес</h2>
-            <div class="row">
-                <div class="col-lg-6 order 2 order-lg-1">
-                    <div class="fields">
-                        {% for addr in user_addresses %}
-                            <label class="form__input form__input--radio">
-                                <span>{{ addr.full_address }}</span>
-                                <input type="radio"
-                                       name=""
-                                       value="{{ addr.full_address }}"
-                                       >
-                                <span class="fake-input"></span>
-                            </label>
-                        {% endfor %}
+                <h2 class="my-5">Выберите адрес</h2>
+                <div class="row">
+                    <div class="col-lg-6 order 2 order-lg-1">
+                        <div class="fields">
+                            {% for addr in user_addresses %}
+                                <label class="form__input form__input--radio">
+                                    <span>{{ addr.full_address }}</span>
+                                    <input type="radio"
+                                           name="user-address"
+                                           value="{{ addr.full_address }}"
+                                            data-street="{{ addr.street }}"
+                                            data-house="{{ addr.house }}"
+                                            data-room="{{ addr.room }}"
+                                            data-entrance="{{ addr.entrance }}"
+                                            data-floor="{{ addr.floor }}"
+                                            data-doorphone="{{ addr.doorphone }}"
+                                    >
+                                    <span class="fake-input"></span>
+                                </label>
+                            {% endfor %}
                             <label class="form__input form__input--radio">
                                 <span>Добавить новый адрес</span>
-                                <input type="radio" name="" value="" checked>
+                                <input type="radio" name="user-address" value="" checked>
                                 <span class="fake-input"></span>
                             </label>
                     </div>

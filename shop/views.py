@@ -491,7 +491,7 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
                 models.UserAddress.objects.filter(user=self.request.user)
                 .order_by("created_at")
                 .reverse()
-                .all()
+                .all()[:5]
             )
 
         return data
