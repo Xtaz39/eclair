@@ -5,7 +5,34 @@
     <section class="order-details">
         <div class="container">
 
-            <h2 class="my-5">Заказ на доставку</h2>
+
+            {% if user_addresses %}
+             <h2 class="my-5">Выберите адрес</h2>
+            <div class="row">
+                <div class="col-lg-6 order 2 order-lg-1">
+                    <div class="fields">
+                        {% for addr in user_addresses %}
+                            <label class="form__input form__input--radio">
+                                <span>{{ addr.full_address }}</span>
+                                <input type="radio"
+                                       name=""
+                                       value="{{ addr.full_address }}"
+                                       >
+                                <span class="fake-input"></span>
+                            </label>
+                        {% endfor %}
+                            <label class="form__input form__input--radio">
+                                <span>Добавить новый адрес</span>
+                                <input type="radio" name="" value="" checked>
+                                <span class="fake-input"></span>
+                            </label>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+
+            <h2 class="my-5">Доставка на новый адрес</h2>
             <div class="row">
                 <div class="col-lg-6 order-2 order-lg-1">
 
@@ -61,7 +88,6 @@
                                            placeholder="Квартира/офис"
                                            value="{{ form.room.value|default:"" }}"
                                            >
-                                        {{ form.room.errors }}
                                     </label>
                                     </div>
                                     <div class="col-sm">
@@ -73,7 +99,6 @@
                                            placeholder="Подъезд"
                                            value="{{ form.entrance.value|default:"" }}"
                                            >
-                                        {{ form.entrance.errors }}
                                     </label>
                                     </div>
                                     <div class="col-sm">
@@ -85,7 +110,6 @@
                                            placeholder="Этаж"
                                            value="{{ form.floor.value|default:"" }}"
                                            >
-                                        {{ form.floor.errors }}
                                     </label>
                                     </div>
                                     <div class="col-sm">
@@ -97,7 +121,6 @@
                                            placeholder="Домофон"
                                            value="{{ form.doorphone.value|default:"" }}"
                                            >
-                                        {{ form.doorphone.errors }}
                                     </label>
                                     </div>
                                 </div>
@@ -111,7 +134,6 @@
                                               cols="30"
                                               placeholder="Комментарий"
                                               rows="5"></textarea>
-                                    {{ form.comment.errors }}
                                 </label>
                                 </div>
                             </div>
