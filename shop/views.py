@@ -437,10 +437,10 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         phone = forms.CharField(required=True, validators=[validators.is_phone])
         street = forms.CharField(required=True)
         house = forms.CharField(required=True)
-        room = forms.CharField()
-        entrance = forms.CharField()
-        floor = forms.CharField()
-        doorphone = forms.CharField()
+        room = forms.CharField(required=False)
+        entrance = forms.CharField(required=False)
+        floor = forms.CharField(required=False)
+        doorphone = forms.CharField(required=False)
         comment = forms.Textarea()
         pay_method = forms.CharField(required=True)
 
@@ -546,10 +546,24 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         ).delete()
 
         # remember address
-        # if not models.UserAddress.objects.filter(address=customer["address"]).exists():
-        #     models.UserAddress.objects.create(
-        #         user=request.user, address=customer["address"]
-        #     )
+        address_already_exists = models.UserAddress.objects.filter(
+            street=customer["street"],
+            house=customer["house"],
+            room=customer["room"],
+            entrance=customer["entrance"],
+            floor=customer["floor"],
+            doorphone=customer["doorphone"],
+        ).exists()
+        if not address_already_exists:
+            models.UserAddress.objects.create(
+                user=request.user,
+                street=customer["street"],
+                house=customer["house"],
+                room=customer["room"],
+                entrance=customer["entrance"],
+                floor=customer["floor"],
+                doorphone=customer["doorphone"],
+            )
 
         # client_card_id = amocrm.client.create_contact(
         #     customer["name"], customer["phone"]
