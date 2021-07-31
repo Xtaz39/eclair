@@ -16,7 +16,7 @@
                     <div class="col-lg-6 order 2 order-lg-1">
                         <div class="fields form-add">
                             {% for addr in user_addresses %}
-                                <label class="form__input form__input--radio form__address">
+                                <label class="form__input form__input--radio form__address address-list">
                                     <span>{{ addr.full_address }}</span>
                                     <input type="radio"
                                            name="user-address"
@@ -166,7 +166,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row hide__new__address">
+                            <div class="row">
                                 <div class="col">
                                 <label class="newinput" for="comment">
                                     <textarea name=""

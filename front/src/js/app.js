@@ -211,7 +211,7 @@ $('.form-add input').on('change', (e) => {
   });
 
 $(document).ready(function() {
- $('.hide__new__address').hide();
+ $('.hide-order-total').hide();
 });
 
 
