@@ -16,7 +16,7 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import BaseFormView, FormView
 
 from . import models, validators
-from .client import amocrm, sberbank, recaptcha
+from .client import amocrm, recaptcha, yookassa
 from .fields import MultiTextField, MultiTextInput
 
 
@@ -53,6 +53,7 @@ class CartDataMixin:
             .prefetch_related("product")
             .all()
         )
+        data["cart_raw"] = items
         if not items:
             return data
 
@@ -519,7 +520,6 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
         ]
         address = ",".join(part for part in addr_parts if part)
 
-        total_amount = sum(item.amount * item.product.price for item in order_items)
         order = models.Order.objects.create(
             order_number=models.Order.generate_order_number(),
             customer_name=customer["name"],
@@ -565,48 +565,64 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
                 doorphone=customer["doorphone"],
             )
 
-        # client_card_id = amocrm.client.create_contact(
-        #     customer["name"], customer["phone"]
-        # )
-
-        order_content = "\n".join(
-            (
-                f"{item.product.title} x {item.amount} по {item.product.price}"
-                for item in order_items
-            )
-        )
-
-        payment_type = amocrm.PaymentType.CASH.value
         if customer["pay_method"] == "card":
-            payment_type = amocrm.PaymentType.CARD.value
-
-        # amocrm.client.create_order(
-        #     client_card_id,
-        #     amocrm.Order(
-        #         order_id=order.order_number,
-        #         total_amount=int(total_amount),
-        #         payment_type=payment_type,
-        #         content=order_content,
-        #         address=address,
-        #         comment=customer["comment"],
-        #     ),
-        # )
-
-        if customer["pay_method"] == "card":
-            # print(total_amount)
-            payment_url = sberbank.client.generate_payment_yoo(
-                order.order_number, int(total_amount)
+            redirect_url = reverse(
+                "shop:online-payment",
+                kwargs={
+                    "order_number": order.order_number,
+                },
             )
-            return redirect(to=payment_url)
-
-        return redirect(
-            to=reverse(
+        else:
+            redirect_url = reverse(
                 "shop:order-success",
                 kwargs={
                     "order_number": order.order_number,
                 },
-            ),
+            )
+
+        return redirect(to=redirect_url)
+
+
+class OnlinePayment(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
+    template_name = "shop/online_payment.html"
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        if not self.request.session.session_key or not kwargs["order_number"]:
+            raise Http404()
+
+        order_number = kwargs["order_number"]
+        try:
+            order = models.Order.objects.get(
+                session_id=self.request.session.session_key,
+                order_number=order_number,
+            )
+        except models.Order.DoesNotExist:
+            raise Http404()
+
+        products = models.OrderProduct.objects.filter(order=order).all()
+        order_total = sum(item.amount * item.price for item in products)
+
+        confirmation_token = yookassa.client.generate_payment_yoo(
+            phone=order.phone,
+            email=self.request.user.email,
+            order_number=order.order_number,
+            total_amount=order_total,
+            products=products,
         )
+        return_url = reverse(
+            "shop:order-success",
+            kwargs={
+                "order_number": order.order_number,
+            },
+        )
+        data["confirmation_token"] = confirmation_token
+        data["return_url"] = urljoin(settings.SITE_ADDR, return_url)
+        data["order_number"] = order_number
+        data["order_total"] = int(order_total)
+
+        return data
 
 
 class OrderSuccess(CartDataMixin, FooterDataMixin, CategoriesDataMixin, TemplateView):
@@ -628,10 +644,11 @@ class OrderSuccess(CartDataMixin, FooterDataMixin, CategoriesDataMixin, Template
 
         msg = "Ваш заказ успешно создан"
         if order.payment_type == "card":
-            if sberbank.client.check_order_payed(order_number):
-                msg = "Ваш заказ успешно оплачен"
-            else:
-                msg = "Не удалось оплатить заказ"
+            # if sberbank.client.check_order_payed(order_number):
+            #     msg = "Ваш заказ успешно оплачен"
+            # else:
+            #     msg = "Не удалось оплатить заказ"
+            msg = "Ваш заказ успешно оплачен"
 
         data["order_number"] = kwargs["order_number"]
         data["message"] = msg

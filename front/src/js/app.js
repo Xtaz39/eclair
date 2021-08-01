@@ -210,11 +210,6 @@ $('.form-add input').on('change', (e) => {
     }
   });
 
-$(document).ready(function() {
- $('.hide-order-total').hide();
-});
-
-
   $('.order-form .dropdown-menu a').on('click', (e) => {
     e.preventDefault();
     const street = e.target.attributes['data-street'].value;

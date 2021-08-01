@@ -1,0 +1,29 @@
+{% extends "shop/base/base.html" %}
+{% load static %}
+
+{% block js_extra %}
+    <script src="https://yookassa.ru/checkout-widget/v1/checkout-widget.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="text-center">
+        <h2>
+            Заказ №{{ order_number }} на сумму {{ order_total }} руб.
+        </h2>
+    </div>
+    <div id="payment-form"></div>
+{% endblock %}
+
+
+{% block after_vuejs %}
+    <script>
+        const checkout = new window.YooMoneyCheckoutWidget({
+            confirmation_token: '{{ confirmation_token }}',
+            return_url: '{{ return_url }}',
+            error_callback: function (error) {
+                console.log(error)
+            }
+        });
+        checkout.render('payment-form');
+    </script>
+{% endblock %}

@@ -178,3 +178,12 @@ RECAPTCHA_API_KEY = os.getenv("RECAPTCHA_API_KEY")
 # ЮKassa
 YOOKASSA_SHOP_ID = os.getenv("YOOKASSA_SHOP_ID")
 YOOKASSA_SECRET_KEY = os.getenv("YOOKASSA_SECRET_KEY")
+# Код систем налогообложения
+# https://yookassa.ru/developers/54fz/parameters-values#tax-systems
+# 1	Общая система налогообложения
+# 2	Упрощенная (УСН, доходы)
+# 3	Упрощенная (УСН, доходы минус расходы)
+# 4	Единый налог на вмененный доход (ЕНВД)
+# 5	Единый сельскохозяйственный налог (ЕСН)
+# 6	Патентная система налогообложения
+YOOKASSA_TAX_SYSTEM_CODE = int(os.getenv("YOOKASSA_TAX_SYSTEM_CODE"))
