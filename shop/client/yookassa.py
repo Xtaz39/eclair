@@ -26,11 +26,10 @@ class Client:
         products: List[models.OrderProduct],
     ) -> str:
         receipt = Receipt()
-        receipt.customer = {
-            "phone": phone,
-            "email": email,
-        }
         receipt.tax_system_code = self._tax_system_code
+        receipt.customer.phone = phone
+        if email:
+            receipt.customer.email = email
 
         receipt.items = [
             ReceiptItem(
