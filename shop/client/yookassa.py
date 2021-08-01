@@ -1,83 +1,76 @@
-from __future__ import annotations
-
+import var_dump as var_dump
 import requests
+
+from yookassa import Settings
+from yookassa import Configuration
+from yookassa import Payment
+from yookassa.domain.models.currency import Currency
+from yookassa.domain.models.receipt import Receipt
+from yookassa.domain.models.receipt_item import ReceiptItem
+from yookassa.domain.common.confirmation_type import ConfirmationType
+from yookassa.domain.request.payment_request_builder import PaymentRequestBuilder
+
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
 from urllib.parse import urljoin
 
 from eclair import settings
-
-
-class ClientError(Exception):
-    pass
+from __future__ import annotations
+from django.http import JsonResponse
+from django.core.handlers.wsgi import WSGIRequest
 
 
 class Client:
-    def __init__(self, url: str, username: str, password: str, redirect_addr: str):
+    def __init__(self, url: str, shopid: str, secretkey: str, redirect_addr: str):
         self._base_url = url
-        self._username = username
-        self._password = password
+        self._shopid = shopid
+        self._secretkey = secretkey
         self._http_client = requests.Session()
         self._redirect_addr = redirect_addr
 
-    def generate_payment(self, order: str, amount: int) -> str:
-        """
-        https://securepayments.sberbank.ru/wiki/doku.php/integration:api:rest:requests:register
-        """
-        resp = self._http_client.post(
-            urljoin(self._base_url, "register.do"),
-            data={
-                "userName": self._username,
-                "password": self._password,
-                "orderNumber": order,
-                # умножаем на 100 так как сумма отправляется в копейках
-                "amount": amount * 100,
-                "returnUrl": f"{self._redirect_addr}/order/success/{order}",
-                "failUrl": f"{self._redirect_addr}/order/fail/{order}",
-            },
-            headers={"Content-type": "application/x-www-form-urlencoded"},
-        )
-        if not resp.ok:
-            raise ClientError(f"Error {resp.status_code}: {resp.text}")
+        def get_client_ip(request: WSGIRequest):
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            if x_forwarded_for:
+                ip = x_forwarded_for.split(',')[0]
+            else:
+                ip = request.META.get('REMOTE_ADDR')
+            return ip
 
-        data = resp.json()
-        if "errorCode" in data:
-            raise ClientError(f"Error {data['errorCode']}: {data['errorMessage']}")
+        def get_order_product(self):
+            cart_product = self.request.OrderProduct.objects.filter(
+                session_id=self.request.session.session_key
+            ).all()
+            products = [{"description": p.title, "quantity": p.amount, "amount": {"value": p.price,
+                                                                                  "currency": Currency.RUB},
+                         "vat_code": 2} for p in cart_product]
+            return JsonResponse(data=products, safe=False)
 
-        return data["formUrl"]
+        def generate_payment_yoo(self, order: str, amount: int) -> str:
+            Configuration.account_id = shopid
+            Configuration.secret_key = secretkey
 
-    def check_order_payed(self, order: str) -> bool:
-        """
-        https://securepayments.sberbank.ru/wiki/doku.php/integration:api:rest:requests:getorderstatusextended
+            receipt = Receipt()
+            receipt.customer = {"phone": self.request.user.phone, "email": self.request.user.email}
+            receipt.tax_system_code = 2
+            receipt.items = [
+                ReceiptItem(get_order_product(self))
+            ]
 
-        :orderStatus Целое число
-         По значению этого параметра определяется состояние заказа в платёжной системе.
-         Отсутствует, если заказ не был найден. Ниже представлен список возможных значений:
-            0 - заказ зарегистрирован, но не оплачен;
-            1 - предавторизованная сумма удержана (для двухстадийных платежей);
-            2 - проведена полная авторизация суммы заказа;
-            3 - авторизация отменена;
-            4 - по транзакции была проведена операция возврата;
-            5 - инициирована авторизация через сервер контроля доступа банка-эмитента;
-            6 - авторизация отклонена.
-        """
-        resp = self._http_client.post(
-            urljoin(self._base_url, "getOrderStatusExtended.do"),
-            data={
-                "userName": self._username,
-                "password": self._password,
-                "orderNumber": order,
-            },
-            headers={"Content-type": "application/x-www-form-urlencoded"},
-        )
-        if not resp.ok:
-            raise ClientError(f"Error {resp.status_code}: {resp.text}")
+            builder = PaymentRequestBuilder()
+            builder.set_amount({"value": amount, "currency": Currency.RUB}) \
+                .set_confirmation(
+                {"type": ConfirmationType.REDIRECT, "return_url": redirect_addr}) \
+                .set_capture(False) \
+                .set_description("Заказ №" + order) \
+                .set_metadata({"orderNumber": order}) \
+                .set_receipt(receipt)
 
-        data = resp.json()
-        if "errorCode" in data and data["errorCode"] != "0":
-            raise ClientError(f"Error {data['errorCode']}: {data['errorMessage']}")
-
-        money_held, payed = 1, 2
-        return data["orderStatus"] in (money_held, payed)
-
+            request = builder.build()
+            request.client_ip = get_client_ip(self.request)
+            print(request.confirmation)
+            res = Payment.create(request)
+            var_dump.var_dump(res)
 
 client = Client(
     settings.SBERBANK_URL,

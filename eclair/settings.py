@@ -174,3 +174,7 @@ SMS_API_KEY = os.getenv("SMS_API_KEY")
 
 # Recaptcha
 RECAPTCHA_API_KEY = os.getenv("RECAPTCHA_API_KEY")
+
+# ЮKassa
+YOOKASSA_SHOP_ID = os.getenv("YOOKASSA_SHOP_ID")
+YOOKASSA_SECRET_KEY = os.getenv("YOOKASSA_SECRET_KEY")

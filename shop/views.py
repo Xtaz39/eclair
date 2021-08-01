@@ -594,7 +594,7 @@ class Checkout(CartDataMixin, FooterDataMixin, CategoriesDataMixin, FormView):
 
         if customer["pay_method"] == "card":
             # print(total_amount)
-            payment_url = sberbank.client.generate_payment(
+            payment_url = sberbank.client.generate_payment_yoo(
                 order.order_number, int(total_amount)
             )
             return redirect(to=payment_url)
